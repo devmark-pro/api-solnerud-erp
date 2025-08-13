@@ -3,6 +3,7 @@ services:
     image: nginx:1.28
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - php-fpm
     volumes:
@@ -10,7 +11,6 @@ services:
       - /var/www/solt/front-solt:/var/www/docker/front/front-solt
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/sites/:/etc/nginx/sites-available
-      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
       - ./docker/logs:/var/log
   php-fpm:
     build:
@@ -18,8 +18,8 @@ services:
       dockerfile: ./docker/dockerFile/php.dockerfile
     volumes:
       - /var/www/solt/back-solt:/var/www/
-    ports:
-      - '9000:9000'
+    # ports:
+    #   - '9000:9000'
     depends_on:
       - postgres
   postgres:

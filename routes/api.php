@@ -8,10 +8,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Route::get('/status', function (Request $request) {
-//     return '111';
-// });
-
 
 Route::prefix('status')->group(function () {
     Route::get('/', [StatusController::class, 'index'] );
