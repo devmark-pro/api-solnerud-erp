@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    //
+    protected $fillable = [
+        'id',
+        'code',
+        'name',
+        'deleted_at',
+    ];
 }
