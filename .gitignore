@@ -24,3 +24,5 @@ yarn-error.log
 /.zed
 
 /docker/nginx/sites
+/docker/logs/*
+/db
