@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\StatusPurchase\StatusPurchaseService;
+use App\Services\StatusSale\StatusSaleService;
 use Illuminate\Support\Facades\Validator;
 
 
-class StatusPurchaseController extends Controller
+class StatusSaleController extends Controller
 {
 
     public function index()
     {
-        return StatusPurchaseService::index();
+        return StatusSaleService::index();
     }
 
     public function create(Request $request)
@@ -29,7 +29,7 @@ class StatusPurchaseController extends Controller
                 return response()->json($error)->setStatusCode(417); 
             }
 
-            return StatusPurchaseService::create($data);
+            return StatusSaleService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -37,21 +37,21 @@ class StatusPurchaseController extends Controller
 
     public function card(string $id)
     {
-        return StatusPurchaseService::card($id);
+        return StatusSaleService::card($id);
     }
 
     public function update(Request $request, string $id)
     {
-        return StatusPurchaseService::update($id, $request->all());
+        return StatusSaleService::update($id, $request->all());
     }
 
     public function destroy(string $id)
     {
-        return StatusPurchaseService::delete($id);
+        return StatusSaleService::delete($id);
     }
 
     public function recover(string $id)
     {
-        return StatusPurchaseService::recover($id);
+        return StatusSaleService::recover($id);
     }
 }

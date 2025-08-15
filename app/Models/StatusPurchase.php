@@ -8,7 +8,6 @@ class StatusPurchase extends Model
 {
     protected $fillable = [
         'id',
-        'code',
         'name',
         'color',
         'deleted_at',
