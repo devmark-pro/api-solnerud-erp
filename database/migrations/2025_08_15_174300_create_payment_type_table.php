@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('directory_type_flows', function (Blueprint $table) {
+        Schema::create('directory_payment_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
             $table->date('deleted_at')->nullable();
+       
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('directory_type_flows');
+        Schema::dropIfExists('directory_payment_types');
     }
 };
