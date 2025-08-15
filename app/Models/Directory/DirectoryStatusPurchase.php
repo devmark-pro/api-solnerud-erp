@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Directory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StatusSale extends Model
+class DirectoryStatusPurchase extends Model
 {
     protected $fillable = [
         'id',

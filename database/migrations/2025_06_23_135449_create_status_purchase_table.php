@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_purchases', function (Blueprint $table) {
+        Schema::create('directory_status_purchases', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('color');

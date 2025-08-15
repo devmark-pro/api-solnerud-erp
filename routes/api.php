@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StatusPurchaseController;
-use App\Http\Controllers\StatusSaleController;
+use App\Http\Controllers\Directory\StatusPurchaseController;
+use App\Http\Controllers\Directory\StatusSaleController;
+use App\Http\Controllers\Directory\TypeFlowController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,5 +28,14 @@ Route::prefix('status_sale')->group(function () {
     Route::post('/{id}', [StatusSaleController::class, 'update'] );
     Route::delete('/{id}', [StatusSaleController::class, 'destroy'] );
     Route::get('/{id}/recover', [StatusSaleController::class, 'recover'] );
+});
+
+Route::prefix('type_flow')->group(function () {
+    Route::get('/', [TypeFlowController::class, 'index'] );
+    Route::put('/', [TypeFlowController::class, 'create'] ); 
+    Route::get('/{id}', [TypeFlowController::class, 'card'] );
+    Route::post('/{id}', [TypeFlowController::class, 'update'] );
+    Route::delete('/{id}', [TypeFlowController::class, 'destroy'] );
+    Route::get('/{id}/recover', [TypeFlowController::class, 'recover'] );
 });
 

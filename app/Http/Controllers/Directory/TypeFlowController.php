@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Directory;
 
-use Illuminate\Http\Request;
-use App\Services\StatusSale\StatusSaleService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\Directory\TypeFlow\TypeFlowService;
 
 
-class StatusSaleController extends Controller
+class TypeFlowController extends Controller
 {
 
     public function index()
     {
-        return StatusSaleService::index();
+        return TypeFlowService::index();
     }
 
     public function create(Request $request)
@@ -21,7 +22,6 @@ class StatusSaleController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
-                'color'=>'required'
             ]);
  
             if($validator->fails()){
@@ -29,7 +29,7 @@ class StatusSaleController extends Controller
                 return response()->json($error)->setStatusCode(417); 
             }
 
-            return StatusSaleService::create($data);
+            return TypeFlowService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -37,21 +37,21 @@ class StatusSaleController extends Controller
 
     public function card(string $id)
     {
-        return StatusSaleService::card($id);
+        return TypeFlowService::card($id);
     }
 
     public function update(Request $request, string $id)
     {
-        return StatusSaleService::update($id, $request->all());
+        return TypeFlowService::update($id, $request->all());
     }
 
     public function destroy(string $id)
     {
-        return StatusSaleService::delete($id);
+        return TypeFlowService::delete($id);
     }
 
     public function recover(string $id)
     {
-        return StatusSaleService::recover($id);
+        return TypeFlowService::recover($id);
     }
 }
