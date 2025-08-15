@@ -26,4 +26,6 @@ yarn-error.log
 
 /docker/nginx/sites
 /docker/logs/*
+/docker/certbot/
+/docker/letsencrypt
 /db
