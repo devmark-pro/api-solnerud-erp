@@ -6,7 +6,7 @@ use App\Http\Controllers\Directory\StatusPurchaseController;
 use App\Http\Controllers\Directory\StatusSaleController;
 use App\Http\Controllers\Directory\TypeFlowController;
 use App\Http\Controllers\Directory\PaymentTypeController;
-
+use App\Http\Controllers\Directory\EmployeePositionsController;
 
 
 Route::get('/user', function (Request $request) {
@@ -48,6 +48,15 @@ Route::prefix('payment_type')->group(function () {
     Route::post('/{id}', [PaymentTypeController::class, 'update'] );
     Route::delete('/{id}', [PaymentTypeController::class, 'destroy'] );
     Route::get('/{id}/recover', [PaymentTypeController::class, 'recover'] );
+});
+
+Route::prefix('employee_position')->group(function () {
+    Route::get('/', [EmployeePositionsController::class, 'index'] );
+    Route::put('/', [EmployeePositionsController::class, 'create'] ); 
+    Route::get('/{id}', [EmployeePositionsController::class, 'card'] );
+    Route::post('/{id}', [EmployeePositionsController::class, 'update'] );
+    Route::delete('/{id}', [EmployeePositionsController::class, 'destroy'] );
+    Route::get('/{id}/recover', [EmployeePositionsController::class, 'recover'] );
 });
 
 
