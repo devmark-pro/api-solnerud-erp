@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('directory_employee_positions', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
+            $table->date('deleted_at')->nullable();
         });
     }
 

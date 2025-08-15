@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Directory\StatusPurchaseController;
 use App\Http\Controllers\Directory\StatusSaleController;
 use App\Http\Controllers\Directory\TypeFlowController;
+use App\Http\Controllers\Directory\PaymentTypeController;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -38,4 +40,15 @@ Route::prefix('type_flow')->group(function () {
     Route::delete('/{id}', [TypeFlowController::class, 'destroy'] );
     Route::get('/{id}/recover', [TypeFlowController::class, 'recover'] );
 });
+
+Route::prefix('payment_type')->group(function () {
+    Route::get('/', [PaymentTypeController::class, 'index'] );
+    Route::put('/', [PaymentTypeController::class, 'create'] ); 
+    Route::get('/{id}', [PaymentTypeController::class, 'card'] );
+    Route::post('/{id}', [PaymentTypeController::class, 'update'] );
+    Route::delete('/{id}', [PaymentTypeController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PaymentTypeController::class, 'recover'] );
+});
+
+
 
