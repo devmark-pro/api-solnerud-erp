@@ -7,6 +7,7 @@ use App\Http\Controllers\Directory\StatusSaleController;
 use App\Http\Controllers\Directory\TypeFlowController;
 use App\Http\Controllers\Directory\PaymentTypeController;
 use App\Http\Controllers\Directory\EmployeePositionsController;
+use App\Http\Controllers\Directory\EmployeeStatusController;
 
 
 Route::get('/user', function (Request $request) {
@@ -59,5 +60,13 @@ Route::prefix('employee_position')->group(function () {
     Route::get('/{id}/recover', [EmployeePositionsController::class, 'recover'] );
 });
 
+Route::prefix('employee_status')->group(function () {
+    Route::get('/', [EmployeeStatusController::class, 'index'] );
+    Route::put('/', [EmployeeStatusController::class, 'create'] ); 
+    Route::get('/{id}', [EmployeeStatusController::class, 'card'] );
+    Route::post('/{id}', [EmployeeStatusController::class, 'update'] );
+    Route::delete('/{id}', [EmployeeStatusController::class, 'destroy'] );
+    Route::get('/{id}/recover', [EmployeeStatusController::class, 'recover'] );
+});
 
 
