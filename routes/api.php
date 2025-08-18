@@ -14,8 +14,7 @@ use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
 use App\Http\Controllers\CounterpartyController;
-
-
+use App\Http\Controllers\NomenclatureController;
 
 
 Route::get('/user', function (Request $request) {
@@ -129,5 +128,15 @@ Route::prefix('counterparties')->group(function () {
     Route::post('/{id}', [CounterpartyController::class, 'update'] );
     Route::delete('/{id}', [CounterpartyController::class, 'destroy'] );
     Route::get('/{id}/recover', [CounterpartyController::class, 'recover'] );
+});
+
+
+Route::prefix('nomenclature')->group(function () {
+    Route::get('/', [NomenclatureController::class, 'index'] );
+    Route::put('/', [NomenclatureController::class, 'create'] ); 
+    Route::get('/{id}', [NomenclatureController::class, 'card'] );
+    Route::post('/{id}', [NomenclatureController::class, 'update'] );
+    Route::delete('/{id}', [NomenclatureController::class, 'destroy'] );
+    Route::get('/{id}/recover', [NomenclatureController::class, 'recover'] );
 });
 
