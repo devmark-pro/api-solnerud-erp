@@ -8,6 +8,8 @@ use App\Http\Controllers\Directory\TypeFlowController;
 use App\Http\Controllers\Directory\PaymentTypeController;
 use App\Http\Controllers\Directory\EmployeePositionsController;
 use App\Http\Controllers\Directory\EmployeeStatusController;
+use App\Http\Controllers\Directory\DeliveryMethodController;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -68,5 +70,15 @@ Route::prefix('employee_status')->group(function () {
     Route::delete('/{id}', [EmployeeStatusController::class, 'destroy'] );
     Route::get('/{id}/recover', [EmployeeStatusController::class, 'recover'] );
 });
+
+Route::prefix('delivery_method')->group(function () {
+    Route::get('/', [DeliveryMethodController::class, 'index'] );
+    Route::put('/', [DeliveryMethodController::class, 'create'] ); 
+    Route::get('/{id}', [DeliveryMethodController::class, 'card'] );
+    Route::post('/{id}', [DeliveryMethodController::class, 'update'] );
+    Route::delete('/{id}', [DeliveryMethodController::class, 'destroy'] );
+    Route::get('/{id}/recover', [DeliveryMethodController::class, 'recover'] );
+});
+
 
 
