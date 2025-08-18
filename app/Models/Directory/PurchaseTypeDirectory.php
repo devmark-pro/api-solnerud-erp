@@ -5,10 +5,11 @@ namespace App\Models\Directory;
 use Illuminate\Database\Eloquent\Model;
 
   
-// Вид контрагента
-class CounterpartyTypeDirectory extends Model
+// Тип покупки
+
+class PurchaseTypeDirectory extends Model
 {
-    protected $table = 'directory_counterparty_types';
+    protected $table = 'directory_purchase_types';
 
     protected $fillable = [
         'id',
