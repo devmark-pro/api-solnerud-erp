@@ -9,6 +9,8 @@ use App\Http\Controllers\Directory\PaymentTypeController;
 use App\Http\Controllers\Directory\EmployeePositionsController;
 use App\Http\Controllers\Directory\EmployeeStatusController;
 use App\Http\Controllers\Directory\DeliveryMethodController;
+use App\Http\Controllers\Directory\PackingTypeController;
+
 
 
 
@@ -78,6 +80,15 @@ Route::prefix('delivery_method')->group(function () {
     Route::post('/{id}', [DeliveryMethodController::class, 'update'] );
     Route::delete('/{id}', [DeliveryMethodController::class, 'destroy'] );
     Route::get('/{id}/recover', [DeliveryMethodController::class, 'recover'] );
+});
+
+Route::prefix('packing_type')->group(function () {
+    Route::get('/', [PackingTypeController::class, 'index'] );
+    Route::put('/', [PackingTypeController::class, 'create'] ); 
+    Route::get('/{id}', [PackingTypeController::class, 'card'] );
+    Route::post('/{id}', [PackingTypeController::class, 'update'] );
+    Route::delete('/{id}', [PackingTypeController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PackingTypeController::class, 'recover'] );
 });
 
 
