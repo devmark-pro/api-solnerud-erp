@@ -11,6 +11,7 @@ use App\Http\Controllers\Directory\EmployeeStatusController;
 use App\Http\Controllers\Directory\DeliveryMethodController;
 use App\Http\Controllers\Directory\PackingTypeController;
 use App\Http\Controllers\Directory\PositionRepresentativeController;
+use App\Http\Controllers\Directory\CounterpartyTypeController;
 
 
 
@@ -100,4 +101,12 @@ Route::prefix('position_representative')->group(function () {
     Route::get('/{id}/recover', [PositionRepresentativeController::class, 'recover'] );
 });
 
+Route::prefix('counterparty_type')->group(function () {
+    Route::get('/', [CounterpartyTypeController::class, 'index'] );
+    Route::put('/', [CounterpartyTypeController::class, 'create'] ); 
+    Route::get('/{id}', [CounterpartyTypeController::class, 'card'] );
+    Route::post('/{id}', [CounterpartyTypeController::class, 'update'] );
+    Route::delete('/{id}', [CounterpartyTypeController::class, 'destroy'] );
+    Route::get('/{id}/recover', [CounterpartyTypeController::class, 'recover'] );
+});
 
