@@ -13,6 +13,8 @@ use App\Http\Controllers\Directory\PackingTypeController;
 use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
+use App\Http\Controllers\CounterpartyController;
+
 
 
 
@@ -119,3 +121,13 @@ Route::prefix('purchase_type')->group(function () {
     Route::delete('/{id}', [PurchaseTypeController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseTypeController::class, 'recover'] );
 });
+
+Route::prefix('counterparties')->group(function () {
+    Route::get('/', [CounterpartyController::class, 'index'] );
+    Route::put('/', [CounterpartyController::class, 'create'] ); 
+    Route::get('/{id}', [CounterpartyController::class, 'card'] );
+    Route::post('/{id}', [CounterpartyController::class, 'update'] );
+    Route::delete('/{id}', [CounterpartyController::class, 'destroy'] );
+    Route::get('/{id}/recover', [CounterpartyController::class, 'recover'] );
+});
+

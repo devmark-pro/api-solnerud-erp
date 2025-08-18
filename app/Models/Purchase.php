@@ -12,6 +12,9 @@ class Purchase extends Model
     protected $fillable = [
         'id',
         'status_purchase_id',
+        'purchase_types_id',
+        'counterparty_id',  //Поставщик
+
         'deleted_at',
     ];
 }
