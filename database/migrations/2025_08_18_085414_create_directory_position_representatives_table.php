@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('directory_packing_types', function (Blueprint $table) {
+        Schema::create('directory_position_representatives', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('deleted_at')->nullable();
             $table->timestamps();
+            $table->date('deleted_at')->nullable();
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('directory_packing_types');
+        Schema::dropIfExists('directory_position_representatives');
     }
 };

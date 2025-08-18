@@ -10,7 +10,7 @@ use App\Http\Controllers\Directory\EmployeePositionsController;
 use App\Http\Controllers\Directory\EmployeeStatusController;
 use App\Http\Controllers\Directory\DeliveryMethodController;
 use App\Http\Controllers\Directory\PackingTypeController;
-
+use App\Http\Controllers\Directory\PositionRepresentativeController;
 
 
 
@@ -91,5 +91,13 @@ Route::prefix('packing_type')->group(function () {
     Route::get('/{id}/recover', [PackingTypeController::class, 'recover'] );
 });
 
+Route::prefix('position_representative')->group(function () {
+    Route::get('/', [PositionRepresentativeController::class, 'index'] );
+    Route::put('/', [PositionRepresentativeController::class, 'create'] ); 
+    Route::get('/{id}', [PositionRepresentativeController::class, 'card'] );
+    Route::post('/{id}', [PositionRepresentativeController::class, 'update'] );
+    Route::delete('/{id}', [PositionRepresentativeController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PositionRepresentativeController::class, 'recover'] );
+});
 
 
