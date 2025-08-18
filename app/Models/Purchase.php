@@ -14,6 +14,9 @@ class Purchase extends Model
         'status_purchase_id',
         'purchase_types_id',
         'counterparty_id',  //Поставщик
+        'nomenclature_id',  //Продукт
+        'created_at',
+        'client_id',
 
         'deleted_at',
     ];

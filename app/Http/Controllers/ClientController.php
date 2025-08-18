@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Services\Counterparty\CounterpartyService;
+use App\Services\Client\ClientService;
 
 
-class CounterpartyController extends Controller
+class ClientController extends Controller
 {
 
     public function index()
     {
-        return CounterpartyService::index();
+        return ClientService::index();
     }
 
     public function create(Request $request)
@@ -28,7 +28,7 @@ class CounterpartyController extends Controller
                 return response()->json($error)->setStatusCode(417); 
             }
 
-            return CounterpartyService::create($data);
+            return ClientService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -36,21 +36,21 @@ class CounterpartyController extends Controller
 
     public function card(string $id)
     {
-        return CounterpartyService::card($id);
+        return ClientService::card($id);
     }
 
     public function update(Request $request, string $id)
     {
-        return CounterpartyService::update($id, $request->all());
+        return ClientService::update($id, $request->all());
     }
 
     public function destroy(string $id)
     {
-        return CounterpartyService::delete($id);
+        return ClientService::delete($id);
     }
 
     public function recover(string $id)
     {
-        return CounterpartyService::recover($id);
+        return ClientService::recover($id);
     }
 }

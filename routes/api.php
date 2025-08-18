@@ -15,6 +15,7 @@ use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
 use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
+use App\Http\Controllers\ClientController;
 
 
 Route::get('/user', function (Request $request) {
@@ -140,3 +141,12 @@ Route::prefix('nomenclature')->group(function () {
     Route::get('/{id}/recover', [NomenclatureController::class, 'recover'] );
 });
 
+
+Route::prefix('client')->group(function () {
+    Route::get('/', [ClientController::class, 'index'] );
+    Route::put('/', [ClientController::class, 'create'] ); 
+    Route::get('/{id}', [ClientController::class, 'card'] );
+    Route::post('/{id}', [ClientController::class, 'update'] );
+    Route::delete('/{id}', [ClientController::class, 'destroy'] );
+    Route::get('/{id}/recover', [ClientController::class, 'recover'] );
+});
