@@ -1,27 +1,27 @@
 <?php
 namespace App\Services\Directory\EmployeePositions;
-use App\Models\Directory\DirectoryEmployeePositions;
+use App\Models\Directory\EmployeePositionsDirectory;
 
 class EmployeePositionsService
 {
 
     public static function index() {
-        return DirectoryEmployeePositions::where(['deleted_at'=> null])->get();
+        return EmployeePositionsDirectory::where(['deleted_at'=> null])->get();
     }
     public static function create($data){  
-        return DirectoryEmployeePositions::create($data);
+        return EmployeePositionsDirectory::create($data);
     }
     public static function card($id){ 
-        return DirectoryEmployeePositions::findOrFail($id);
+        return EmployeePositionsDirectory::findOrFail($id);
     }
     public static function update($id, $data){ 
-        return DirectoryEmployeePositions::findOrFail($id)->update($data);
+        return EmployeePositionsDirectory::findOrFail($id)->update($data);
     }
     public static function delete($id){ 
-        return DirectoryEmployeePositions::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        return EmployeePositionsDirectory::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
     }
     public static function recover($id){ 
-        return DirectoryEmployeePositions::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        return EmployeePositionsDirectory::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
     }
 
 }

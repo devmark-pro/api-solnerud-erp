@@ -4,8 +4,10 @@ namespace App\Models\Directory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DirectoryEmployeeStatus extends Model
+class DeliveryMethodDirectory extends Model
 {
+    protected $table = 'directory_delivery_methods';
+
     protected $fillable = [
         'id',
         'name',
