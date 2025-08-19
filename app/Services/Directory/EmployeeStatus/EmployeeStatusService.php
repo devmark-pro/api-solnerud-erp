@@ -11,17 +11,23 @@ class EmployeeStatusService
     public static function create($data){  
         return EmployeeStatusDirectory::create($data);
     }
-    public static function card($id){ 
-        return EmployeeStatusDirectory::findOrFail($id);
-    }
     public static function update($id, $data){ 
-        return EmployeeStatusDirectory::findOrFail($id)->update($data);
+        $model = EmployeeStatusDirectory::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return EmployeeStatusDirectory::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = EmployeeStatusDirectory::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return EmployeeStatusDirectory::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = EmployeeStatusDirectory::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
 
 }

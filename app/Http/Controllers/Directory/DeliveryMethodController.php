@@ -35,23 +35,31 @@ class DeliveryMethodController extends Controller
         }
     }
 
-    public function card(string $id)
+     public function card(string $id)
     {
-        return DeliveryMethodService::card($id);
+        $data = DeliveryMethodService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return DeliveryMethodService::update($id, $request->all());
+        $data = DeliveryMethodService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return DeliveryMethodService::delete($id);
+        $data = DeliveryMethodService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return DeliveryMethodService::recover($id);
+        $data = DeliveryMethodService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

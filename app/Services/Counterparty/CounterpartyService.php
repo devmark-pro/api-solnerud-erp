@@ -11,16 +11,24 @@ class CounterpartyService
         return Counterparty::create($data);
     }
     public static function card($id){ 
-        return Counterparty::findOrFail($id);
+        return Counterparty::find($id);
     }
     public static function update($id, $data){ 
-        return Counterparty::findOrFail($id)->update($data);
+        $model = Counterparty::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return Counterparty::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = Counterparty::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return Counterparty::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = Counterparty::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
-
 }

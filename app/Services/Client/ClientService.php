@@ -11,16 +11,25 @@ class ClientService
         return Client::create($data);
     }
     public static function card($id){ 
-        return Client::findOrFail($id);
+        return Client::find($id);
     }
     public static function update($id, $data){ 
-        return Client::findOrFail($id)->update($data);
+        $model = Client::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return Client::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = Client::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return Client::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = Client::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
 
 }

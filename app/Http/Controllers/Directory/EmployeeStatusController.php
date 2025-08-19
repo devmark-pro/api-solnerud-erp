@@ -34,23 +34,31 @@ class EmployeeStatusController extends Controller
         }
     }
 
-    public function card(string $id)
+     public function card(string $id)
     {
-        return EmployeeStatusService::card($id);
+        $data = EmployeeStatusService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return EmployeeStatusService::update($id, $request->all());
+        $data = EmployeeStatusService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return EmployeeStatusService::delete($id);
+        $data = EmployeeStatusService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return EmployeeStatusService::recover($id);
+        $data = EmployeeStatusService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

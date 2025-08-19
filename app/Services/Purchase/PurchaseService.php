@@ -11,16 +11,25 @@ class PurchaseService
         return Purchase::create($data);
     }
     public static function card($id){ 
-        return Purchase::findOrFail($id);
+        return Purchase::find($id);
     }
     public static function update($id, $data){ 
-        return Purchase::findOrFail($id)->update($data);
+        $model = Purchase::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return Purchase::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = Purchase::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return Purchase::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = Purchase::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
 
 }

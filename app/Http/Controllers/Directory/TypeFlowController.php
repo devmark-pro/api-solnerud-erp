@@ -35,23 +35,30 @@ class TypeFlowController extends Controller
         }
     }
 
-    public function card(string $id)
+  public function card(string $id)
     {
-        return TypeFlowService::card($id);
+        $data = TypeFlowService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return TypeFlowService::update($id, $request->all());
+        $data = TypeFlowService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return TypeFlowService::delete($id);
+        $data = TypeFlowService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return TypeFlowService::recover($id);
-    }
-}
+        $data = TypeFlowService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
+    }}

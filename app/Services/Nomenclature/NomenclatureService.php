@@ -11,16 +11,24 @@ class NomenclatureService
         return Nomenclature::create($data);
     }
     public static function card($id){ 
-        return Nomenclature::findOrFail($id);
+        return Nomenclature::find($id);
     }
     public static function update($id, $data){ 
-        return Nomenclature::findOrFail($id)->update($data);
+        $model = Nomenclature::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return Nomenclature::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = Nomenclature::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return Nomenclature::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = Nomenclature::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
-
 }

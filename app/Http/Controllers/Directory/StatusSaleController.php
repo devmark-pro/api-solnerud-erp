@@ -36,23 +36,31 @@ class StatusSaleController extends Controller
         }
     }
 
-    public function card(string $id)
+public function card(string $id)
     {
-        return StatusSaleService::card($id);
+        $data = StatusSaleService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return StatusSaleService::update($id, $request->all());
+        $data = StatusSaleService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return StatusSaleService::delete($id);
+        $data = StatusSaleService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return StatusSaleService::recover($id);
+        $data = StatusSaleService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

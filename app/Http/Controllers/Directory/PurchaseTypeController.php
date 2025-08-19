@@ -37,21 +37,29 @@ class PurchaseTypeController extends Controller
 
     public function card(string $id)
     {
-        return PurchaseTypeService::card($id);
+        $data = PurchaseTypeService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return PurchaseTypeService::update($id, $request->all());
+        $data = PurchaseTypeService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return PurchaseTypeService::delete($id);
+        $data = PurchaseTypeService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return PurchaseTypeService::recover($id);
+        $data = PurchaseTypeService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

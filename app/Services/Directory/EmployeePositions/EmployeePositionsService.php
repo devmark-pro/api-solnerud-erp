@@ -11,17 +11,22 @@ class EmployeePositionsService
     public static function create($data){  
         return EmployeePositionsDirectory::create($data);
     }
-    public static function card($id){ 
-        return EmployeePositionsDirectory::findOrFail($id);
-    }
     public static function update($id, $data){ 
-        return EmployeePositionsDirectory::findOrFail($id)->update($data);
+        $model = EmployeePositionsDirectory::find($id);
+        if(!$model) return null; 
+        $model->updateOrFail($data);
+        return $model;
     }
     public static function delete($id){ 
-        return EmployeePositionsDirectory::findOrFail($id)->updateOrFail(['deleted_at' => now()]);
+        $model = EmployeePositionsDirectory::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => now()]);
+        return $model; 
     }
     public static function recover($id){ 
-        return EmployeePositionsDirectory::findOrFail($id)->updateOrFail(['deleted_at'=> null]);
+        $model = EmployeePositionsDirectory::find($id);
+        if(!$model) return null; 
+        $model->update(['deleted_at' => null]);
+        return $model; 
     }
-
 }

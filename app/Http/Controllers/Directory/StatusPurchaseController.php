@@ -36,23 +36,31 @@ class StatusPurchaseController extends Controller
         }
     }
 
-    public function card(string $id)
+public function card(string $id)
     {
-        return StatusPurchaseService::card($id);
+        $data = StatusPurchaseService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return StatusPurchaseService::update($id, $request->all());
+        $data = StatusPurchaseService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return StatusPurchaseService::delete($id);
+        $data = StatusPurchaseService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return StatusPurchaseService::recover($id);
+        $data = StatusPurchaseService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

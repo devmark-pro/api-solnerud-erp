@@ -34,23 +34,31 @@ class ClientController extends Controller
         }
     }
 
-    public function card(string $id)
+     public function card(string $id)
     {
-        return ClientService::card($id);
+        $data = ClientService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return ClientService::update($id, $request->all());
+        $data = ClientService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return ClientService::delete($id);
+        $data = ClientService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return ClientService::recover($id);
+        $data = ClientService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

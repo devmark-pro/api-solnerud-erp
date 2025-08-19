@@ -34,23 +34,31 @@ class EmployeePositionsController extends Controller
         }
     }
 
-    public function card(string $id)
+     public function card(string $id)
     {
-        return EmployeePositionsService::card($id);
+        $data = EmployeePositionsService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return EmployeePositionsService::update($id, $request->all());
+        $data = EmployeePositionsService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return EmployeePositionsService::delete($id);
+        $data = EmployeePositionsService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return EmployeePositionsService::recover($id);
+        $data = EmployeePositionsService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

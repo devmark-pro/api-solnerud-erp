@@ -35,23 +35,31 @@ class PackingTypeController extends Controller
         }
     }
 
-    public function card(string $id)
+     public function card(string $id)
     {
-        return PackingTypeService::card($id);
+        $data = PackingTypeService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return PackingTypeService::update($id, $request->all());
+        $data = PackingTypeService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return PackingTypeService::delete($id);
+        $data = PackingTypeService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return PackingTypeService::recover($id);
+        $data = PackingTypeService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

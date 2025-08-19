@@ -36,21 +36,29 @@ class CounterpartyController extends Controller
 
     public function card(string $id)
     {
-        return CounterpartyService::card($id);
+        $data = CounterpartyService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return CounterpartyService::update($id, $request->all());
+        $data = CounterpartyService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return CounterpartyService::delete($id);
+        $data = CounterpartyService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return CounterpartyService::recover($id);
+        $data = CounterpartyService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }

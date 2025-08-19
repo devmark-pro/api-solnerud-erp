@@ -36,21 +36,29 @@ class PaymentTypeController extends Controller
 
     public function card(string $id)
     {
-        return PaymentTypeService::card($id);
+        $data = PaymentTypeService::card($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        return PaymentTypeService::update($id, $request->all());
+        $data = PaymentTypeService::update($id, $request->all());
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function destroy(string $id)
     {
-        return PaymentTypeService::delete($id);
+        $data = PaymentTypeService::delete($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 
     public function recover(string $id)
     {
-        return PaymentTypeService::recover($id);
+        $data = PaymentTypeService::recover($id);
+        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        return $data;
     }
 }
