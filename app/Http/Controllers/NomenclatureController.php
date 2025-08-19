@@ -21,6 +21,7 @@ class NomenclatureController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
+                'system_number' => 'unique:nomenclatures'
             ]);
  
             if($validator->fails()){
@@ -43,9 +44,19 @@ class NomenclatureController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $data = NomenclatureService::update($id, $request->all());
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
-        return $data;
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'system_number' => 'unique:nomenclatures'
+        ]);
+ 
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json($error)->setStatusCode(417); 
+        }
+
+        $result = NomenclatureService::update($id, $data);
+        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        return $result;
     }
 
     public function destroy(string $id)

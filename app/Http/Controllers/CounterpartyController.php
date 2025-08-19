@@ -21,6 +21,8 @@ class CounterpartyController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
+                'system_number' => 'unique:counterparties'
+            
             ]);
  
             if($validator->fails()){
@@ -36,16 +38,20 @@ class CounterpartyController extends Controller
 
     public function card(string $id)
     {
-        $data = CounterpartyService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
-        return $data; 
+        $result = CounterpartyService::card($id);
+        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        return $result; 
     }
 
     public function update(Request $request, string $id)
     {
-        $data = CounterpartyService::update($id, $request->all());
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
-        return $data;
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'system_number' => 'unique:counterparties'
+        ]);
+        $result = CounterpartyService::update($id, $request->all());
+        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        return $result;
     }
 
     public function destroy(string $id)
