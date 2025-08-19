@@ -11,7 +11,17 @@ class PurchaseService
         return Purchase::create($data);
     }
     public static function card($id){ 
-        return Purchase::find($id);
+        $model = Purchase::find($id);
+        if(!$model) return null;
+        return $model->with([
+                'statusPurchase', 
+                'purchaseType', 
+                'counterparty', 
+                'nomenclature', 
+                'client',
+                'packingType',
+                'deliveryMethod'
+            ])->first();
     }
     public static function update($id, $data){ 
         $model = Purchase::find($id);

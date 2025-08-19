@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Directory\CounterpartyTypeDirectory;
 
   
 class Counterparty extends Model
@@ -18,4 +20,8 @@ class Counterparty extends Model
                         // Предстовитель
         'deleted_at',
     ];
+    public function counterpartyType(): BelongsTo 
+    {
+        return $this->belongsTo(CounterpartyTypeDirectory::class);
+    }
 }
