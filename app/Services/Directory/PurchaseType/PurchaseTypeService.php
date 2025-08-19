@@ -12,6 +12,9 @@ class PurchaseTypeService
     public static function create($data){  
         return PurchaseTypeDirectory::create($data);
     }
+    public static function card($id){ 
+        return PurchaseTypeDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = PurchaseTypeDirectory::find($id);
         if(!$model) return null; 

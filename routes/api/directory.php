@@ -13,6 +13,8 @@ use App\Http\Controllers\Directory\PackingTypeController;
 use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
+use App\Http\Controllers\Directory\WarehouseController;
+
 
 
 
@@ -114,4 +116,14 @@ Route::prefix('purchase_type')->group(function () {
     Route::delete('/{id}', [PurchaseTypeController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseTypeController::class, 'recover'] );
 });
+
+Route::prefix('warehouse')->group(function () {
+    Route::get('/', [WarehouseController::class, 'index'] );
+    Route::put('/', [WarehouseController::class, 'create'] ); 
+    Route::get('/{id}', [WarehouseController::class, 'card'] );
+    Route::post('/{id}', [WarehouseController::class, 'update'] );
+    Route::delete('/{id}', [WarehouseController::class, 'destroy'] );
+    Route::get('/{id}/recover', [WarehouseController::class, 'recover'] );
+});
+
 

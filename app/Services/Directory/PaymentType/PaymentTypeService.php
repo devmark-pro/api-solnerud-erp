@@ -11,6 +11,9 @@ class PaymentTypeService
     public static function create($data){  
         return PaymentTypeDirectory::create($data);
     }
+    public static function card($id){ 
+        return PaymentTypeDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = PaymentTypeDirectory::find($id);
         if(!$model) return null; 

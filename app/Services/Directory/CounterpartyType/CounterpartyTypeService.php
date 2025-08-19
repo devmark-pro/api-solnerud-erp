@@ -10,6 +10,9 @@ class CounterpartyTypeService
     public static function create($data){  
         return CounterpartyTypeDirectory::create($data);
     }
+    public static function card($id){ 
+        return CounterpartyTypeDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = CounterpartyTypeDirectory::find($id);
         if(!$model) return null; 

@@ -11,6 +11,9 @@ class PositionRepresentativeService
     public static function create($data){  
         return PositionRepresentativeDirectory::create($data);
     }
+    public static function card($id){ 
+        return PositionRepresentativeDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = PositionRepresentativeDirectory::find($id);
         if(!$model) return null; 

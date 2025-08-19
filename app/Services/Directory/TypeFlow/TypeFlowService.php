@@ -11,6 +11,9 @@ class TypeFlowService
     public static function create($data){  
         return TypeFlowDirectory::create($data);
     }
+    public static function card($id){ 
+        return TypeFlowDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = TypeFlowDirectory::find($id);
         if(!$model) return null; 

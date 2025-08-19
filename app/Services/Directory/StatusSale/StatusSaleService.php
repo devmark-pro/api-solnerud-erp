@@ -12,7 +12,10 @@ class StatusSaleService
     public static function create($data){  
         return StatusSaleDirectory::create($data);
     }
-      public static function update($id, $data){ 
+    public static function card($id){ 
+        return StatusSaleDirectory::find($id);
+    }
+    public static function update($id, $data){ 
         $model = StatusSaleDirectory::find($id);
         if(!$model) return null; 
         $model->updateOrFail($data);

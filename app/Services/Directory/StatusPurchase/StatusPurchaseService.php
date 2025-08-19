@@ -12,6 +12,9 @@ class StatusPurchaseService
     public static function create($data){  
         return StatusPurchaseDirectory::create($data);
     }
+    public static function card($id){ 
+        return StatusPurchaseDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = StatusPurchaseDirectory::find($id);
         if(!$model) return null; 

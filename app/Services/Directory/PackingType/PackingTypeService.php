@@ -11,6 +11,9 @@ class PackingTypeService
     public static function create($data){  
         return PackingTypeDirectory::create($data);
     }
+    public static function card($id){ 
+        return PackingTypeDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = PackingTypeDirectory::find($id);
         if(!$model) return null; 

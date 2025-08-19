@@ -11,6 +11,9 @@ class EmployeeStatusService
     public static function create($data){  
         return EmployeeStatusDirectory::create($data);
     }
+    public static function card($id){ 
+        return EmployeeStatusDirectory::find($id);
+    }
     public static function update($id, $data){ 
         $model = EmployeeStatusDirectory::find($id);
         if(!$model) return null; 

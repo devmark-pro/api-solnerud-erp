@@ -31,7 +31,6 @@ Route::prefix('nomenclature')->group(function () {
     Route::get('/{id}/recover', [NomenclatureController::class, 'recover'] );
 });
 
-
 Route::prefix('client')->group(function () {
     Route::get('/', [ClientController::class, 'index'] );
     Route::put('/', [ClientController::class, 'create'] ); 
@@ -49,3 +48,4 @@ Route::prefix('purchase')->group(function () {
     Route::delete('/{id}', [PurchaseController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
 });
+
