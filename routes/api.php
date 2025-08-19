@@ -16,6 +16,7 @@ use App\Http\Controllers\Directory\PurchaseTypeController;
 use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PurchaseController;
 
 
 Route::get('/user', function (Request $request) {
@@ -149,4 +150,13 @@ Route::prefix('client')->group(function () {
     Route::post('/{id}', [ClientController::class, 'update'] );
     Route::delete('/{id}', [ClientController::class, 'destroy'] );
     Route::get('/{id}/recover', [ClientController::class, 'recover'] );
+});
+
+Route::prefix('purchase')->group(function () {
+    Route::get('/', [PurchaseController::class, 'index'] );
+    Route::put('/', [PurchaseController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseController::class, 'card'] );
+    Route::post('/{id}', [PurchaseController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
 });

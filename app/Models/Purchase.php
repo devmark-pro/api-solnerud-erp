@@ -12,12 +12,17 @@ class Purchase extends Model
     protected $fillable = [
         'id',
         'status_purchase_id',
-        'purchase_types_id',
+        'purchase_type_id',
         'counterparty_id',  //Поставщик
         'nomenclature_id',  //Продукт
-        'created_at',
         'client_id',
-
+        'packing_type_id',  // Тип фасовки
+        'delivery_method_id', // способ доставки
+        'price',            //цена за тонну
+        'count_plan',       //количество план
+                            //адрес отгрузки
+        'comment', 
+        'created_at',
         'deleted_at',
     ];
 }
