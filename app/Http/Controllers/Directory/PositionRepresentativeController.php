@@ -38,28 +38,28 @@ class PositionRepresentativeController extends Controller
      public function card(string $id)
     {
         $data = PositionRepresentativeService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
     public function update(Request $request, string $id)
     {
         $data = PositionRepresentativeService::update($id, $request->all());
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function destroy(string $id)
     {
         $data = PositionRepresentativeService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = PositionRepresentativeService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 }

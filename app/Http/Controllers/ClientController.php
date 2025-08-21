@@ -38,7 +38,7 @@ class ClientController extends Controller
      public function card(string $id)
     {
         $data = ClientService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
@@ -54,21 +54,21 @@ class ClientController extends Controller
             return response()->json($error)->setStatusCode(417); 
         }
         $result = ClientService::update($id, $data);
-        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
         $data = ClientService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = ClientService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 }

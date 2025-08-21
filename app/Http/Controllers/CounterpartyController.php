@@ -39,7 +39,7 @@ class CounterpartyController extends Controller
     public function card(string $id)
     {
         $result = CounterpartyService::card($id);
-        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result; 
     }
 
@@ -50,21 +50,21 @@ class CounterpartyController extends Controller
             'system_number' => 'unique:counterparties'
         ]);
         $result = CounterpartyService::update($id, $request->all());
-        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
         $data = CounterpartyService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = CounterpartyService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 }

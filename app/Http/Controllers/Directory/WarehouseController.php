@@ -38,27 +38,27 @@ class WarehouseController extends Controller
   public function card(string $id)
     {
         $data = WarehouseService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
     public function update(Request $request, string $id)
     {
         $data = WarehouseService::update($id, $request->all());
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function destroy(string $id)
     {
         $data = WarehouseService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = WarehouseService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }}

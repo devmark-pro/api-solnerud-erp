@@ -37,7 +37,7 @@ class UserController extends Controller
      public function card(string $id)
     {
         $data = UserService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
@@ -53,21 +53,21 @@ class UserController extends Controller
             return response()->json($error)->setStatusCode(417); 
         }
         $result = UserService::update($id, $data);
-        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
         $data = UserService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = UserService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 }

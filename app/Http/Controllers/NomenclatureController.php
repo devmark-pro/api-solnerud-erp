@@ -38,7 +38,7 @@ class NomenclatureController extends Controller
     public function card(string $id)
     {
         $data = NomenclatureService::card($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
@@ -55,21 +55,21 @@ class NomenclatureController extends Controller
         }
 
         $result = NomenclatureService::update($id, $data);
-        if(!$result) return response()->json(['error'=>'Not found'], 404);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
         $data = NomenclatureService::delete($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
         $data = NomenclatureService::recover($id);
-        if(!$data) return response()->json(['error'=>'Not found'], 404);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 }
