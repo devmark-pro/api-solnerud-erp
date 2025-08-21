@@ -23,13 +23,11 @@ class EmployeePositionsService
     public static function delete($id){ 
         $model = EmployeePositionsDirectory::find($id);
         if(!$model) return null; 
-        $model->update(['deleted_at' => now()]);
-        return $model; 
+        return $model->update(['deleted_at' => now()]);      
     }
     public static function recover($id){ 
         $model = EmployeePositionsDirectory::find($id);
         if(!$model) return null; 
-        $model->update(['deleted_at' => null]);
-        return $model; 
+        return $model->update(['deleted_at' => null]);
     }
 }

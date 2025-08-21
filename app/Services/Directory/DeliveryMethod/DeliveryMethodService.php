@@ -23,14 +23,11 @@ class DeliveryMethodService
     public static function delete($id){ 
         $model = DeliveryMethodDirectory::find($id);
         if(!$model) return null; 
-        $model->update(['deleted_at' => now()]);
-        return $model; 
+        return $model->update(['deleted_at' => now()]);  
     }
     public static function recover($id){ 
         $model = DeliveryMethodDirectory::find($id);
         if(!$model) return null; 
-        $model->update(['deleted_at' => null]);
-        return $model; 
+        return $model->update(['deleted_at' => null]);
     }
-
 }

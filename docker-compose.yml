@@ -1,7 +1,7 @@
 services:
   nginx:
     image: nginx:1.28
-    container_name: nginx_1_28
+    container_name: nginx_solt
     ports:
       - 80:80
       - 443:443
@@ -15,12 +15,13 @@ services:
       - ./docker/logs:/var/log
       - ./docker/certbot/www:/var/www/certbot/
       - ./docker/certbot/conf/:/etc/nginx/ssl/:ro
-      - ./docker/letsencrypt:/etc/letsencrypt 
+      - ./docker/letsencrypt:/etc/letsencrypt
     restart: always
   php-fpm:
     build:
       context: .
       dockerfile: ./docker/dockerFile/php.dockerfile
+    container_name: php_fpm_solt
     volumes:
       - /var/www/solt/back-solt:/var/www/
     depends_on:
@@ -28,22 +29,30 @@ services:
     restart: always
   postgres:
     image: postgres:17.5
+    container_name: postgres_solt
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: aSdf514134f
       POSTGRES_DB: solt
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - '5431:5432'
+      - '5430:5432'
     volumes:
       - ./db:/var/lib/postgresql/data/pgdata
     restart: always
   certbot:
     image: certbot/certbot:latest
-    container_name: certbot_lastest
+    container_name: certbot_solt
     entrypoint: '/bin/sh'
-    tty: true 
+    tty: true
     volumes:
       - ./docker/logs/:/var/log/
       - ./docker/certbot/www:/var/www/certbot/
       - ./docker/letsencrypt:/etc/letsencrypt
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis_solt
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    # volumes:
+    #   - cache:/data
