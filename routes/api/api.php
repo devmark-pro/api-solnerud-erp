@@ -6,6 +6,7 @@ use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/user', function (Request $request) {
@@ -47,5 +48,15 @@ Route::prefix('purchase')->group(function () {
     Route::post('/{id}', [PurchaseController::class, 'update'] );
     Route::delete('/{id}', [PurchaseController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
+});
+
+
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'index'] );
+    Route::put('/', [UserController::class, 'create'] ); 
+    Route::get('/{id}', [UserController::class, 'card'] );
+    Route::post('/{id}', [UserController::class, 'update'] );
+    Route::delete('/{id}', [UserController::class, 'destroy'] );
+    Route::get('/{id}/recover', [UserController::class, 'recover'] );
 });
 

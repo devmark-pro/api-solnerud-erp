@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Directory\EmployeePositionDirectory;
+use App\Models\Directory\EmployeeStatusDirectory;
+use App\Models\Directory\WarehouseDirectory;
+
 
 class User extends Authenticatable
 {
@@ -18,17 +22,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
         'surname',
-        'patronymic',
+        'patronymic',  // отчество
         'phone',
         'employee_position_id',
         'employment_date',
         'employee_status_id',
-        'warehouses_id',
-        'city'
+        'warehouse_id',
+        'city',
+        'deleted_at'
     ];
 
     /**
@@ -53,4 +59,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function employeePosition():BelongsTo 
+    {
+        return $this->belongsTo(EmployeePositionDirectory::class);
+    }
+
+    public function employeeStatus():BelongsTo 
+    {
+        return $this->belongsTo(EmployeeStatusDirectory::class);
+    }
+
+    public function warehouse():BelongsTo 
+    {
+        return $this->belongsTo(WarehouseDirectory::class);
+    }
+
 }
