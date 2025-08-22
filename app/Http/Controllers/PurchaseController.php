@@ -10,9 +10,11 @@ use App\Services\Purchase\PurchaseService;
 class PurchaseController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return PurchaseService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return PurchaseService::index($page, $limit);
     }
 
     public function create(Request $request)

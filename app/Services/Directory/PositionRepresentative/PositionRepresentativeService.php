@@ -5,9 +5,24 @@ use App\Models\Directory\PositionRepresentativeDirectory;
 class PositionRepresentativeService
 {
 
-    public static function index() {
-        return PositionRepresentativeDirectory::where(['deleted_at'=> null])->get();
+    public static function index($page = 1 ,$limit = 10 ) {
+
+        $offset = $limit * ($page-1);
+        $model = PositionRepresentativeDirectory::where(['deleted_at'=> null]);
+        $count = $model->get()->count();
+        $pagesCount= ceil($count/$limit);
+        $data = $model
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+            
+        return [
+            'data' => $data,
+            'pagesCount' => $pagesCount
+        ];
     }
+
     public static function create($data){  
         return PositionRepresentativeDirectory::create($data);
     }

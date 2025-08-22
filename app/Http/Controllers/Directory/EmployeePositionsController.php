@@ -10,9 +10,11 @@ use App\Services\Directory\EmployeePositions\EmployeePositionsService;
 
 class EmployeePositionsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return EmployeePositionsService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return EmployeePositionsService::index($page, $limit);
     }
 
     public function create(Request $request)

@@ -11,9 +11,11 @@ use App\Services\Directory\CounterpartyType\CounterpartyTypeService;
 class CounterpartyTypeController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return CounterpartyTypeService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return CounterpartyTypeService::index($page, $limit);
     }
 
     public function create(Request $request)

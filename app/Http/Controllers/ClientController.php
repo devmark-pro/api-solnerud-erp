@@ -10,9 +10,11 @@ use App\Services\Client\ClientService;
 class ClientController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return ClientService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return ClientService::index($page, $limit);
     }
 
     public function create(Request $request)

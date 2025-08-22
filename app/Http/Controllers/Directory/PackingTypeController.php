@@ -11,9 +11,11 @@ use App\Services\Directory\PackingType\PackingTypeService;
 class PackingTypeController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return PackingTypeService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return PackingTypeService::index($page, $limit);
     }
 
     public function create(Request $request)

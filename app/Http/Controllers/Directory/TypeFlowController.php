@@ -11,9 +11,11 @@ use App\Services\Directory\TypeFlow\TypeFlowService;
 class TypeFlowController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return TypeFlowService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return TypeFlowService::index($page, $limit);
     }
 
     public function create(Request $request)

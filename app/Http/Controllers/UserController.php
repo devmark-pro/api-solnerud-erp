@@ -10,9 +10,11 @@ use App\Services\User\UserService;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return UserService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return UserService::index($page, $limit);
     }
 
     public function create(Request $request)

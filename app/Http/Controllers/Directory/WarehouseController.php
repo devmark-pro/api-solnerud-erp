@@ -11,9 +11,11 @@ use App\Services\Directory\Warehouse\WarehouseService;
 class WarehouseController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return WarehouseService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return WarehouseService::index($page, $limit);
     }
 
     public function create(Request $request)

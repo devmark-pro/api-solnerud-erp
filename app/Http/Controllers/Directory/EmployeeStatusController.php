@@ -10,9 +10,11 @@ use App\Services\Directory\EmployeeStatus\EmployeeStatusService;
 
 class EmployeeStatusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return EmployeeStatusService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return EmployeeStatusService::index($page, $limit);
     }
 
     public function create(Request $request)

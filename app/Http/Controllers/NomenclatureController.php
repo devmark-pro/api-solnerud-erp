@@ -10,9 +10,11 @@ use App\Services\Nomenclature\NomenclatureService;
 class NomenclatureController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return NomenclatureService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return NomenclatureService::index($page, $limit);
     }
 
     public function create(Request $request)

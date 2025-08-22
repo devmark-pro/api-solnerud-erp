@@ -6,9 +6,24 @@ use App\Models\Directory\PurchaseTypeDirectory;
 class PurchaseTypeService
 {
 
-    public static function index() {
-        return PurchaseTypeDirectory::where(['deleted_at'=> null])->get();
+    public static function index($page = 1 ,$limit = 100 ) {
+
+        $offset = $limit * ($page-1);
+        $model = PurchaseTypeDirectory::where(['deleted_at'=> null]);
+        $count = $model->get()->count();
+        $pagesCount= ceil($count/$limit);
+        $data = $model
+            ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+            
+        return [
+            'data' => $data,
+            'pagesCount' => $pagesCount
+        ];
     }
+
     public static function create($data){  
         return PurchaseTypeDirectory::create($data);
     }

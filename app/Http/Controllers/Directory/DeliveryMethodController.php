@@ -11,9 +11,11 @@ use App\Services\Directory\DeliveryMethod\DeliveryMethodService;
 class DeliveryMethodController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return DeliveryMethodService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return DeliveryMethodService::index($page, $limit);
     }
 
     public function create(Request $request)

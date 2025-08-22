@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Validator;
 class StatusSaleController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return StatusSaleService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return StatusSaleService::index($page, $limit);
     }
 
     public function create(Request $request)

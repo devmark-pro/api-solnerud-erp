@@ -11,9 +11,11 @@ use App\Services\Directory\PurchaseType\PurchaseTypeService;
 class PurchaseTypeController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return PurchaseTypeService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return PurchaseTypeService::index($page, $limit);
     }
 
     public function create(Request $request)

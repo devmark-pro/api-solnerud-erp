@@ -10,9 +10,11 @@ use App\Services\Directory\PaymentType\PaymentTypeService;
 
 class PaymentTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return PaymentTypeService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return PaymentTypeService::index($page, $limit);
     }
 
     public function create(Request $request)

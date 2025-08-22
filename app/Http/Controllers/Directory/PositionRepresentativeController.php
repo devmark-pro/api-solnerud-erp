@@ -11,9 +11,11 @@ use App\Services\Directory\PositionRepresentative\PositionRepresentativeService;
 class PositionRepresentativeController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return PositionRepresentativeService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return PositionRepresentativeService::index($page, $limit);
     }
 
     public function create(Request $request)

@@ -10,9 +10,11 @@ use App\Services\Counterparty\CounterpartyService;
 class CounterpartyController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return CounterpartyService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 10;
+        return CounterpartyService::index($page, $limit);
     }
 
     public function create(Request $request)

@@ -10,25 +10,17 @@ use Illuminate\Support\Facades\Validator;
 class DeliveryAddressController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return DeliveryAddressService::index();
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 100;
+        return DeliveryAddressService::index($page, $limit);
     }
 
     public function create(Request $request)
     {
         try {
             $data = $request->all();
-            // $validator = Validator::make($data, [
-            //     'name'=>'required',
-            //     'system_number' => 'unique:nomenclatures'
-            // ]);
- 
-            // if($validator->fails()){
-            //     $error = $validator->errors()->toArray();
-            //     return response()->json($error)->setStatusCode(417); 
-            // }
-
             return DeliveryAddressService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
