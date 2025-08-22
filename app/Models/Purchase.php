@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Directory\StatusPurchaseDirectory;
 use App\Models\Directory\PurchaseTypeDirectory;
 use App\Models\Directory\PackingTypeDirectory;
@@ -11,6 +12,7 @@ use App\Models\Directory\DeliveryMethodDirectory;
 use App\Models\Counterparty;
 use App\Models\Nomenclature;
 use App\Models\Client;
+use App\Models\DeliveryAddress;
 
   
 class Purchase extends Model
@@ -59,5 +61,9 @@ class Purchase extends Model
     public function deliveryMethod():BelongsTo 
     {
         return $this->belongsTo(DeliveryMethodDirectory::class);
+    }
+    public function deliveryAddress(): HasMany
+    {
+        return $this->hasMany(DeliveryAddress::class);
     }
 }

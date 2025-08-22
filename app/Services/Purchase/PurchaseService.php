@@ -20,7 +20,8 @@ class PurchaseService
                 'nomenclature', 
                 'client',
                 'packingType',
-                'deliveryMethod'
+                'deliveryMethod',
+                'deliveryAddress'
             ])->first();
     }
     public static function update($id, $data){ 

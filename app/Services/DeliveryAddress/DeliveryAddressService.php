@@ -1,39 +1,34 @@
 <?php
-namespace App\Services\User;
-use App\Models\User;
 
-class UserService
+namespace App\Services\DeliveryAddress;
+
+use App\Models\DeliveryAddress;
+
+class DeliveryAddressService
 {
     public static function index() {
-        return User::where(['deleted_at'=> null])->get();
+        return DeliveryAddress::where(['deleted_at'=> null])->get();
     }
-    public static function create($data){
-        User::create($data);
+    public static function create($data){  
+        return DeliveryAddress::create($data);
     }
     public static function card($id){ 
-        $model = User::find($id);
-        if(!$model) return null;
-        return $model->with([
-                'employeePosition',
-                'employeeStatus', 
-                'warehouse'
-            ])->first();    
+        return DeliveryAddress::find($id);
     }
     public static function update($id, $data){ 
-        $model = User::find($id);
+        $model = DeliveryAddress::find($id);
         if(!$model) return null; 
         $model->updateOrFail($data);
         return $model;
     }
     public static function delete($id){ 
-        $model = User::find($id);
+        $model = DeliveryAddress::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => now()]);
     }
     public static function recover($id){ 
-        $model = User::find($id);
+        $model = DeliveryAddress::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
     }
-
 }

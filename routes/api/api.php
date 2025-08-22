@@ -7,6 +7,7 @@ use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DeliveryAddressController;
 
 
 Route::get('/user', function (Request $request) {
@@ -60,3 +61,11 @@ Route::prefix('user')->group(function () {
     Route::get('/{id}/recover', [UserController::class, 'recover'] );
 });
 
+Route::prefix('delivery_address')->group(function () {
+    Route::get('/', [DeliveryAddressController::class, 'index'] );
+    Route::put('/', [DeliveryAddressController::class, 'create'] ); 
+    Route::get('/{id}', [DeliveryAddressController::class, 'card'] );
+    Route::post('/{id}', [DeliveryAddressController::class, 'update'] );
+    Route::delete('/{id}', [DeliveryAddressController::class, 'destroy'] );
+    Route::get('/{id}/recover', [DeliveryAddressController::class, 'recover'] );
+});
