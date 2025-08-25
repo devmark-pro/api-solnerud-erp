@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
-            $table->decimal('latitude', 9, 6);
-            $table->decimal('longitude', 9, 6);
-            $table->string('warehouse_lessor');
+            $table->decimal('latitude', 9, 6)->nullable();
+            $table->decimal('longitude', 9, 6)->nullable();
+            $table->string('warehouse_lessor')->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

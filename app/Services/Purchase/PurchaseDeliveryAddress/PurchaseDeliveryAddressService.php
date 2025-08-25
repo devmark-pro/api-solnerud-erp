@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Services\DeliveryAddress;
+namespace App\Services\Purchase\PurchaseDeliveryAddress;
 
-use App\Models\DeliveryAddress;
+use App\Models\Purchase\PurchaseDeliveryAddress;
 
-class DeliveryAddressService
+class PurchaseDeliveryAddressService
 {
     public static function index($page = 1 ,$limit = 10 ) {
 
         $offset = $limit * ($page-1);
-        $model = DeliveryAddress::where(['deleted_at'=> null]);
+        $model = PurchaseDeliveryAddress::where(['deleted_at'=> null]);
         $count = $model->get()->count();
         $pagesCount= ceil($count/$limit);
         $data = $model
@@ -24,24 +24,24 @@ class DeliveryAddressService
         ];
     }
     public static function create($data){  
-        return DeliveryAddress::create($data);
+        return PurchaseDeliveryAddress::create($data);
     }
     public static function card($id){ 
-        return DeliveryAddress::find($id);
+        return PurchaseDeliveryAddress::find($id);
     }
     public static function update($id, $data){ 
-        $model = DeliveryAddress::find($id);
+        $model = PurchaseDeliveryAddress::find($id);
         if(!$model) return null; 
         $model->updateOrFail($data);
         return $model;
     }
     public static function delete($id){ 
-        $model = DeliveryAddress::find($id);
+        $model = PurchaseDeliveryAddress::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => now()]);
     }
     public static function recover($id){ 
-        $model = DeliveryAddress::find($id);
+        $model = PurchaseDeliveryAddress::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
     }

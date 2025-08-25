@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,7 @@ use App\Models\Directory\DeliveryMethodDirectory;
 use App\Models\Counterparty;
 use App\Models\Nomenclature;
 use App\Models\Client;
-use App\Models\DeliveryAddress;
+use App\Models\Purchase\PurchaseDeliveryAddress;
 
   
 class Purchase extends Model

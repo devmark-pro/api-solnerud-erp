@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Purchase;
+use App\Models\Purchase\Purchase;
 
 
-class DeliveryAddress extends Model
+class PurchaseDeliveryAddress extends Model
 {
-    protected $table = 'delivery_addresses';
+    protected $table = 'purchase_delivery_addresses';
 
     protected $fillable = [
         'id',
@@ -17,7 +17,6 @@ class DeliveryAddress extends Model
         'planned_quantity', // плановое количество
         'actual_quantity',  // фактическое количество
         'remained',         // осталось
-        'cost',             // себестоимость
         'purchase_id',
         'deleted_at',
     ];

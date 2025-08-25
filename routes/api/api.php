@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DeliveryAddressController;
+use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
+use App\Http\Controllers\Purchase\PurchaseController;
 
 
 Route::get('/user', function (Request $request) {
@@ -42,15 +42,6 @@ Route::prefix('client')->group(function () {
     Route::get('/{id}/recover', [ClientController::class, 'recover'] );
 });
 
-Route::prefix('purchase')->group(function () {
-    Route::get('/', [PurchaseController::class, 'index'] );
-    Route::put('/', [PurchaseController::class, 'create'] ); 
-    Route::get('/{id}', [PurchaseController::class, 'card'] );
-    Route::post('/{id}', [PurchaseController::class, 'update'] );
-    Route::delete('/{id}', [PurchaseController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
-});
-
 
 Route::prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index'] );
@@ -61,11 +52,21 @@ Route::prefix('user')->group(function () {
     Route::get('/{id}/recover', [UserController::class, 'recover'] );
 });
 
-Route::prefix('delivery_address')->group(function () {
-    Route::get('/', [DeliveryAddressController::class, 'index'] );
-    Route::put('/', [DeliveryAddressController::class, 'create'] ); 
-    Route::get('/{id}', [DeliveryAddressController::class, 'card'] );
-    Route::post('/{id}', [DeliveryAddressController::class, 'update'] );
-    Route::delete('/{id}', [DeliveryAddressController::class, 'destroy'] );
-    Route::get('/{id}/recover', [DeliveryAddressController::class, 'recover'] );
+Route::prefix('purchase')->group(function () {
+    Route::get('/', [PurchaseController::class, 'index'] );
+    Route::put('/', [PurchaseController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseController::class, 'card'] );
+    Route::post('/{id}', [PurchaseController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
+});
+
+
+Route::prefix('purchase_delivery_address')->group(function () {
+    Route::get('/', [PurchaseDeliveryAddressController::class, 'index'] );
+    Route::put('/', [PurchaseDeliveryAddressController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseDeliveryAddressController::class, 'card'] );
+    Route::post('/{id}', [PurchaseDeliveryAddressController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseDeliveryAddressController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseDeliveryAddressController::class, 'recover'] );
 });

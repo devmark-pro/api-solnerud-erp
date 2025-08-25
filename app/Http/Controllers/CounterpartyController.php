@@ -22,9 +22,7 @@ class CounterpartyController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
-                'system_number' => 'unique:counterparties'
-            
+                'name'=>'required',            
             ]);
  
             if($validator->fails()){

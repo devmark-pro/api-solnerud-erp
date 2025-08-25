@@ -24,6 +24,7 @@ class WarehouseController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
+                'address'=>'required',
             ]);
  
             if($validator->fails()){

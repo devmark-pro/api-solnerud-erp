@@ -23,7 +23,6 @@ class ClientController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
-                'system_number' => 'unique:nomenclatures'
             ]);
  
             if($validator->fails()){

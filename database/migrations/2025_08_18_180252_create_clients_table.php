@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('system_number')->unique();
-            $table->string('inn')->unique();
-            $table->string('city');
-            $table->string('address');
+            $table->string('inn')->nullable()->unique();
+            $table->string('city')->nullable();
+            $table->string('address')->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

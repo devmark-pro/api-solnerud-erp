@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Purchase;
 
-use App\Services\DeliveryAddress\DeliveryAddressService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\Purchase\PurchaseDeliveryAddress\PurchaseDeliveryAddressService;
 
-
-class DeliveryAddressController extends Controller
+class PurchaseDeliveryAddressController extends Controller
 {
-
     public function index(Request $request)
     {
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 100;
-        return DeliveryAddressService::index($page, $limit);
+        return PurchaseDeliveryAddressService::index($page, $limit);
     }
 
     public function create(Request $request)
     {
         try {
             $data = $request->all();
-            return DeliveryAddressService::create($data);
+            return PurchaseDeliveryAddressService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -29,7 +28,7 @@ class DeliveryAddressController extends Controller
 
      public function card(string $id)
     {
-        $data = DeliveryAddressService::card($id);
+        $data = PurchaseDeliveryAddressService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -45,21 +44,21 @@ class DeliveryAddressController extends Controller
             $error = $validator->errors()->toArray();
             return response()->json($error)->setStatusCode(417); 
         }
-        $result = DeliveryAddressService::update($id, $data);
+        $result = PurchaseDeliveryAddressService::update($id, $data);
         if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
-        $data = DeliveryAddressService::delete($id);
+        $data = PurchaseDeliveryAddressService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
-        $data = DeliveryAddressService::recover($id);
+        $data = PurchaseDeliveryAddressService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

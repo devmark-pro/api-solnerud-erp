@@ -23,6 +23,7 @@ class UserController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
+                'surname'=>'required',
             ]);
  
             if($validator->fails()){

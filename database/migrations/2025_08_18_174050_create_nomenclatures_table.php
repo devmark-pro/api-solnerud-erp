@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('nomenclatures', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('system_number')->unique();
+            $table->string('system_number')->nullable()->unique();
             $table->timestamps();
             $table->date('deleted_at')->nullable();
         });

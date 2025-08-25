@@ -1,6 +1,6 @@
 <?php
-namespace App\Services\Purchase;
-use App\Models\Purchase;
+namespace App\Services\Purchase\Purchase;
+use App\Models\Purchase\Purchase;
 
 class PurchaseService
 {

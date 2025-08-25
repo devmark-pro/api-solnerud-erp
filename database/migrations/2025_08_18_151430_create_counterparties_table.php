@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('counterparties', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('system_number')->unique();
-            $table->string('inn')->unique();
-            $table->string('city');
-            $table->string('address');
+            $table->string('inn')->nullable()->unique();
+            $table->string('city')->nullable();
+            $table->string('address')->nullable();
             $table->foreignId('counterparty_type_id')
                 ->constrained('directory_counterparty_types');
             $table->date('deleted_at')->nullable();

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Purchase;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Services\Purchase\PurchaseService;
+use App\Http\Controllers\Controller;
+use App\Services\Purchase\Purchase\PurchaseService;
 
 
 class PurchaseController extends Controller
@@ -21,14 +22,19 @@ class PurchaseController extends Controller
     {
         try {
             $data = $request->all();
-            // $validator = Validator::make($data, [
-            //     'name'=>'required',
-            // ]);
+            $validator = Validator::make($data, [
+                'counterparty_id'=>'required',
+                'nomenclature_id'=>'required',
+                'client_id'=>'required', 
+                'delivery_method_id'=>'required',
+                'price'=>'required', 
+                'count_plan'=>'required',
+            ]);
  
-            // if($validator->fails()){
-            //     $error = $validator->errors()->toArray();
-            //     return response()->json($error)->setStatusCode(417); 
-            // }
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json($error)->setStatusCode(417); 
+            }
 
             return PurchaseService::create($data);
         } catch (Exception $e){

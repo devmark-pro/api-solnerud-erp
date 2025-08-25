@@ -13,15 +13,22 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('status_purchase_id')->constrained('directory_status_purchases');
-            $table->foreignId('purchase_type_id')->constrained('directory_purchase_types');
-            $table->foreignId('counterparty_id')->constrained();
-            $table->foreignId('nomenclature_id')->constrained();
-            $table->foreignId('client_id')->constrained();
-            $table->foreignId('packing_type_id')->constrained('directory_packing_types');
-            $table->foreignId('delivery_method_id')->constrained('directory_delivery_methods');
-            $table->float('price')->default(0);
-            $table->float('count_plan')->default(0);
+            $table->foreignId('status_purchase_id')
+                ->nullable()
+                ->constrained('directory_status_purchases'); // статус отгрузки
+            $table->foreignId('purchase_type_id')
+                ->nullable() 
+                ->constrained('directory_purchase_types');  // тип покупки
+            $table->foreignId('counterparty_id')->constrained();   // поставщик
+            $table->foreignId('nomenclature_id')->constrained();   // товар
+            $table->foreignId('client_id')->constrained();         // покупатель
+            $table->foreignId('packing_type_id')
+                ->nullable()
+                ->constrained('directory_packing_types');   //тип фасовки
+            $table->foreignId('delivery_method_id')
+                ->constrained('directory_delivery_methods'); // доставка
+            $table->float('price')->default(0);         // цена 
+            $table->float('count_plan')->default(0);    // план тон
             $table->text('comment')->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
