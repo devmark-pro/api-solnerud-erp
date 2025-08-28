@@ -6,8 +6,9 @@ use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
 use App\Http\Controllers\Purchase\PurchaseController;
+use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
+use App\Http\Controllers\Purchase\PurchaseInvoiceController;
 
 
 Route::get('/user', function (Request $request) {
@@ -61,7 +62,6 @@ Route::prefix('purchase')->group(function () {
     Route::get('/{id}/recover', [PurchaseController::class, 'recover'] );
 });
 
-
 Route::prefix('purchase_delivery_address')->group(function () {
     Route::get('/', [PurchaseDeliveryAddressController::class, 'index'] );
     Route::put('/', [PurchaseDeliveryAddressController::class, 'create'] ); 
@@ -69,4 +69,13 @@ Route::prefix('purchase_delivery_address')->group(function () {
     Route::post('/{id}', [PurchaseDeliveryAddressController::class, 'update'] );
     Route::delete('/{id}', [PurchaseDeliveryAddressController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseDeliveryAddressController::class, 'recover'] );
+});
+
+Route::prefix('purchase_invoice')->group(function () {
+    Route::get('/', [PurchaseInvoiceController::class, 'index'] );
+    Route::put('/', [PurchaseInvoiceController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseInvoiceController::class, 'card'] );
+    Route::post('/{id}', [PurchaseInvoiceController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseInvoiceController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseInvoiceController::class, 'recover'] );
 });

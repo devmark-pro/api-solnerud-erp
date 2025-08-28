@@ -13,6 +13,7 @@ use App\Models\Counterparty;
 use App\Models\Nomenclature;
 use App\Models\Client;
 use App\Models\Purchase\PurchaseDeliveryAddress;
+use App\Models\Purchase\PurchaseInvoice;
 
   
 class Purchase extends Model
@@ -64,6 +65,10 @@ class Purchase extends Model
     }
     public function deliveryAddress(): HasMany
     {
-        return $this->hasMany(DeliveryAddress::class);
+        return $this->hasMany(PurchaseDeliveryAddress::class);
+    }
+    public function invoice(): HasMany
+    {
+        return $this->hasMany(PurchaseInvoice::class);
     }
 }
