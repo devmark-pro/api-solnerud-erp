@@ -26,9 +26,7 @@ class UserService
         User::create($data);
     }
     public static function card($id){ 
-        $model = User::find($id);
-        if(!$model) return null;
-        return $model->with([
+        return User::where(['id' => $id])->with([
                 'employeePosition',
                 'employeeStatus', 
                 'warehouse'

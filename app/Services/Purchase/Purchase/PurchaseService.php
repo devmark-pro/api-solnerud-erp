@@ -26,9 +26,8 @@ class PurchaseService
         return Purchase::create($data);
     }
     public static function card($id){ 
-        $model = Purchase::find($id);
-        if(!$model) return null;
-        return $model->with([
+        return Purchase::where(['id' => $id])
+            ->with([
                 'statusPurchase', 
                 'purchaseType', 
                 'counterparty', 

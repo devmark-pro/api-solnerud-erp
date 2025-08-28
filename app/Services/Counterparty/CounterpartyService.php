@@ -26,9 +26,9 @@ class CounterpartyService
         return Counterparty::create($data);
     }
     public static function card($id){ 
-        $model = Counterparty::find($id);
-        if(!$model) return null;
-        return $model->with('counterpartyType')->first();
+        return Counterparty::where(['id'=>$id])
+            ->with('counterpartyType')
+            ->first();
     }
     public static function update($id, $data){ 
         $model = Counterparty::find($id);
