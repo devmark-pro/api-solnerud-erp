@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Purchase\Purchase;
 
-
+// Адреса доставки
 class PurchaseDeliveryAddress extends Model
 {
     protected $table = 'purchase_delivery_addresses';

@@ -15,7 +15,7 @@ use App\Models\Client;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Purchase\PurchaseInvoice;
 
-  
+// Покупки
 class Purchase extends Model
 {
     protected $fillable = [

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Purchase\Purchase;
 use App\Models\User;
 
-
+// Счет фактура
 class PurchaseInvoice extends Model
 {
     protected $fillable = [
