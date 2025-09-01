@@ -21,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/dockerFile/php.dockerfile
+    # user: 'www-data'
     container_name: php_fpm_solt
     volumes:
       - /var/www/solt/back-solt:/var/www/
@@ -50,9 +51,13 @@ services:
       - ./docker/certbot/www:/var/www/certbot/
       - ./docker/letsencrypt:/etc/letsencrypt
   redis:
-    image: redis:6.2-alpine
+    image: redis:8.2.1
     container_name: redis_solt
     restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    environment:
+      - REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      - REDIS_USER=redis
+      - REDIS_USER_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    # command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
     # volumes:
     #   - cache:/data

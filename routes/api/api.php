@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Purchase\PurchaseController;
 use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
 use App\Http\Controllers\Purchase\PurchaseInvoiceController;
+use App\Http\Controllers\Purchase\PurchaseAccountSupplierController;
 
 
 Route::get('/user', function (Request $request) {
@@ -78,4 +79,13 @@ Route::prefix('purchase_invoice')->group(function () {
     Route::post('/{id}', [PurchaseInvoiceController::class, 'update'] );
     Route::delete('/{id}', [PurchaseInvoiceController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseInvoiceController::class, 'recover'] );
+});
+
+Route::prefix('account_supplier')->group(function () {
+    Route::get('/', [PurchaseAccountSupplierController::class, 'index'] );
+    Route::put('/', [PurchaseAccountSupplierController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseAccountSupplierController::class, 'card'] );
+    Route::post('/{id}', [PurchaseAccountSupplierController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseAccountSupplierController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseAccountSupplierController::class, 'recover'] );
 });

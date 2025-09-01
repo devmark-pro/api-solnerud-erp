@@ -30,10 +30,15 @@ RUN docker-php-ext-enable redis
 RUN docker-php-source delete 
 RUN touch /usr/local/etc/php/conf.d/tzone.ini 
 RUN printf '[PHP]\ndate.timezone = "Europe/Moscow"\n' > /usr/local/etc/php/conf.d/tzone.ini 
-RUN date 
+
 RUN wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer 
 RUN date 
 
 
+# RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
+
+# RUN chown -R www-data:www-data /var/www
+# USER www-data
 
 RUN composer global require laravel/installer
+
