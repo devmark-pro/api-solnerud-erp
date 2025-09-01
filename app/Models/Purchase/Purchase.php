@@ -27,14 +27,33 @@ class Purchase extends Model
         'client_id',
         'packing_type_id',  // Тип фасовки
         'delivery_method_id', // способ доставки
-        'price',            //цена за тонну
-        'count_plan',       //количество план
-                            //адрес отгрузки
+        'price',            // цена за тонну
+        'count_plan',       // количество план
+                            // адрес отгрузки
         'comment', 
         'created_at',
         'deleted_at',
     ];
 
+    protected $appends = [ 
+        'count',        //  Количество  = "Кол-во план" и  "Кол-во факт" из карточки покупки
+        'summ',         //  Сумма поступлений = "Сумма поступлений" из карточки покупки
+        'summ_nds'      //  Сумма НДС 
+    ];
+
+
+    public function getCountAttribute() 
+    {
+        return '= "Кол-во план" и  "Кол-во факт" из карточки покупки' ;
+    }
+    public function getSummAttribute() 
+    {
+        return '= "Сумма поступлений" из карточки покупки';
+    }
+    public function getSummNdsAttribute() 
+    {
+        return  '= "Сумма НДС" из карточки покупки';
+    }
     public function statusPurchase():BelongsTo 
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);
