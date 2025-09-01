@@ -6,7 +6,7 @@ use App\Models\Purchase\PurchaseAccountSupplier;
 
 class PurchaseAccountSupplierService
 {
-    public static function index($page = 1 ,$limit = 10 ) {
+    public static function index($page = 1, $limit = 10 ) {
         $offset = $limit * ($page-1);
         $model = PurchaseAccountSupplier::where(['deleted_at'=> null]);
         $count = $model->get()->count();
@@ -16,10 +16,14 @@ class PurchaseAccountSupplierService
             ->offset($offset)
             ->limit($limit)
             ->get();
-            
+        
         return [
             'data' => $data,
-            'pagesCount' => $pagesCount
+            'pagination' => [
+                'pagesCount' => $pagesCount,
+                'page' => $page,
+                'limit' => $limit,
+            ],
         ];
     }
     public static function create($data){  

@@ -19,7 +19,11 @@ class DeliveryMethodService
             
         return [
             'data' => $data,
-            'pagesCount' => $pagesCount
+            'pagination' => [
+                'pagesCount' => $pagesCount,
+                'page' => $page,
+                'limit' => $limit,
+            ],
         ];
     }
 
