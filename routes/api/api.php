@@ -10,6 +10,7 @@ use App\Http\Controllers\Purchase\PurchaseController;
 use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
 use App\Http\Controllers\Purchase\PurchaseInvoiceController;
 use App\Http\Controllers\Purchase\PurchaseAccountSupplierController;
+use App\Http\Controllers\Purchase\PurchaseReceiptsController;
 
 
 Route::get('/user', function (Request $request) {
@@ -81,11 +82,20 @@ Route::prefix('purchase_invoice')->group(function () {
     Route::get('/{id}/recover', [PurchaseInvoiceController::class, 'recover'] );
 });
 
-Route::prefix('account_supplier')->group(function () {
+Route::prefix('purchase_account_supplier')->group(function () {
     Route::get('/', [PurchaseAccountSupplierController::class, 'index'] );
     Route::put('/', [PurchaseAccountSupplierController::class, 'create'] ); 
     Route::get('/{id}', [PurchaseAccountSupplierController::class, 'card'] );
     Route::post('/{id}', [PurchaseAccountSupplierController::class, 'update'] );
     Route::delete('/{id}', [PurchaseAccountSupplierController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseAccountSupplierController::class, 'recover'] );
+});
+
+Route::prefix('purchase_receipts')->group(function () {
+    Route::get('/', [PurchaseReceiptsController::class, 'index'] );
+    Route::put('/', [PurchaseReceiptsController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseReceiptsController::class, 'card'] );
+    Route::post('/{id}', [PurchaseReceiptsController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseReceiptsController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseReceiptsController::class, 'recover'] );
 });
