@@ -40,7 +40,9 @@ class PurchaseService
                 'packingType',
                 'deliveryMethod',
                 'deliveryAddress',
-                'invoice'
+                'invoice',
+                'accountSupplier',
+                'receipts'
             ])->first();
     }
     public static function update($id, $data){ 

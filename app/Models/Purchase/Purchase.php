@@ -14,6 +14,8 @@ use App\Models\Nomenclature;
 use App\Models\Client;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Purchase\PurchaseInvoice;
+use App\Models\Purchase\PurchaseAccountSupplier;
+
 
 // Покупки
 class Purchase extends Model
@@ -89,5 +91,13 @@ class Purchase extends Model
     public function invoice(): HasMany
     {
         return $this->hasMany(PurchaseInvoice::class);
+    }
+    public function accountSupplier(): HasMany
+    {
+        return $this->hasMany(PurchaseAccountSupplier::class);
+    }
+    public function receipts(): HasMany
+    {
+        return $this->hasMany(PurchaseReceipts::class);
     }
 }
