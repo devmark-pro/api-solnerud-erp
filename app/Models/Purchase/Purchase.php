@@ -15,7 +15,7 @@ use App\Models\Client;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Purchase\PurchaseInvoice;
 use App\Models\Purchase\PurchaseAccountSupplier;
-
+use App\Models\Purchase\PurchaseExpenses;
 
 // Покупки
 class Purchase extends Model
@@ -99,5 +99,9 @@ class Purchase extends Model
     public function receipts(): HasMany
     {
         return $this->hasMany(PurchaseReceipts::class);
+    }
+    public function purchaseExpenses(): HasMany
+    {
+        return $this->hasMany(PurchaseExpenses::class);
     }
 }

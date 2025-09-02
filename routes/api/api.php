@@ -11,7 +11,7 @@ use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
 use App\Http\Controllers\Purchase\PurchaseInvoiceController;
 use App\Http\Controllers\Purchase\PurchaseAccountSupplierController;
 use App\Http\Controllers\Purchase\PurchaseReceiptsController;
-
+use App\Http\Controllers\Purchase\PurchaseExpenseController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -98,4 +98,13 @@ Route::prefix('purchase_receipts')->group(function () {
     Route::post('/{id}', [PurchaseReceiptsController::class, 'update'] );
     Route::delete('/{id}', [PurchaseReceiptsController::class, 'destroy'] );
     Route::get('/{id}/recover', [PurchaseReceiptsController::class, 'recover'] );
+});
+
+Route::prefix('purchase_expenses')->group(function () {
+    Route::get('/', [PurchaseExpenseController::class, 'index'] );
+    Route::put('/', [PurchaseExpenseController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseExpenseController::class, 'card'] );
+    Route::post('/{id}', [PurchaseExpenseController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseExpenseController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseExpenseController::class, 'recover'] );
 });
