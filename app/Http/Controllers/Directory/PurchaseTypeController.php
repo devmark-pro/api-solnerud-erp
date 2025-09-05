@@ -23,7 +23,7 @@ class PurchaseTypeController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_purchase_types',
             ]);
  
             if($validator->fails()){

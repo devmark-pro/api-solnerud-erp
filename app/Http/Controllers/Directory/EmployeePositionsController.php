@@ -22,7 +22,7 @@ class EmployeePositionsController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_employee_positions',
             ]);
  
             if($validator->fails()){

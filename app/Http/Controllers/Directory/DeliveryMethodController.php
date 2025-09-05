@@ -23,7 +23,7 @@ class DeliveryMethodController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_delivery_methods',
             ]);
  
             if($validator->fails()){

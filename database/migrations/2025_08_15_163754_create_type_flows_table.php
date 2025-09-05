@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('directory_type_flows', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
             $table->date('deleted_at')->nullable();
         });

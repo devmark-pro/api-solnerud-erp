@@ -1,21 +1,19 @@
 <?php
+namespace App\Http\Controllers\Purchase;
 
-namespace App\Http\Controllers\Directory;
-
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Directory\PackingType\PackingTypeService;
+use App\Services\Purchase\PurchaseDocument\PurchaseDocumentService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-
-class PackingTypeController extends Controller
+class PurchaseDocumentController extends Controller
 {
 
     public function index(Request $request)
     {
         $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 100;
-        return PackingTypeService::index($page, $limit);
+        $limit = $request->get('limit') ?? 10;
+        return PurchaseDocumentService::index($page, $limit);
     }
 
     public function create(Request $request)
@@ -23,7 +21,7 @@ class PackingTypeController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required|unique:directory_packing_types',
+                'name'=>'required',
             ]);
  
             if($validator->fails()){
@@ -31,7 +29,7 @@ class PackingTypeController extends Controller
                 return response()->json($error)->setStatusCode(417); 
             }
 
-            return PackingTypeService::create($data);
+            return PurchaseDocumentService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -39,28 +37,29 @@ class PackingTypeController extends Controller
 
      public function card(string $id)
     {
-        $data = PackingTypeService::card($id);
+        $data = PurchaseDocumentService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
     public function update(Request $request, string $id)
     {
-        $data = PackingTypeService::update($id, $request->all());
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data;
+        $data = $request->all();
+        $result = PurchaseDocumentService::update($id, $data);
+        if(!$result) return response()->json(['message'=>'Not found'], 404);
+        return $result;
     }
 
     public function destroy(string $id)
     {
-        $data = PackingTypeService::delete($id);
+        $data = PurchaseDocumentService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
-        $data = PackingTypeService::recover($id);
+        $data = PurchaseDocumentService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

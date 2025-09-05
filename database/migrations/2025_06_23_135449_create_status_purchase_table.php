@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('directory_status_purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('color');
             $table->timestamps();
             $table->date('deleted_at')->nullable();

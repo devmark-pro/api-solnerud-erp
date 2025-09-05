@@ -22,7 +22,7 @@ class EmployeeStatusController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_employee_statuses',
             ]);
  
             if($validator->fails()){

@@ -23,7 +23,7 @@ class StatusSaleController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_status_sales',
                 'color'=>'required'
             ]);
  

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('directory_packing_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

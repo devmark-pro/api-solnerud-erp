@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Purchase;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Services\Purchase\PurchaseReceipts\PurchaseReceiptsService;
+use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptService;
 
 
 class PurchaseReceiptsController extends Controller
@@ -15,7 +15,7 @@ class PurchaseReceiptsController extends Controller
     {
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 10;
-        return PurchaseReceiptsService::index($page, $limit);
+        return PurchaseReceiptService::index($page, $limit);
     }
 
     public function create(Request $request)
@@ -31,7 +31,7 @@ class PurchaseReceiptsController extends Controller
                 return response()->json($error)->setStatusCode(417); 
             }
 
-            return PurchaseReceiptsService::create($data);
+            return PurchaseReceiptService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -39,7 +39,7 @@ class PurchaseReceiptsController extends Controller
 
      public function card(string $id)
     {
-        $data = PurchaseReceiptsService::card($id);
+        $data = PurchaseReceiptService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -47,21 +47,21 @@ class PurchaseReceiptsController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->all();
-        $result = PurchaseReceiptsService::update($id, $data);
+        $result = PurchaseReceiptService::update($id, $data);
         if(!$result) return response()->json(['message'=>'Not found'], 404);
         return $result;
     }
 
     public function destroy(string $id)
     {
-        $data = PurchaseReceiptsService::delete($id);
+        $data = PurchaseReceiptService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
     public function recover(string $id)
     {
-        $data = PurchaseReceiptsService::recover($id);
+        $data = PurchaseReceiptService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

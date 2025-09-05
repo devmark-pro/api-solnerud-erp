@@ -14,11 +14,11 @@ class PurchaseAccountSupplier extends Model
 
     protected $fillable = [
         'id',
-        'payment_type_id',  // Тип оплаты r
+        'payment_type_id',  // Тип оплаты 
         'summ',             // r
         'summ_nds',
-        'paid',             // оплачено 0        
-        // 'remained',         // осталось
+        'paid',             // оплачено      
+    //  'remained',         // осталось
         'payment_data',     // срок оплаты
         'purchase_id',
         'deleted_at',

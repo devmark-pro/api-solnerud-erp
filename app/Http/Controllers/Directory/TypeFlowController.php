@@ -23,7 +23,7 @@ class TypeFlowController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_type_flows',
             ]);
  
             if($validator->fails()){

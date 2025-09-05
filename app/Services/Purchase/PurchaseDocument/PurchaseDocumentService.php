@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services\Purchase\PurchaseReceipt;
+namespace App\Services\Purchase\PurchaseDocument;
 
-use App\Models\Purchase\PurchaseReceipt;
+use App\Models\Purchase\PurchaseDocument;
 
-class PurchaseReceiptService
+class PurchaseDocumentService
 {
     public static function index($page = 1 ,$limit = 100 ) {
         $offset = $limit * ($page-1);
-        $model = PurchaseReceipt::where(['deleted_at'=> null]);
+        $model = PurchaseDocument::where(['deleted_at'=> null]);
         $count = $model->get()->count();
         $pagesCount= ceil($count/$limit);
         $data = $model
@@ -27,26 +27,26 @@ class PurchaseReceiptService
         ];
     }
     public static function create($data){  
-        return PurchaseReceipt::create($data);
+        return PurchaseDocument::create($data);
     }
     public static function card($id){ 
-        return PurchaseReceipt::where(['id'=>$id])
-            ->with(['user', 'warehouse'])
+        return PurchaseDocument::where(['id'=>$id])
+            //->with(['user'])
             ->first();
     }
     public static function update($id, $data){ 
-        $model = PurchaseReceipt::find($id);
+        $model = PurchaseDocument::find($id);
         if(!$model) return null; 
         $model->updateOrFail($data);
         return $model;
     }
     public static function delete($id){ 
-        $model = PurchaseReceipt::find($id);
+        $model = PurchaseDocument::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => now()]);
     }
     public static function recover($id){ 
-        $model = PurchaseReceipt::find($id);
+        $model = PurchaseDocument::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
     }

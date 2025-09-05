@@ -42,7 +42,9 @@ class PurchaseService
                 'deliveryAddress',
                 'invoice',
                 'accountSupplier',
-                'receipts'
+                'receipts',
+                'expenses',
+                'document'
             ])->first();
     }
     public static function update($id, $data){ 

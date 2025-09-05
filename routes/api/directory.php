@@ -14,8 +14,7 @@ use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
 use App\Http\Controllers\Directory\WarehouseController;
-
-
+use App\Http\Controllers\Purchase\PurchaseDocumentController;
 
 
 Route::prefix('status_purchase')->group(function () {
@@ -126,4 +125,11 @@ Route::prefix('warehouse')->group(function () {
     Route::get('/{id}/recover', [WarehouseController::class, 'recover'] );
 });
 
-
+Route::prefix('purchase_document')->group(function () {
+    Route::get('/', [PurchaseDocumentController::class, 'index'] );
+    Route::put('/', [PurchaseDocumentController::class, 'create'] ); 
+    Route::get('/{id}', [PurchaseDocumentController::class, 'card'] );
+    Route::post('/{id}', [PurchaseDocumentController::class, 'update'] );
+    Route::delete('/{id}', [PurchaseDocumentController::class, 'destroy'] );
+    Route::get('/{id}/recover', [PurchaseDocumentController::class, 'recover'] );
+});

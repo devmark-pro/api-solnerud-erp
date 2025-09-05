@@ -23,7 +23,7 @@ class CounterpartyTypeController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name'=>'required',
+                'name'=>'required|unique:directory_counterparty_types',
             ]);
  
             if($validator->fails()){

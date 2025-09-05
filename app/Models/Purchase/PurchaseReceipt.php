@@ -11,7 +11,7 @@ use App\Models\Directory\WarehouseDirectory;
 
 
 // Поступления
-class PurchaseReceipts extends Model
+class PurchaseReceipt extends Model
 {
     protected $fillable = [
         'id',
