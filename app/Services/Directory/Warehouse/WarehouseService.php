@@ -10,7 +10,7 @@ class WarehouseService
         $count = $model->get()->count();
         $pagesCount= ceil($count/$limit);
         $data = $model
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->offset($offset)
             ->limit($limit)
             ->get();
