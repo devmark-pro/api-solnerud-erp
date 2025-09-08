@@ -28,7 +28,8 @@ class NomenclatureController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-                return response()->json($error)->setStatusCode(417); 
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
 
             return NomenclatureService::create($data);
@@ -53,7 +54,8 @@ class NomenclatureController extends Controller
  
         if($validator->fails()){
             $error = $validator->errors()->toArray();
-            return response()->json($error)->setStatusCode(417); 
+           return response()->json(['message'=>$error])->setStatusCode(417); 
+            
         }
 
         $result = NomenclatureService::update($id, $data);

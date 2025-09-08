@@ -36,12 +36,12 @@ Route::prefix('status_sale')->group(function () {
 });
 
 Route::prefix('type_flow')->group(function () {
-    Route::get('/', [TypeFlowController::class, 'index'] );
-    Route::put('/', [TypeFlowController::class, 'create'] ); 
-    Route::get('/{id}', [TypeFlowController::class, 'card'] );
-    Route::post('/{id}', [TypeFlowController::class, 'update'] );
-    Route::delete('/{id}', [TypeFlowController::class, 'destroy'] );
-    Route::get('/{id}/recover', [TypeFlowController::class, 'recover'] );
+    Route::post('/', [TypeFlowController::class, 'index'] );
+    Route::post('/create', [TypeFlowController::class, 'create'] ); 
+    Route::post('/get', [TypeFlowController::class, 'card'] );
+    Route::post('/update', [TypeFlowController::class, 'update'] );
+    Route::post('/delete', [TypeFlowController::class, 'destroy'] );
+    Route::post('/recover', [TypeFlowController::class, 'recover'] );
 });
 
 Route::prefix('payment_type')->group(function () {

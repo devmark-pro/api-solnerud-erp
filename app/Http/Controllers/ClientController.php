@@ -27,7 +27,8 @@ class ClientController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-                return response()->json($error)->setStatusCode(417); 
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
 
             return ClientService::create($data);
@@ -52,7 +53,8 @@ class ClientController extends Controller
  
         if($validator->fails()){
             $error = $validator->errors()->toArray();
-            return response()->json($error)->setStatusCode(417); 
+           return response()->json(['message'=>$error])->setStatusCode(417); 
+            
         }
         $result = ClientService::update($id, $data);
         if(!$result) return response()->json(['message'=>'Not found'], 404);

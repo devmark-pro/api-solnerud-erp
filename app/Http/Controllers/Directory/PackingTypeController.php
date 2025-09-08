@@ -28,7 +28,8 @@ class PackingTypeController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-                return response()->json($error)->setStatusCode(417); 
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
 
             return PackingTypeService::create($data);
