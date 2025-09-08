@@ -18,21 +18,21 @@ use App\Http\Controllers\Purchase\PurchaseDocumentController;
 
 
 Route::prefix('status_purchase')->group(function () {
-    Route::get('/', [StatusPurchaseController::class, 'index'] );
-    Route::put('/', [StatusPurchaseController::class, 'create'] ); 
-    Route::get('/{id}', [StatusPurchaseController::class, 'card'] );
-    Route::post('/{id}', [StatusPurchaseController::class, 'update'] );
-    Route::delete('/{id}', [StatusPurchaseController::class, 'destroy'] );
-    Route::get('/{id}/recover', [StatusPurchaseController::class, 'recover'] );
+    Route::post('/', [StatusPurchaseController::class, 'index'] );
+    Route::post('/create', [StatusPurchaseController::class, 'create'] ); 
+    Route::post('/get', [StatusPurchaseController::class, 'card'] );
+    Route::post('/update', [StatusPurchaseController::class, 'update'] );
+    Route::post('/delete', [StatusPurchaseController::class, 'destroy'] );
+    Route::post('/recover', [StatusPurchaseController::class, 'recover'] );
 });
 
 Route::prefix('status_sale')->group(function () {
-    Route::get('/', [StatusSaleController::class, 'index'] );
-    Route::put('/', [StatusSaleController::class, 'create'] ); 
-    Route::get('/{id}', [StatusSaleController::class, 'card'] );
-    Route::post('/{id}', [StatusSaleController::class, 'update'] );
-    Route::delete('/{id}', [StatusSaleController::class, 'destroy'] );
-    Route::get('/{id}/recover', [StatusSaleController::class, 'recover'] );
+    Route::post('/', [StatusSaleController::class, 'index'] );
+    Route::post('/create', [StatusSaleController::class, 'create'] ); 
+    Route::post('/get', [StatusSaleController::class, 'card'] );
+    Route::post('/update', [StatusSaleController::class, 'update'] );
+    Route::post('/delete', [StatusSaleController::class, 'destroy'] );
+    Route::post('/recover', [StatusSaleController::class, 'recover'] );
 });
 
 Route::prefix('type_flow')->group(function () {
@@ -45,91 +45,91 @@ Route::prefix('type_flow')->group(function () {
 });
 
 Route::prefix('payment_type')->group(function () {
-    Route::get('/', [PaymentTypeController::class, 'index'] );
-    Route::put('/', [PaymentTypeController::class, 'create'] ); 
-    Route::get('/{id}', [PaymentTypeController::class, 'card'] );
-    Route::post('/{id}', [PaymentTypeController::class, 'update'] );
-    Route::delete('/{id}', [PaymentTypeController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PaymentTypeController::class, 'recover'] );
+    Route::post('/', [PaymentTypeController::class, 'index'] );
+    Route::post('/create', [PaymentTypeController::class, 'create'] ); 
+    Route::post('/get', [PaymentTypeController::class, 'card'] );
+    Route::post('/update', [PaymentTypeController::class, 'update'] );
+    Route::post('/delete', [PaymentTypeController::class, 'destroy'] );
+    Route::post('/recover', [PaymentTypeController::class, 'recover'] );
 });
 
 Route::prefix('employee_position')->group(function () {
-    Route::get('/', [EmployeePositionsController::class, 'index'] );
-    Route::put('/', [EmployeePositionsController::class, 'create'] ); 
-    Route::get('/{id}', [EmployeePositionsController::class, 'card'] );
-    Route::post('/{id}', [EmployeePositionsController::class, 'update'] );
-    Route::delete('/{id}', [EmployeePositionsController::class, 'destroy'] );
-    Route::get('/{id}/recover', [EmployeePositionsController::class, 'recover'] );
+    Route::post('/', [EmployeePositionsController::class, 'index'] );
+    Route::post('/create', [EmployeePositionsController::class, 'create'] ); 
+    Route::post('/get', [EmployeePositionsController::class, 'card'] );
+    Route::post('/update', [EmployeePositionsController::class, 'update'] );
+    Route::post('/delete', [EmployeePositionsController::class, 'destroy'] );
+    Route::post('/recover', [EmployeePositionsController::class, 'recover'] );
 });
 
 Route::prefix('employee_status')->group(function () {
-    Route::get('/', [EmployeeStatusController::class, 'index'] );
-    Route::put('/', [EmployeeStatusController::class, 'create'] ); 
-    Route::get('/{id}', [EmployeeStatusController::class, 'card'] );
-    Route::post('/{id}', [EmployeeStatusController::class, 'update'] );
-    Route::delete('/{id}', [EmployeeStatusController::class, 'destroy'] );
-    Route::get('/{id}/recover', [EmployeeStatusController::class, 'recover'] );
+    Route::post('/', [EmployeeStatusController::class, 'index'] );
+    Route::post('/create', [EmployeeStatusController::class, 'create'] ); 
+    Route::post('/get', [EmployeeStatusController::class, 'card'] );
+    Route::post('/update', [EmployeeStatusController::class, 'update'] );
+    Route::post('/delete', [EmployeeStatusController::class, 'destroy'] );
+    Route::post('/recover', [EmployeeStatusController::class, 'recover'] );
 });
 
 Route::prefix('delivery_method')->group(function () {
-    Route::get('/', [DeliveryMethodController::class, 'index'] );
-    Route::put('/', [DeliveryMethodController::class, 'create'] ); 
-    Route::get('/{id}', [DeliveryMethodController::class, 'card'] );
-    Route::post('/{id}', [DeliveryMethodController::class, 'update'] );
-    Route::delete('/{id}', [DeliveryMethodController::class, 'destroy'] );
-    Route::get('/{id}/recover', [DeliveryMethodController::class, 'recover'] );
+    Route::post('/', [DeliveryMethodController::class, 'index'] );
+    Route::post('/create', [DeliveryMethodController::class, 'create'] ); 
+    Route::post('/get', [DeliveryMethodController::class, 'card'] );
+    Route::post('/update', [DeliveryMethodController::class, 'update'] );
+    Route::post('/delete', [DeliveryMethodController::class, 'destroy'] );
+    Route::post('/recover', [DeliveryMethodController::class, 'recover'] );
 });
 
 Route::prefix('packing_type')->group(function () {
-    Route::get('/', [PackingTypeController::class, 'index'] );
-    Route::put('/', [PackingTypeController::class, 'create'] ); 
-    Route::get('/{id}', [PackingTypeController::class, 'card'] );
-    Route::post('/{id}', [PackingTypeController::class, 'update'] );
-    Route::delete('/{id}', [PackingTypeController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PackingTypeController::class, 'recover'] );
+    Route::post('/', [PackingTypeController::class, 'index'] );
+    Route::post('/create', [PackingTypeController::class, 'create'] ); 
+    Route::post('/get', [PackingTypeController::class, 'card'] );
+    Route::post('/update', [PackingTypeController::class, 'update'] );
+    Route::post('/delete', [PackingTypeController::class, 'destroy'] );
+    Route::post('/recover', [PackingTypeController::class, 'recover'] );
 });
 
 Route::prefix('position_representative')->group(function () {
-    Route::get('/', [PositionRepresentativeController::class, 'index'] );
-    Route::put('/', [PositionRepresentativeController::class, 'create'] ); 
-    Route::get('/{id}', [PositionRepresentativeController::class, 'card'] );
-    Route::post('/{id}', [PositionRepresentativeController::class, 'update'] );
-    Route::delete('/{id}', [PositionRepresentativeController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PositionRepresentativeController::class, 'recover'] );
+    Route::post('/', [PositionRepresentativeController::class, 'index'] );
+    Route::post('/create', [PositionRepresentativeController::class, 'create'] ); 
+    Route::post('/get', [PositionRepresentativeController::class, 'card'] );
+    Route::post('/update', [PositionRepresentativeController::class, 'update'] );
+    Route::post('/delete', [PositionRepresentativeController::class, 'destroy'] );
+    Route::post('/recover', [PositionRepresentativeController::class, 'recover'] );
 });
 
 Route::prefix('counterparty_type')->group(function () {
-    Route::get('/', [CounterpartyTypeController::class, 'index'] );
-    Route::put('/', [CounterpartyTypeController::class, 'create'] ); 
-    Route::get('/{id}', [CounterpartyTypeController::class, 'card'] );
-    Route::post('/{id}', [CounterpartyTypeController::class, 'update'] );
-    Route::delete('/{id}', [CounterpartyTypeController::class, 'destroy'] );
-    Route::get('/{id}/recover', [CounterpartyTypeController::class, 'recover'] );
+    Route::post('/', [CounterpartyTypeController::class, 'index'] );
+    Route::post('/create', [CounterpartyTypeController::class, 'create'] ); 
+    Route::post('/get', [CounterpartyTypeController::class, 'card'] );
+    Route::post('/update', [CounterpartyTypeController::class, 'update'] );
+    Route::post('/delete', [CounterpartyTypeController::class, 'destroy'] );
+    Route::post('/recover', [CounterpartyTypeController::class, 'recover'] );
 });
 
 Route::prefix('purchase_type')->group(function () {
-    Route::get('/', [PurchaseTypeController::class, 'index'] );
-    Route::put('/', [PurchaseTypeController::class, 'create'] ); 
-    Route::get('/{id}', [PurchaseTypeController::class, 'card'] );
-    Route::post('/{id}', [PurchaseTypeController::class, 'update'] );
-    Route::delete('/{id}', [PurchaseTypeController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PurchaseTypeController::class, 'recover'] );
+    Route::post('/', [PurchaseTypeController::class, 'index'] );
+    Route::post('/create', [PurchaseTypeController::class, 'create'] ); 
+    Route::post('/get', [PurchaseTypeController::class, 'card'] );
+    Route::post('/update', [PurchaseTypeController::class, 'update'] );
+    Route::post('/delete', [PurchaseTypeController::class, 'destroy'] );
+    Route::post('/recover', [PurchaseTypeController::class, 'recover'] );
 });
 
 Route::prefix('warehouse')->group(function () {
-    Route::get('/', [WarehouseController::class, 'index'] );
-    Route::put('/', [WarehouseController::class, 'create'] ); 
-    Route::get('/{id}', [WarehouseController::class, 'card'] );
-    Route::post('/{id}', [WarehouseController::class, 'update'] );
-    Route::delete('/{id}', [WarehouseController::class, 'destroy'] );
-    Route::get('/{id}/recover', [WarehouseController::class, 'recover'] );
+    Route::post('/', [WarehouseController::class, 'index'] );
+    Route::post('/create', [WarehouseController::class, 'create'] ); 
+    Route::post('/get', [WarehouseController::class, 'card'] );
+    Route::post('/update', [WarehouseController::class, 'update'] );
+    Route::post('/delete', [WarehouseController::class, 'destroy'] );
+    Route::post('/recover', [WarehouseController::class, 'recover'] );
 });
 
 Route::prefix('purchase_document')->group(function () {
-    Route::get('/', [PurchaseDocumentController::class, 'index'] );
-    Route::put('/', [PurchaseDocumentController::class, 'create'] ); 
-    Route::get('/{id}', [PurchaseDocumentController::class, 'card'] );
-    Route::post('/{id}', [PurchaseDocumentController::class, 'update'] );
-    Route::delete('/{id}', [PurchaseDocumentController::class, 'destroy'] );
-    Route::get('/{id}/recover', [PurchaseDocumentController::class, 'recover'] );
+    Route::post('/', [PurchaseDocumentController::class, 'index'] );
+    Route::post('/create', [PurchaseDocumentController::class, 'create'] ); 
+    Route::post('/get', [PurchaseDocumentController::class, 'card'] );
+    Route::post('/update', [PurchaseDocumentController::class, 'update'] );
+    Route::post('/delete', [PurchaseDocumentController::class, 'destroy'] );
+    Route::post('/recover', [PurchaseDocumentController::class, 'recover'] );
 });

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class StatusPurchaseController extends Controller
 {
-
     public function index(Request $request)
     {
         $page = $request->get('page') ?? 1;
@@ -21,10 +20,9 @@ class StatusPurchaseController extends Controller
     public function create(Request $request)
     {
         try {
-            $data = $request->all();
-            $validator = Validator::make($data, [
-                'name'=>'required|unique:directory_status_purchases',
-                'color'=>'required'
+            $updateData = $request->all();
+            $validator = Validator::make($updateData, [
+                'name'=>'required|unique:directory_type_flows',
             ]);
  
             if($validator->fails()){
@@ -33,37 +31,102 @@ class StatusPurchaseController extends Controller
             
             }
 
-            return StatusPurchaseService::create($data);
+            return StatusPurchaseService::create($updateData);
         } catch (Exception $e){
             return $e->getMessage();
         }
     }
 
-public function card(string $id)
+    public function card(Request $request)
     {
-        $data = StatusPurchaseService::card($id);
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data; 
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'id'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
+            }
+            $id = $request->input('id');
+            $data = StatusPurchaseService::card($id);
+            if(!$data) return response()->json(['message'=>'Not found'], 404);
+            return $data; 
+
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $data = StatusPurchaseService::update($id, $request->all());
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data;
+        try {
+            $requestData=$request->all();
+            $validator = Validator::make($requestData, [
+                'id'=>'required',
+                'data'=>'required',
+                // 'data.name'=>'required|unique:directory_type_flows',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
+            
+            }
+            $validator = Validator::make($requestData['data'], [
+                'name'=>'required|unique:directory_type_flows',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
+            }
+            $id = $request->input('id');
+            $data = $request->input('data');
+            $result = StatusPurchaseService::update($id, $data);
+            if(!$result) return response()->json(['message'=>'Not found'], 404);
+            return $result;
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        $data = StatusPurchaseService::delete($id);
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data;
+        try {
+            $validator = Validator::make($request->all(), [
+                'id'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
+            }
+            $id = $request->input('id');
+            $data = StatusPurchaseService::delete($id);
+            if(!$data) return response()->json(['message'=>'Not found'], 404);
+            return $data;
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 
-    public function recover(string $id)
-    {
-        $data = StatusPurchaseService::recover($id);
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data;
+    public function recover(Request $request)
+    {   
+        try {
+            $validator = Validator::make($request->all(), [
+                'id'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+               return response()->json(['message'=>$error])->setStatusCode(417); 
+            
+            }
+            $id = $request->input('id');
+            $data = StatusPurchaseService::recover($id);
+            if(!$data) return response()->json(['message'=>'Not found'], 404);
+            return $data;
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 }

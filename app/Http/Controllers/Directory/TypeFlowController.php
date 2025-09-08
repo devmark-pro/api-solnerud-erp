@@ -71,12 +71,10 @@ class TypeFlowController extends Controller
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
             $validator = Validator::make($requestData['data'], [
-                // 'id'=>'required',
-                // 'data'=>'required',
                 'name'=>'required|unique:directory_type_flows',
             ]);
             if($validator->fails()){
@@ -131,4 +129,5 @@ class TypeFlowController extends Controller
         } catch (Exception $e){
             return $e->getMessage();
         }
-    }}
+    }
+}
