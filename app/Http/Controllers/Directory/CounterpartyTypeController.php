@@ -22,7 +22,7 @@ class CounterpartyTypeController extends Controller
         try {
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_counterparty_types',
             ]);
  
             if($validator->fails()){
@@ -66,7 +66,7 @@ class CounterpartyTypeController extends Controller
             $validator = Validator::make($requestData, [
                 'id'=>'required',
                 'data'=>'required',
-                // 'data.name'=>'required|unique:directory_type_flows',
+                // 'data.name'=>'required|unique:directory_counterparty_types',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
@@ -74,7 +74,7 @@ class CounterpartyTypeController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_counterparty_types',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

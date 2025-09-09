@@ -22,7 +22,7 @@ public function index(Request $request)
         try {
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_status_sales',
             ]);
  
             if($validator->fails()){
@@ -35,6 +35,7 @@ public function index(Request $request)
         } catch (Exception $e){
             return $e->getMessage();
         }
+        
     }
 
     public function card(Request $request)
@@ -66,7 +67,7 @@ public function index(Request $request)
             $validator = Validator::make($requestData, [
                 'id'=>'required',
                 'data'=>'required',
-                // 'data.name'=>'required|unique:directory_type_flows',
+                // 'data.name'=>'required|unique:directory_tatus_sales',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
@@ -74,7 +75,7 @@ public function index(Request $request)
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_tatus_sales',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

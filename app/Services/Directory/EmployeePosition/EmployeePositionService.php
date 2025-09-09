@@ -1,8 +1,8 @@
 <?php
-namespace App\Services\Directory\EmployeePositions;
+namespace App\Services\Directory\EmployeePosition;
 use App\Models\Directory\EmployeePositionDirectory;
 
-class EmployeePositionsService
+class EmployeePositionService
 {
 
     public static function index($page = 1 ,$limit = 10 ) {

@@ -6,7 +6,7 @@ use App\Http\Controllers\Directory\StatusPurchaseController;
 use App\Http\Controllers\Directory\StatusSaleController;
 use App\Http\Controllers\Directory\TypeFlowController;
 use App\Http\Controllers\Directory\PaymentTypeController;
-use App\Http\Controllers\Directory\EmployeePositionsController;
+use App\Http\Controllers\Directory\EmployeePositionController;
 use App\Http\Controllers\Directory\EmployeeStatusController;
 use App\Http\Controllers\Directory\DeliveryMethodController;
 use App\Http\Controllers\Directory\PackingTypeController;
@@ -54,12 +54,12 @@ Route::prefix('payment_type')->group(function () {
 });
 
 Route::prefix('employee_position')->group(function () {
-    Route::post('/', [EmployeePositionsController::class, 'index'] );
-    Route::post('/create', [EmployeePositionsController::class, 'create'] ); 
-    Route::post('/get', [EmployeePositionsController::class, 'card'] );
-    Route::post('/update', [EmployeePositionsController::class, 'update'] );
-    Route::post('/delete', [EmployeePositionsController::class, 'destroy'] );
-    Route::post('/recover', [EmployeePositionsController::class, 'recover'] );
+    Route::post('/', [EmployeePositionController::class, 'index'] );
+    Route::post('/create', [EmployeePositionController::class, 'create'] ); 
+    Route::post('/get', [EmployeePositionController::class, 'card'] );
+    Route::post('/update', [EmployeePositionController::class, 'update'] );
+    Route::post('/delete', [EmployeePositionController::class, 'destroy'] );
+    Route::post('/recover', [EmployeePositionController::class, 'recover'] );
 });
 
 Route::prefix('employee_status')->group(function () {

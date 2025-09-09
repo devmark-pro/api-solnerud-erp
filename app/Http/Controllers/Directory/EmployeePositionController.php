@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Directory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Directory\EmployeePositions\EmployeePositionsService;
+use App\Services\Directory\EmployeePosition\EmployeePositionService;
 
 
-class EmployeePositionsController extends Controller
+class EmployeePositionController extends Controller
 {
     public function index(Request $request)
     {
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 100;
-        return EmployeePositionsService::index($page, $limit);
+        return EmployeePositionService::index($page, $limit);
     }
 
     public function create(Request $request)
@@ -22,7 +22,7 @@ class EmployeePositionsController extends Controller
         try {
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_employee_positions',
             ]);
  
             if($validator->fails()){
@@ -31,7 +31,7 @@ class EmployeePositionsController extends Controller
             
             }
 
-            return EmployeePositionsService::create($updateData);
+            return EmployeePositionService::create($updateData);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -50,7 +50,7 @@ class EmployeePositionsController extends Controller
             
             }
             $id = $request->input('id');
-            $data = EmployeePositionsService::card($id);
+            $data = EmployeePositionService::card($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data; 
 
@@ -66,7 +66,7 @@ class EmployeePositionsController extends Controller
             $validator = Validator::make($requestData, [
                 'id'=>'required',
                 'data'=>'required',
-                // 'data.name'=>'required|unique:directory_type_flows',
+                // 'data.name'=>'required|unique:directory_employee_positions',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
@@ -74,7 +74,7 @@ class EmployeePositionsController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_employee_positions',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
@@ -82,7 +82,7 @@ class EmployeePositionsController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = EmployeePositionsService::update($id, $data);
+            $result = EmployeePositionService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -102,7 +102,7 @@ class EmployeePositionsController extends Controller
             
             }
             $id = $request->input('id');
-            $data = EmployeePositionsService::delete($id);
+            $data = EmployeePositionService::delete($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data;
         } catch (Exception $e){
@@ -122,7 +122,7 @@ class EmployeePositionsController extends Controller
             
             }
             $id = $request->input('id');
-            $data = EmployeePositionsService::recover($id);
+            $data = EmployeePositionService::recover($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data;
         } catch (Exception $e){
