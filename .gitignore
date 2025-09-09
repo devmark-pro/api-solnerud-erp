@@ -29,6 +29,4 @@ yarn-error.log
 /docker/certbot/
 /docker/letsencrypt
 /db
-
-/stub
 /app/Console/Commands/My
