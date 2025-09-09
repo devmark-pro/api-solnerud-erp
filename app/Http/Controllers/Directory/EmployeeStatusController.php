@@ -74,7 +74,7 @@ class EmployeeStatusController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_employee_statuses',
+                'name'=>'required|unique:directory_employee_statuses,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

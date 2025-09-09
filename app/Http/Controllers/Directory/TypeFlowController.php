@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Directory\TypeFlow\TypeFlowService;
-
+use Illuminate\Validation\Rule;
 
 class TypeFlowController extends Controller
 {
@@ -75,7 +75,7 @@ class TypeFlowController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_type_flows',
+                'name'=>'required|unique:directory_type_flows,name,'.$requestData['id']
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

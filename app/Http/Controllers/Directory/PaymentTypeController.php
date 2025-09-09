@@ -74,7 +74,7 @@ class PaymentTypeController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_payment_types',
+                'name'=>'required|unique:directory_payment_types,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

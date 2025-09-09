@@ -23,7 +23,7 @@ class WarehouseController extends Controller
         try {
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
-                'name'=>'required|unique:directory_warehouses',
+                'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
             ]);
  
             if($validator->fails()){

@@ -74,7 +74,7 @@ class StatusPurchaseController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_status_purchases',
+                'name'=>'required|unique:directory_status_purchases,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

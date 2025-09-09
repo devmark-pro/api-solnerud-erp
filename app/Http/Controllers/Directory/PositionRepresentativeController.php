@@ -74,7 +74,7 @@ class PositionRepresentativeController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_position_representatives',
+                'name'=>'required|unique:directory_position_representatives,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

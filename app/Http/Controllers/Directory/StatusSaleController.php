@@ -75,7 +75,7 @@ public function index(Request $request)
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_tatus_sales',
+                'name'=>'required|unique:directory_tatus_sales,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();

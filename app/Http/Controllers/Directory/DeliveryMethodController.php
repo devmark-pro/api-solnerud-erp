@@ -74,7 +74,7 @@ class DeliveryMethodController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_delivery_methods',
+                'name'=>'required|unique:directory_delivery_methods,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
