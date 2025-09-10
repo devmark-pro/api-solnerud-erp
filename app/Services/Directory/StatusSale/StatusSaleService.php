@@ -18,12 +18,13 @@ class StatusSaleService
             ->limit($limit)
             ->get();
             
-        return [
+       return [
             'data' => $data,
             'pagination' => [
                 'pagesCount' => $pagesCount,
                 'page' => $page,
                 'limit' => $limit,
+                'count' => $count,
             ],
         ];
     }

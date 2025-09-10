@@ -24,6 +24,7 @@ class PurchaseTypeService
                 'pagesCount' => $pagesCount,
                 'page' => $page,
                 'limit' => $limit,
+                'count' => $count,
             ],
         ];
     }
