@@ -21,18 +21,18 @@ class WarehouseController extends Controller
     public function create(Request $request)
     {
         try {
-            $updateData = $request->all();
-            $validator = Validator::make($updateData, [
-                'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
+            $requestData = $request->all();
+            $validator = Validator::make($requestData, [
+                'name'=>'required|unique:directory_warehouses',
             ]);
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
 
-            return WarehouseService::create($updateData);
+            return WarehouseService::create($requestData);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -75,7 +75,7 @@ class WarehouseController extends Controller
             
             }
             $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_warehouses',
+                'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
