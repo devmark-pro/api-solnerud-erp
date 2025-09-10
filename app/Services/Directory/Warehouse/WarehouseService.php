@@ -6,7 +6,8 @@ class WarehouseService
 {
     public static function index($page = 1 ,$limit = 100 ) {
         $offset = $limit * ($page-1);
-        $model = WarehouseDirectory::where(['deleted_at'=> null]);
+        $model = WarehouseDirectory::where(['deleted_at'=> null])
+            ->with(['user']);
         $count = $model->get()->count();
         $pagesCount= ceil($count/$limit);
         $data = $model

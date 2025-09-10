@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('address');
             $table->decimal('latitude', 9, 6)->nullable();
             $table->decimal('longitude', 9, 6)->nullable();
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->string('warehouse_lessor')->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
