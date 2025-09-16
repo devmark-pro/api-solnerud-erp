@@ -9,8 +9,8 @@ class PositionRepresentativeService
 
         $offset = $limit * ($page-1);
         $model = PositionRepresentativeDirectory::where(['deleted_at'=> null]);
-        $count = $model->get()->count();
-        $pagesCount= ceil($count/$limit);
+        $total = $model->get()->count();
+        $pagesCount= ceil($total/$limit);
         $data = $model
             ->orderBy('created_at', 'asc')
             ->offset($offset)
@@ -23,7 +23,7 @@ class PositionRepresentativeService
                 'pagesCount' => $pagesCount,
                 'page' => $page,
                 'limit' => $limit,
-                'count' => $count,
+                'total' => $total,
             ],
         ];
     }

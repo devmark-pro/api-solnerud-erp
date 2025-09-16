@@ -9,8 +9,8 @@ class PurchaseDocumentService
     public static function index($page = 1 ,$limit = 100 ) {
         $offset = $limit * ($page-1);
         $model = PurchaseDocument::where(['deleted_at'=> null]);
-        $count = $model->get()->count();
-        $pagesCount= ceil($count/$limit);
+        $total = $model->get()->count();
+        $pagesCount= ceil($total/$limit);
         $data = $model
             ->orderBy('created_at', 'desc')
             ->offset($offset)
@@ -23,7 +23,7 @@ class PurchaseDocumentService
                 'pagesCount' => $pagesCount,
                 'page' => $page,
                 'limit' => $limit,
-                'count' => $count,
+                'total' => $total,
             ],
         ];
     }

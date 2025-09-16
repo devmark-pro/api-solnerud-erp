@@ -13,9 +13,9 @@ class WarehouseController extends Controller
 
     public function index(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 100;
-        return WarehouseService::index($page, $limit);
+        $requestAll = $request->all();
+        
+        return WarehouseService::index($requestAll);
     }
 
     public function create(Request $request)

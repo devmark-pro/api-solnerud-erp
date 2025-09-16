@@ -8,8 +8,8 @@ class ClientService
 
         $offset = $limit * ($page-1);
         $model = Client::where(['deleted_at'=> null]);
-        $count = $model->get()->count();
-        $pagesCount= ceil($count/$limit);
+        $total = $model->get()->count();
+        $pagesCount= ceil($total/$limit);
         $data = $model
             ->orderBy('created_at', 'desc')
             ->offset($offset)
@@ -22,7 +22,7 @@ class ClientService
                 'pagesCount' => $pagesCount,
                 'page' => $page,
                 'limit' => $limit,
-                'count' => $count,
+                'total' => $total,
             ],
         ];
     }
