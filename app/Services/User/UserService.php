@@ -4,38 +4,70 @@ use App\Models\User;
 
 class UserService
 {
-    public static function index($page = 1 ,$limit = 10 ) {
-
-        $offset = $limit * ($page-1);
-        $model = User::where(['deleted_at'=> null]);
-        $total = $model->get()->count();
-        $pagesCount= ceil($total/$limit);
-        $data = $model
-            ->orderBy('created_at', 'desc')
-            ->offset($offset)
-            ->limit($limit)
-            ->get();
+     public static function index($requestAll) {
+        try {
+            $page = 1;
+            $limit = 10;
+            if((array_key_exists('pagination', $requestAll)
+                && (array_key_exists('page', $requestAll['pagination']))
+                && (array_key_exists('limit', $requestAll['pagination']))    
+            )){
+                $page = $requestAll['pagination']['page'] ?? 1;
+                $limit = $requestAll['pagination']['limit'] ?? 10;
+            }
             
-       return [
-            'data' => $data,
-            'pagination' => [
-                'pagesCount' => $pagesCount,
-                'page' => $page,
-                'limit' => $limit,
-                'total' => $total,
-            ],
-        ];
+            $offset = $limit * ($page-1);
+            $model = User::where(['deleted_at' => null])
+                ->with([
+                    'employeePosition',
+                    'employeeStatus', 
+                ]);
+            
+            $total = $model->get()->count();
+
+            if(array_key_exists('find', $requestAll) 
+                && (is_string($requestAll['find']))
+            ) {
+
+                $find = $requestAll['find']; 
+                $model->where('id', 'LIKE', "%$find%")
+                    ->orWhere('name', 'LIKE', "%$find%");
+            }
+            $count = $model->where(['deleted_at' => null])->get()->count();
+
+            $pagesCount = ceil($count/$limit);
+
+            $data = $model
+                ->orderBy('created_at', 'desc')
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
+                
+        return [
+                'data' => $data,
+                'pagination' => [
+                    'pagesCount' => $pagesCount,
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'count' => $count,
+                ],
+            ];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
      
     public static function create($data){
         User::create($data);
     }
     public static function card($id){ 
-        return User::where(['id' => $id])->with([
+        return User::where(['id' => $id])
+            ->with([
                 'employeePosition',
                 'employeeStatus', 
-                'warehouse'
-            ])->first();    
+            ])
+            ->first();    
     }
     public static function update($id, $data){ 
         $model = User::find($id);

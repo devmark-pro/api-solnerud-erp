@@ -32,7 +32,6 @@ class User extends Authenticatable
         'employee_position_id',
         'employment_date',
         'employee_status_id',
-        'warehouse_id',
         'city',
         'deleted_at'
     ];
@@ -69,10 +68,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo(EmployeeStatusDirectory::class);
     }
-
-    public function warehouse():BelongsTo 
-    {
-        return $this->belongsTo(WarehouseDirectory::class);
-    }
-
 }

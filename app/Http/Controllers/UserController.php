@@ -12,9 +12,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 10;
-        return UserService::index($page, $limit);
+        $requestAll = $request->all();
+        return UserService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -38,28 +37,50 @@ class UserController extends Controller
         }
     }
 
-     public function card(string $id)
+     public function card(Request $request)
     {
+         $validator = Validator::make($request->all(), [
+                'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417);     
+        }
+        $id = $request->input('id');
         $data = UserService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $data = $request->all();
-        $validator = Validator::make($data, [
-            'system_number' => 'unique:nomenclatures'
-        ]);
- 
-        if($validator->fails()){
-            $error = $validator->errors()->toArray();
-           return response()->json(['message'=>$error])->setStatusCode(417); 
+        try {
+            $requestData=$request->all();
+            $validator = Validator::make($requestData, [
+                'id'=>'required',
+                'data'=>'required',
+                // 'data.name'=>'required|unique:directory_warehouses',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
+            }
+            // $validator = Validator::make($requestData['data'], [
+            //     'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
+            // ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
+            }
+            $id = $request->input('id');
+            $data = $request->input('data');
+            $result = UserService::update($id, $data);
+            if(!$result) return response()->json(['message'=>'Not found'], 404);
+            return $result;
+        } catch (Exception $e){
+            return $e->getMessage();
         }
-        $result = UserService::update($id, $data);
-        if(!$result) return response()->json(['message'=>'Not found'], 404);
-        return $result;
     }
 
     public function destroy(string $id)

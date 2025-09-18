@@ -14,7 +14,6 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        
         return WarehouseService::index($requestAll);
     }
 
@@ -40,7 +39,6 @@ class WarehouseController extends Controller
 
     public function card(Request $request)
     {
-
         try {
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -74,9 +72,9 @@ class WarehouseController extends Controller
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            $validator = Validator::make($requestData['data'], [
-                'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
-            ]);
+            // $validator = Validator::make($requestData['data'], [
+            //     'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
+            // ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
