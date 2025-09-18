@@ -13,8 +13,6 @@ use App\Http\Controllers\Directory\PackingTypeController;
 use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
-use App\Http\Controllers\Directory\WarehouseController;
-use App\Http\Controllers\Purchase\PurchaseDocumentController;
 
 
 Route::prefix('status_purchase')->group(function () {
@@ -116,20 +114,4 @@ Route::prefix('purchase_type')->group(function () {
     Route::post('/recover', [PurchaseTypeController::class, 'recover'] );
 });
 
-Route::prefix('warehouse')->group(function () {
-    Route::post('/', [WarehouseController::class, 'index'] );
-    Route::post('/create', [WarehouseController::class, 'create'] ); 
-    Route::post('/get', [WarehouseController::class, 'card'] );
-    Route::post('/update', [WarehouseController::class, 'update'] );
-    Route::post('/delete', [WarehouseController::class, 'destroy'] );
-    Route::post('/recover', [WarehouseController::class, 'recover'] );
-});
 
-Route::prefix('purchase_document')->group(function () {
-    Route::post('/', [PurchaseDocumentController::class, 'index'] );
-    Route::post('/create', [PurchaseDocumentController::class, 'create'] ); 
-    Route::post('/get', [PurchaseDocumentController::class, 'card'] );
-    Route::post('/update', [PurchaseDocumentController::class, 'update'] );
-    Route::post('/delete', [PurchaseDocumentController::class, 'destroy'] );
-    Route::post('/recover', [PurchaseDocumentController::class, 'recover'] );
-});

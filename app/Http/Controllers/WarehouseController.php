@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Directory;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Directory\Warehouse\WarehouseService;
+use App\Services\Warehouse\WarehouseService;
 
 
 class WarehouseController extends Controller
