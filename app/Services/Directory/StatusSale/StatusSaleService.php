@@ -36,10 +36,13 @@ class StatusSaleService
         return StatusSaleDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = StatusSaleDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            StatusSaleDirectory::where('id', $id)->update($data);
+            return StatusSaleDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = StatusSaleDirectory::find($id);

@@ -35,10 +35,13 @@ class PositionRepresentativeService
         return PositionRepresentativeDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = PositionRepresentativeDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+          try {
+            PositionRepresentativeDirectory::where('id', $id)->update($data);
+            return PositionRepresentativeDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = PositionRepresentativeDirectory::find($id);

@@ -64,10 +64,12 @@ class WarehouseService
         return Warehouse::find($id);
     }
     public static function update($id, $data){ 
-        $model = Warehouse::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            Warehouse::where('id', $id)->update($data);
+            return Warehouse::where('id', $id)->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = Warehouse::find($id);

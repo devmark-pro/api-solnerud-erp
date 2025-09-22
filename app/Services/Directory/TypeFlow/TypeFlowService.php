@@ -34,10 +34,13 @@ class TypeFlowService
         return TypeFlowDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = TypeFlowDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            TypeFlowDirectory::where('id', $id)->update($data);
+            return TypeFlowDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = TypeFlowDirectory::find($id);

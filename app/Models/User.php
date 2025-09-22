@@ -36,6 +36,11 @@ class User extends Authenticatable
         'deleted_at'
     ];
 
+
+    protected $appends = [ 
+        'is_password',     // Паоль задан 
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -68,4 +73,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(EmployeeStatusDirectory::class);
     }
+
+    public function getIsPasswordAttribute() 
+    {
+        return !!$this->password;
+        // boolean($this->password);//$this->belongsTo(EmployeeStatusDirectory::class);
+    }
+    
 }

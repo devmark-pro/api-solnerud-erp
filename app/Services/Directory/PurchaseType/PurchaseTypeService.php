@@ -36,10 +36,13 @@ class PurchaseTypeService
         return PurchaseTypeDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = PurchaseTypeDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            PurchaseTypeDirectory::where('id', $id)->update($data);
+            return PurchaseTypeDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = PurchaseTypeDirectory::find($id);

@@ -35,10 +35,13 @@ class DeliveryMethodService
         return DeliveryMethodDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = DeliveryMethodDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+          try {
+            DeliveryMethodDirectory::where('id', $id)->update($data);
+            return DeliveryMethodDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = DeliveryMethodDirectory::find($id);

@@ -36,10 +36,13 @@ class StatusPurchaseService
         return StatusPurchaseDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = StatusPurchaseDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            StatusPurchaseDirectory::where('id', $id)->update($data);
+            return StatusPurchaseDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = StatusPurchaseDirectory::find($id);

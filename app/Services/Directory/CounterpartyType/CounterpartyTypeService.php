@@ -34,10 +34,13 @@ class CounterpartyTypeService
         return CounterpartyTypeDirectory::find($id);
     }
     public static function update($id, $data){ 
-        $model = CounterpartyTypeDirectory::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            CounterpartyTypeDirectory::where('id', $id)->update($data);
+            return CounterpartyTypeDirectory::where('id', $id)->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = CounterpartyTypeDirectory::find($id);

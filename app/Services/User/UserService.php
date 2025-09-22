@@ -20,7 +20,7 @@ class UserService
             $model = User::where(['deleted_at' => null])
                 ->with([
                     'employeePosition',
-                    'employeeStatus', 
+                    'employeeStatus',
                 ]);
             
             $total = $model->get()->count();
@@ -43,7 +43,7 @@ class UserService
                 ->limit($limit)
                 ->get();
                 
-        return [
+            return [
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
@@ -70,10 +70,18 @@ class UserService
             ->first();    
     }
     public static function update($id, $data){ 
-        $model = User::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        // $model = 
+        try {
+            User::where('id', $id)->update($data);
+            return User::where('id', $id)
+                ->with([
+                    'employeePosition',
+                    'employeeStatus', 
+                ])->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
         $model = User::find($id);
