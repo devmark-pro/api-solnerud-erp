@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserDocumentController;
 use App\Http\Controllers\WarehouseController;
 
 use App\Http\Controllers\Purchase\PurchaseController;
@@ -59,6 +60,15 @@ Route::prefix('user')->group(function () {
     Route::post('/recover', [UserController::class, 'recover'] );
 });
 
+Route::prefix('user_document')->group(function () {
+    Route::post('/', [UserDocumentController::class,  'index']);
+    Route::post('/create', [UserDocumentController::class, 'create'] ); 
+    Route::post('/get', [UserDocumentController::class, 'card'] );
+    Route::post('/update', [UserDocumentController::class, 'update'] );
+    Route::post('/delete', [UserDocumentController::class, 'destroy'] );
+    Route::post('/recover', [UserDocumentController::class, 'recover'] );
+});
+
 Route::prefix('purchase')->group(function () {
     Route::post('/', [PurchaseController::class, 'index'] );
     Route::post('/create', [PurchaseController::class, 'create'] ); 
@@ -103,7 +113,14 @@ Route::prefix('purchase_receipts')->group(function () {
     Route::post('/delete', [PurchaseReceiptsController::class, 'destroy'] );
     Route::post('/recover', [PurchaseReceiptsController::class, 'recover'] );
 });
-
+Route::prefix('user_document')->group(function () {
+    Route::post('/', [UserDocumentController::class,  'index']);
+    Route::post('/create', [UserDocumentController::class, 'create'] ); 
+    Route::post('/get', [UserDocumentController::class, 'card'] );
+    Route::post('/update', [UserDocumentController::class, 'update'] );
+    Route::post('/delete', [UserDocumentController::class, 'destroy'] );
+    Route::post('/recover', [UserDocumentController::class, 'recover'] );
+});
 Route::prefix('purchase_expenses')->group(function () {
     Route::post('/', [PurchaseExpenseController::class, 'index'] );
     Route::post('/create', [PurchaseExpenseController::class, 'create'] ); 
@@ -131,5 +148,6 @@ Route::prefix('warehouse')->group(function () {
     Route::post('/delete', [WarehouseController::class, 'destroy'] );
     Route::post('/recover', [WarehouseController::class, 'recover'] );
 });
+
 
 ?>

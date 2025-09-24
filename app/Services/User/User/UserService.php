@@ -1,6 +1,6 @@
 <?php
-namespace App\Services\User;
-use App\Models\User;
+namespace App\Services\User\User;
+use App\Models\User\User;
 use App\Models\Warehouse;
 
 class UserService

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\User\UserService;
+use Illuminate\Support\Facades\Validator;
+use App\Services\User\UserDocument\UserDocumentService;
 
 
-class UserController extends Controller
+class UserDocumentController extends Controller
 {
-
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return UserService::index($requestAll);
+        return UserDocumentService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -22,24 +22,20 @@ class UserController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
-                'surname'=>'required',
-                'employee_position_id'=>'required',
-                'employee_status_id'=>'required',
-            ]);
+             ]);
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-
-            return UserService::create($data);
+            return UserDocumentService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
     }
 
-     public function card(Request $request)
+    public function card(Request $request)
     {
          $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -49,7 +45,7 @@ class UserController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417);     
         }
         $id = $request->input('id');
-        $data = UserService::card($id);
+        $data = UserDocumentService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -67,13 +63,9 @@ class UserController extends Controller
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            if($validator->fails()){
-                $error = $validator->errors()->toArray();
-                return response()->json(['message'=>$error])->setStatusCode(417); 
-            }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = UserService::update($id, $data);
+            $result = UserDocumentService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -91,14 +83,22 @@ class UserController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = UserService::delete($id);
+        $data = UserDocumentService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
-    public function recover(string $id)
+    public function recover(Request $request)
     {
-        $data = UserService::recover($id);
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
+        $data = UserDocumentService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
