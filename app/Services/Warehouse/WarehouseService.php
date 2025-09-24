@@ -58,7 +58,11 @@ class WarehouseService
     }
 
     public static function create($data){  
-        return Warehouse::create($data);
+        try{
+            return Warehouse::create($data);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function card($id){ 
         return Warehouse::find($id);
@@ -66,7 +70,9 @@ class WarehouseService
     public static function update($id, $data){ 
         try {
             Warehouse::where('id', $id)->update($data);
-            return Warehouse::where('id', $id)->first();
+            return Warehouse::where('id', $id)->with([
+                'user', 
+            ])->first();
         } catch (Exception $e) {
             return $e->getMessage();
         }

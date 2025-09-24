@@ -23,6 +23,8 @@ class UserController extends Controller
             $validator = Validator::make($data, [
                 'name'=>'required',
                 'surname'=>'required',
+                'employee_position_id'=>'required',
+                'employee_status_id'=>'required',
             ]);
  
             if($validator->fails()){
@@ -59,16 +61,12 @@ class UserController extends Controller
             $validator = Validator::make($requestData, [
                 'id'=>'required',
                 'data'=>'required',
-                // 'data.name'=>'required|unique:directory_warehouses',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            // $validator = Validator::make($requestData['data'], [
-            //     'name'=>'required|unique:directory_warehouses,name,'.$requestData['id'],
-            // ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
@@ -83,8 +81,16 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
         $data = UserService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;

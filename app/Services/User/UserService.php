@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\User;
 use App\Models\User;
+use App\Models\Warehouse;
 
 class UserService
 {
@@ -59,7 +60,17 @@ class UserService
     }
      
     public static function create($data){
-        User::create($data);
+        try {
+            $user = User::create($data);
+            if(array_key_exists('warehouse_id', $data)){
+                Warehouse::where('id', $data['warehouse_id'])
+                    ->update(['user_id' => $user->id]);
+                unset($data['warehouse_id']);
+            };
+            return $user;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function card($id){ 
         return User::where(['id' => $id])
@@ -70,9 +81,15 @@ class UserService
             ->first();    
     }
     public static function update($id, $data){ 
-        // $model = 
         try {
+            if(array_key_exists('warehouse_id', $data)){
+                Warehouse::where('id', $data['warehouse_id'])
+                    ->update(['user_id' => $id]);
+                unset($data['warehouse_id']);
+            }
+            
             User::where('id', $id)->update($data);
+
             return User::where('id', $id)
                 ->with([
                     'employeePosition',
@@ -84,9 +101,11 @@ class UserService
         }
     }
     public static function delete($id){ 
-        $model = User::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => now()]);
+        try {
+            return User::where('id', $id)->update(['deleted_at' => now()]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function recover($id){ 
         $model = User::find($id);

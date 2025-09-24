@@ -8,7 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Directory\EmployeePositionDirectory;
 use App\Models\Directory\EmployeeStatusDirectory;
-use App\Models\Directory\WarehouseDirectory;
+use App\Models\Warehouse;
+
 
 
 class User extends Authenticatable
@@ -36,9 +37,9 @@ class User extends Authenticatable
         'deleted_at'
     ];
 
-
     protected $appends = [ 
-        'is_password',     // Паоль задан 
+        'is_password',     // Пароль задан 
+        'warehouse',
     ];
 
     /**
@@ -73,11 +74,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(EmployeeStatusDirectory::class);
     }
-
+    public function user():BelongsTo 
+    {
+        return $this->belongsTo(User::class);
+    }
+    
     public function getIsPasswordAttribute() 
     {
         return !!$this->password;
-        // boolean($this->password);//$this->belongsTo(EmployeeStatusDirectory::class);
     }
+    public function getWarehouseAttribute() 
+    {
+        return  Warehouse::where('user_id', $this->id)->first();
+    }
+    
     
 }
