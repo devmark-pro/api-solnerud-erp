@@ -29,11 +29,5 @@ class UserDocument extends Model
     {
         return $this->belongsTo(User::class, 'added_user_id');
     }
-
-// public function statusPurchase():BelongsTo 
-//     {
-//         return $this->belongsTo(StatusPurchaseDirectory::class);
-//     }
-
 }
 
