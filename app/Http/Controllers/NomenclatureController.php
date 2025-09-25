@@ -22,7 +22,8 @@ class NomenclatureController extends Controller
         try {
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
-                'name'=>'required|unique:directory_Nomenclatures',
+                'system_number'=>'required|unique:nomenclatures',
+                'name'=>'required',
             ]);
  
             if($validator->fails()){
