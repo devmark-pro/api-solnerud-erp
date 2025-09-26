@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CounterpartyController;
+use App\Http\Controllers\Counterparty\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\User\UserController;

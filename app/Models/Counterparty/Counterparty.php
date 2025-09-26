@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Counterparty;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +11,6 @@ class Counterparty extends Model
 {
     protected $fillable = [
         'id',
-        'system_number', // номер в системе
         'name',
         'counterparty_type_id', // вид контрагента
         'inn',
