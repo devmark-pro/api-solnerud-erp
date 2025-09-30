@@ -33,7 +33,6 @@ return new class extends Migration
             $table->dropColumn('patronymic');
             $table->dropColumn('employee_position_id');
             $table->dropColumn('employee_status_id');
-            $table->dropColumn('warehouse_id');
             $table->dropColumn('employment_date');
             $table->dropColumn('phone');
             $table->dropColumn('city');

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 // Должность представителя
-class PositionRepresentativeDirectory extends Model
+class RepresentativePositionDirectory extends Model
 {
     protected $table = 'directory_position_representatives';
 

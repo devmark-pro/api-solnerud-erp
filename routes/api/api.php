@@ -17,13 +17,14 @@ use App\Http\Controllers\Purchase\PurchaseReceiptsController;
 use App\Http\Controllers\Purchase\PurchaseExpenseController;
 use App\Http\Controllers\Purchase\PurchaseDocumentController;
 
+use App\Http\Controllers\Counterparty\CounterpartyRepresentativeController;
 
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::prefix('counterparties')->group(function () {
+Route::prefix('counterparty')->group(function () {
     Route::post('/', [CounterpartyController::class, 'index'] );
     Route::post('/create', [CounterpartyController::class, 'create'] ); 
     Route::post('/get', [CounterpartyController::class, 'card'] );
@@ -31,6 +32,17 @@ Route::prefix('counterparties')->group(function () {
     Route::post('/delete', [CounterpartyController::class, 'destroy'] );
     Route::post('/recover', [CounterpartyController::class, 'recover'] );
 });
+
+
+Route::prefix('counterparty_representative')->group(function () {
+    Route::post('/', [CounterpartyRepresentativeController::class,  'index']);
+    Route::post('/create', [CounterpartyRepresentativeController::class, 'create'] ); 
+    Route::post('/get', [CounterpartyRepresentativeController::class, 'card'] );
+    Route::post('/update', [CounterpartyRepresentativeController::class, 'update'] );
+    Route::post('/delete', [CounterpartyRepresentativeController::class, 'destroy'] );
+    Route::post('/recover', [CounterpartyRepresentativeController::class, 'recover'] );
+});
+
 
 Route::prefix('nomenclature')->group(function () {
     Route::post('/', [NomenclatureController::class, 'index'] );

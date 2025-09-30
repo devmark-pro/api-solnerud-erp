@@ -18,7 +18,7 @@ class CounterpartyService
             
             $offset = $limit * ($page-1);
             $model = Counterparty::where(['deleted_at' => null])
-                ->with(['counterpartyType']);
+                ->with(['counterpartyType','representatives']);
 
             $total = $model->get()->count();
 
@@ -27,7 +27,7 @@ class CounterpartyService
             ) {
 
                 $find = $requestAll['find']; 
-                $model->where('system_number', 'LIKE', "%$find%")
+                $model->where('id', 'LIKE', "%$find%")
                     ->orWhere('name', 'LIKE', "%$find%");
             }
             $count = $model->where(['deleted_at' => null])->get()->count();
@@ -41,7 +41,6 @@ class CounterpartyService
                 ->get();
                 
         return [
-                'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -49,6 +48,8 @@ class CounterpartyService
                     'total' => $total,
                     'count' => $count,
                 ],
+                'data' => $data,
+
             ];
         } catch (Exception $e) {
             return $e->getMessage();
@@ -64,7 +65,7 @@ class CounterpartyService
     }
      public static function card($id){ 
         return Counterparty::where(['id' => $id])
-            ->with(['counterpartyType'])->first();    
+            ->with(['counterpartyType', 'representatives'])->first();    
     }
     public static function update($id, $data){ 
         try {
