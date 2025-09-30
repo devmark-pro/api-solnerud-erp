@@ -5,8 +5,10 @@ namespace App\Models\Counterparty;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Directory\CounterpartyTypeDirectory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Counterparty\CounterpartyRepresentative;
 
-  
+
 class Counterparty extends Model
 {
     protected $fillable = [
@@ -19,8 +21,13 @@ class Counterparty extends Model
                         // Предстовитель
         'deleted_at',
     ];
+
     public function counterpartyType(): BelongsTo 
     {
         return $this->belongsTo(CounterpartyTypeDirectory::class);
+    }
+    public function representatives(): HasMany
+    {
+        return $this->hasMany(CounterpartyRepresentative::class)->where('deleted_at', null);
     }
 }
