@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('client_representatives', function (Blueprint $table) {
             $table->id();
+            $table->string('surname');
             $table->string('name');
-            // $table->string('system_number')->unique();
-            $table->string('inn')->nullable()->unique();
-            $table->string('city')->nullable();
-            $table->string('address')->nullable();
+            $table->string('patronymic')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->foreignId('representative_position_id')->constrained('directory_position_representatives');
+            $table->foreignId('client_id')->constrained();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('client_representatives');
     }
 };

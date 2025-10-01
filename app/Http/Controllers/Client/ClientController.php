@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Counterparty;
+namespace App\Http\Controllers\Client;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Counterparty\Counterparty\CounterpartyService;
+use App\Services\Client\Client\ClientService;
 
 
-class CounterpartyController extends Controller
+class ClientController extends Controller
 {
 
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return CounterpartyService::index($requestAll);
+        return ClientService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -31,7 +31,7 @@ class CounterpartyController extends Controller
             
             }
 
-            return CounterpartyService::create($requestData);
+            return ClientService::create($requestData);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -49,7 +49,7 @@ class CounterpartyController extends Controller
             
             }
             $id = $request->input('id');
-            $data = CounterpartyService::card($id);
+            $data = ClientService::card($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data; 
 
@@ -77,7 +77,7 @@ class CounterpartyController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = CounterpartyService::update($id, $data);
+            $result = ClientService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -97,7 +97,7 @@ class CounterpartyController extends Controller
             
             }
             $id = $request->input('id');
-            $data = CounterpartyService::delete($id);
+            $data = ClientService::delete($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data;
         } catch (Exception $e){
@@ -117,7 +117,7 @@ class CounterpartyController extends Controller
             
             }
             $id = $request->input('id');
-            $data = CounterpartyService::recover($id);
+            $data = ClientService::recover($id);
             if(!$data) return response()->json(['message'=>'Not found'], 404);
             return $data;
         } catch (Exception $e){

@@ -1,10 +1,11 @@
 <?php
-namespace App\Services\Counterparty\Counterparty;
-use App\Models\Counterparty\Counterparty;
 
-class CounterpartyService
+namespace App\Services\Client\ClientRepresentative;
+use App\Models\Client\ClientRepresentative;
+
+class ClientRepresentativeService
 {
-    public static function index($requestAll) {
+     public static function index($requestAll) {
         try {
             $page = 1;
             $limit = 10;
@@ -17,9 +18,9 @@ class CounterpartyService
             }
             
             $offset = $limit * ($page-1);
-            $model = Counterparty::where(['deleted_at' => null])
-                ->with(['counterpartyType','representatives']);
-
+            $model = ClientRepresentative::where(['deleted_at' => null]);
+               // ->with([])
+            
             $total = $model->get()->count();
 
             if(array_key_exists('find', $requestAll) 
@@ -30,6 +31,15 @@ class CounterpartyService
                 $model->where('id', 'LIKE', "%$find%")
                     ->orWhere('name', 'LIKE', "%$find%");
             }
+
+            if(array_key_exists('filter', $requestAll) 
+               && (is_array($requestAll['filter']))
+            ) 
+            {
+                $filter = $requestAll['filter']; 
+                $model->where($filter);
+            }
+            
             $count = $model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
@@ -40,7 +50,8 @@ class CounterpartyService
                 ->limit($limit)
                 ->get();
                 
-        return [
+            return [
+                'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -48,44 +59,47 @@ class CounterpartyService
                     'total' => $total,
                     'count' => $count,
                 ],
-                'data' => $data,
-
             ];
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-
-    public static function create($data){  
-        try{
-            return Counterparty::create($data);
+     
+    public static function create($data){
+        try {
+            return ClientRepresentative::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-     public static function card($id){ 
-        return Counterparty::where(['id' => $id])
-            ->with(['counterpartyType', 'representatives'])
+    public static function card($id){ 
+        return ClientRepresentative::where(['id' => $id])
+            //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            Counterparty::where('id', $id)->update($data);
-            return Counterparty::where('id', $id)
-                ->with(['counterpartyType', 'representatives'])
+            ClientRepresentative::where('id', $id)->update($data);
+            return ClientRepresentative::where('id', $id)
+                //->with([])
                 ->first();
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
-        $model = Counterparty::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => now()]); 
+        try {
+            return ClientRepresentative::where('id', $id)->update(['deleted_at' => now()]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function recover($id){ 
-        $model = Counterparty::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => null]);
-    }
+        try {
+            return ClientRepresentative::where('id', $id)->update(['deleted_at' => null]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+     }
 }

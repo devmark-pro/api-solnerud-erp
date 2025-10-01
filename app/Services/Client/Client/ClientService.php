@@ -1,8 +1,8 @@
 <?php
-namespace App\Services\Counterparty\Counterparty;
-use App\Models\Counterparty\Counterparty;
+namespace App\Services\Client\Client;
+use App\Models\Client\Client;
 
-class CounterpartyService
+class ClientService
 {
     public static function index($requestAll) {
         try {
@@ -17,8 +17,8 @@ class CounterpartyService
             }
             
             $offset = $limit * ($page-1);
-            $model = Counterparty::where(['deleted_at' => null])
-                ->with(['counterpartyType','representatives']);
+            $model = Client::where(['deleted_at' => null])
+                ->with(['representatives']);
 
             $total = $model->get()->count();
 
@@ -58,33 +58,33 @@ class CounterpartyService
 
     public static function create($data){  
         try{
-            return Counterparty::create($data);
+            return Client::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
      public static function card($id){ 
-        return Counterparty::where(['id' => $id])
-            ->with(['counterpartyType', 'representatives'])
+        return Client::where(['id' => $id])
+            ->with(['representatives'])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            Counterparty::where('id', $id)->update($data);
-            return Counterparty::where('id', $id)
-                ->with(['counterpartyType', 'representatives'])
-                ->first();
+            Client::where('id', $id)->update($data);
+            return Client::where('id', $id)
+            ->with(['representatives'])
+            ->first();
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
-        $model = Counterparty::find($id);
+        $model = Client::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => now()]); 
     }
     public static function recover($id){ 
-        $model = Counterparty::find($id);
+        $model = Client::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
     }

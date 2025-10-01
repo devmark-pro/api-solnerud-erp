@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Counterparty\CounterpartyController;
 use App\Http\Controllers\NomenclatureController;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\ClientRepresentativeController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserDocumentController;
 use App\Http\Controllers\WarehouseController;
@@ -62,6 +63,14 @@ Route::prefix('client')->group(function () {
     Route::post('/recover', [ClientController::class, 'recover'] );
 });
 
+Route::prefix('client_representative')->group(function () {
+    Route::post('/', [ClientRepresentativeController::class,  'index']);
+    Route::post('/create', [ClientRepresentativeController::class, 'create'] ); 
+    Route::post('/get', [ClientRepresentativeController::class, 'card'] );
+    Route::post('/update', [ClientRepresentativeController::class, 'update'] );
+    Route::post('/delete', [ClientRepresentativeController::class, 'destroy'] );
+    Route::post('/recover', [ClientRepresentativeController::class, 'recover'] );
+});
 
 Route::prefix('user')->group(function () {
     Route::post('/', [UserController::class, 'index'] );
