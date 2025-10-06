@@ -8,8 +8,8 @@ services:
     depends_on:
       - php-fpm
     volumes:
-      - /var/www/solt/back-solt:/var/www/
-      - /var/www/solt/front-solt:/var/www/docker/front/front-solt
+      - ./:/var/www/
+      - ../front-solt:/var/www/docker/front/front-solt
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/sites/:/etc/nginx/sites-available
       - ./docker/logs:/var/log
@@ -24,9 +24,10 @@ services:
     # user: 'www-data'
     container_name: php_fpm_solt
     volumes:
-      - /var/www/solt/back-solt:/var/www/
+      - ./:/var/www/
     depends_on:
       - postgres
+      - redis
     restart: always
   postgres:
     image: postgres:17.5

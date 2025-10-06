@@ -12,7 +12,7 @@ RUN apt-get install -y wget g++ zlib1g-dev curl libicu-dev libmagickwand-dev lib
 RUN mkdir -p /usr/src/php/ext/imagick 
 RUN curl -fsSL https://github.com/Imagick/imagick/archive/06116aa24b76edaf6b1693198f79e6c295eda8a9.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1 
 
-RUN pecl install redis  
+# RUN pecl install redis  
 
 
 RUN apt-get install -y \
@@ -26,7 +26,7 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-w
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ 
 RUN docker-php-ext-configure intl 
 RUN docker-php-ext-install -j$(nproc) intl ldap gd bz2 sockets bcmath gettext pdo_mysql pdo pdo_pgsql pgsql zip 
-RUN docker-php-ext-enable redis  
+# RUN docker-php-ext-enable redis  
 RUN docker-php-source delete 
 RUN touch /usr/local/etc/php/conf.d/tzone.ini 
 RUN printf '[PHP]\ndate.timezone = "Europe/Moscow"\n' > /usr/local/etc/php/conf.d/tzone.ini 
