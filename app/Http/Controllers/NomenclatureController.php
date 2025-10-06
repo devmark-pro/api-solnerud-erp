@@ -66,16 +66,12 @@ class NomenclatureController extends Controller
             $validator = Validator::make($requestData, [
                 'id'=>'required',
                 'data'=>'required',
-                // 'data.name'=>'required|unique:directory_Nomenclatures',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            // $validator = Validator::make($requestData['data'], [
-            //     'name'=>'required|unique:directory_Nomenclatures,name,'.$requestData['id'],
-            // ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 

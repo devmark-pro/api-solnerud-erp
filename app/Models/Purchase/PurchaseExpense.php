@@ -38,12 +38,4 @@ class PurchaseExpense extends Model
         return $this->belongsTo(PurchaseDeliveryAddress::class);
     }
 
-/*
-
-    use Illuminate\Database\Eloquent\Relations\HasMany;
-    public function _(): HasMany
-    {
-        return $this->hasMany(_::class);
-    }
-*/
 }

@@ -31,6 +31,7 @@ class PurchaseService
         return Purchase::create($data);
     }
     public static function card($id){ 
+
         return Purchase::where(['id' => $id])
             ->with([
                 'statusPurchase', 
@@ -44,8 +45,8 @@ class PurchaseService
                 'invoice',
                 'accountSupplier',
                 'receipts',
-                'expenses',
-                'document'
+                // 'expenses',
+                // 'document'
             ])->first();
     }
     public static function update($id, $data){ 
