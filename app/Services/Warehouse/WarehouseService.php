@@ -31,7 +31,7 @@ class WarehouseService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'LIKE', "%$find%");
+                    ->orWhere('name', 'ILIKE', "%$find%");
             }
             $count = $model->where(['deleted_at' => null])->get()->count();
 

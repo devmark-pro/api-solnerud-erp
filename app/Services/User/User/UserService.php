@@ -32,8 +32,8 @@ class UserService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'LIKE', "%$find%")
-                    ->orWhere('surname', 'LIKE', "%$find%");
+                    ->orWhere('name', 'ILIKE', "%$find%")
+                    ->orWhere('surname', 'ILIKE', "%$find%");
             
             }
             $count = $model->where(['deleted_at' => null])->get()->count();

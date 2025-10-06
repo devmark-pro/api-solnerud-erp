@@ -29,7 +29,7 @@ class CounterpartyRepresentativeService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'LIKE', "%$find%");
+                    ->orWhere('name', 'ILIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 

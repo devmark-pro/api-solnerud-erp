@@ -26,7 +26,7 @@ class NomenclatureService
 
                 $find = $requestAll['find']; 
                 $model->where('system_number', 'LIKE', "%$find%")
-                    ->orWhere('name', 'LIKE', "%$find%");
+                    ->orWhere('name', 'ILIKE', "%$find%");
             }
             $count = $model->where(['deleted_at' => null])->get()->count();
 
