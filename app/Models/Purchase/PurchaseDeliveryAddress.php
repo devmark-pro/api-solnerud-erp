@@ -15,11 +15,31 @@ class PurchaseDeliveryAddress extends Model
         'id',
         'address',
         'planned_quantity', // плановое количество
-        'actual_quantity',  // фактическое количество
-        'remained',         // осталось
         'purchase_id',
         'deleted_at',
     ];
+
+    protected $appends = [ 
+        'actual_quantity',  // фактическое количество
+        'remained',         // осталось
+        'cost',             // Себестоимость
+    ];
+
+
+    public function getActualQuantityAttribute() 
+    {
+        return 'После Покупок';
+    }
+
+    public function getRemainedAttribute() 
+    {
+        return 'После Покупок';
+    }
+
+    public function getCostAttribute() 
+    {
+        return 'После Покупок';
+    }
 
     public function purchase(): BelongsTo 
     {

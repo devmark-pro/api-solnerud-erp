@@ -12,6 +12,21 @@ class PurchaseService
         $pagesCount= ceil($total/$limit);
         $data = $model
             ->orderBy('created_at', 'desc')
+            ->with([
+                'statusPurchase', 
+                // 'purchaseType', 
+                'counterparty', 
+                'nomenclature', 
+                'client',
+                'packingType',
+                'deliveryMethod',
+                'deliveryAddress',
+                'invoice',
+                'accountSupplier',
+                'receipts',
+                // 'expenses',
+                // 'document'
+            ])
             ->offset($offset)
             ->limit($limit)
             ->get();
@@ -35,7 +50,7 @@ class PurchaseService
         return Purchase::where(['id' => $id])
             ->with([
                 'statusPurchase', 
-                'purchaseType', 
+                // 'purchaseType', 
                 'counterparty', 
                 'nomenclature', 
                 'client',

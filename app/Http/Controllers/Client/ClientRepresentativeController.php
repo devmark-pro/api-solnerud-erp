@@ -30,7 +30,6 @@ class ClientRepresentativeController extends Controller
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                return response()->json(['message'=>$error])->setStatusCode(417); 
-            
             }
             return ClientRepresentativeService::create($data);
         } catch (Exception $e){

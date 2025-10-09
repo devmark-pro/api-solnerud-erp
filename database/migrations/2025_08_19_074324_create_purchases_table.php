@@ -16,9 +16,8 @@ return new class extends Migration
             $table->foreignId('status_purchase_id')
                 ->nullable()
                 ->constrained('directory_status_purchases'); // статус отгрузки
-            $table->foreignId('purchase_type_id')
-                ->nullable() 
-                ->constrained('directory_purchase_types');  // тип покупки
+            
+            $table->string('purchase_type')->nullable();    
             $table->foreignId('counterparty_id')->constrained();   // поставщик
             $table->foreignId('nomenclature_id')->constrained();   // товар
             $table->foreignId('client_id')->constrained();         // покупатель

@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignId('purchase_id')->constrained();
             $table->string('address');
             $table->float('planned_quantity')->default(0)->nullable();
-            $table->float('actual_quantity')->default(0)->nullable();
-            $table->float('remained')->default(0);
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

@@ -24,7 +24,7 @@ class Purchase extends Model
     protected $fillable = [
         'id',
         'status_purchase_id',
-        'purchase_type_id',
+        'purchase_type',    //
         'counterparty_id',  //Поставщик
         'nomenclature_id',  //Продукт
         'client_id',
@@ -61,10 +61,7 @@ class Purchase extends Model
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);
     }
-    public function purchaseType():BelongsTo 
-    {
-        return $this->belongsTo(PurchaseTypeDirectory::class);
-    }
+   
     public function counterparty():BelongsTo 
     {
         return $this->belongsTo(Counterparty::class);
