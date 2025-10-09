@@ -1,55 +1,107 @@
 <?php
 
 namespace App\Services\Purchase\PurchaseInvoice;
-
 use App\Models\Purchase\PurchaseInvoice;
 
 class PurchaseInvoiceService
 {
-    public static function index($page = 1 ,$limit = 100 ) {
-        $offset = $limit * ($page-1);
-        $model = PurchaseInvoice::where(['deleted_at'=> null]);
-        $total = $model->get()->count();
-        $pagesCount= ceil($total/$limit);
-        $data = $model
-            ->orderBy('created_at', 'desc')
-            ->offset($offset)
-            ->limit($limit)
-            ->get();
+     public static function index($requestAll) {
+        try {
+            $page = 1;
+            $limit = 10;
+            if((array_key_exists('pagination', $requestAll)
+                && (array_key_exists('page', $requestAll['pagination']))
+                && (array_key_exists('limit', $requestAll['pagination']))    
+            )){
+                $page = $requestAll['pagination']['page'] ?? 1;
+                $limit = $requestAll['pagination']['limit'] ?? 10;
+            }
             
-       return [
-            'data' => $data,
-            'pagination' => [
-                'pagesCount' => $pagesCount,
-                'page' => $page,
-                'limit' => $limit,
-                'total' => $total,
-            ],
-        ];
+            $offset = $limit * ($page-1);
+            $model = PurchaseInvoice::where(['deleted_at' => null])
+                ->with(['user']);
+            
+            $total = $model->get()->count();
+
+            if(array_key_exists('find', $requestAll) 
+                && (is_string($requestAll['find']))
+            ) {
+
+                $find = $requestAll['find']; 
+                $model->where('id', 'LIKE', "%$find%")
+                    ->orWhere('name', 'ILIKE', "%$find%");
+            }
+
+            if(array_key_exists('filter', $requestAll) 
+               && (is_array($requestAll['filter']))
+            ) 
+            {
+                $filter = $requestAll['filter']; 
+                $model->where($filter);
+            }
+            
+            $count = $model->where(['deleted_at' => null])->get()->count();
+
+            $pagesCount = ceil($count/$limit);
+
+            $data = $model
+                ->orderBy('created_at', 'desc')
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
+                
+            return [
+                'data' => $data,
+                'pagination' => [
+                    'pagesCount' => $pagesCount,
+                    'page' => $page,
+                    'limit' => $limit,
+                    'total' => $total,
+                    'count' => $count,
+                ],
+            ];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
-    public static function create($data){  
-        return PurchaseInvoice::create($data);
+     
+    public static function create($data){
+        try {
+            return PurchaseInvoice::create($data)
+            
+            ;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function card($id){ 
-        return PurchaseInvoice::where(['id'=>$id])
+        return PurchaseInvoice::where(['id' => $id])
             ->with(['user'])
-            ->first();
+            ->first();    
     }
     public static function update($id, $data){ 
-        $model = PurchaseInvoice::find($id);
-        if(!$model) return null; 
-        $model->updateOrFail($data);
-        return $model;
+        try {
+            PurchaseInvoice::where('id', $id)->update($data);
+            return PurchaseInvoice::where('id', $id)
+                ->with(['user'])
+                ->first();
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function delete($id){ 
-        $model = PurchaseInvoice::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => now()]);
+        try {
+            return PurchaseInvoice::where('id', $id)->update(['deleted_at' => now()]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function recover($id){ 
-        $model = PurchaseInvoice::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => null]);
-    }
-
+        try {
+            return PurchaseInvoice::where('id', $id)->update(['deleted_at' => null]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+     }
 }

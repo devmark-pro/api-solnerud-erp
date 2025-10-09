@@ -21,11 +21,12 @@ class PurchaseDeliveryAddressController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'address'=>'required',
+                'purchase_id' => 'required',
             ]);
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             }
             return PurchaseDeliveryAddressService::create($data);
         } catch (Exception $e){
@@ -33,7 +34,7 @@ class PurchaseDeliveryAddressController extends Controller
         }
     }
 
-     public function card(Request $request)
+    public function card(Request $request)
     {
         $validator = Validator::make($request->all(), [
                 'id'=>'required',

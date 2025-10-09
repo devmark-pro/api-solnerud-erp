@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('summ');  
             $table->float('summ_nds')->default(0);  
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->string('file')->nullable();
+            $table->longText('file')->nullable();
             $table->date('deleted_at')->nullable();
             $table->foreignId('purchase_id')->constrained();
             $table->timestamps();

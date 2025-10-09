@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_documents', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('file')->nullable();
+            $table->longText('file')->nullable();
             $table->date('date')->nullable();    
             $table->foreignId('added_user_id')->nullable()->constrained('users');
             $table->text('comment')->nullable();

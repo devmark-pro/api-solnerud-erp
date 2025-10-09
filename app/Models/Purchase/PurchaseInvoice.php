@@ -5,7 +5,7 @@ namespace App\Models\Purchase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Purchase\Purchase;
-use App\Models\User;
+use App\Models\User\User;
 
 // Счет фактура
 class PurchaseInvoice extends Model
