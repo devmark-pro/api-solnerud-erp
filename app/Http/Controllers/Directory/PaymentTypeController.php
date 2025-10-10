@@ -23,6 +23,7 @@ class PaymentTypeController extends Controller
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
                 'name'=>'required|unique:directory_payment_types',
+                'color'=>'required',
             ]);
  
             if($validator->fails()){

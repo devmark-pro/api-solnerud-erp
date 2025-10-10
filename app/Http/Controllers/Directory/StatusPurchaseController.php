@@ -23,6 +23,8 @@ class StatusPurchaseController extends Controller
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
                 'name'=>'required|unique:directory_status_purchases',
+                'color'=>'required',
+           
             ]);
  
             if($validator->fails()){

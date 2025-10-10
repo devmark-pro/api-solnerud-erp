@@ -10,11 +10,9 @@ use App\Services\Purchase\PurchaseAccountSupplier\PurchaseAccountSupplierService
 class PurchaseAccountSupplierController extends Controller
 {
     public function index(Request $request)
-    {
-        
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 10;
-        return PurchaseAccountSupplierService::index($page, $limit);
+    { 
+        $requestAll = $request->all();
+        return PurchaseAccountSupplierService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -29,7 +27,7 @@ class PurchaseAccountSupplierController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
 
@@ -39,30 +37,70 @@ class PurchaseAccountSupplierController extends Controller
         }
     }
 
-     public function card(string $id)
+     public function card(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+                'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417);     
+        }
+        $id = $request->input('id');
         $data = PurchaseAccountSupplierService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
-    public function update(Request $request, string $id)
+     public function update(Request $request)
     {
-        $data = $request->all();
-        $result = PurchaseAccountSupplierService::update($id, $data);
-        if(!$result) return response()->json(['message'=>'Not found'], 404);
-        return $result;
+        try {
+            $requestData=$request->all();
+            $validator = Validator::make($requestData, [
+                'id'=>'required',
+                'data'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
+            
+            }
+            $id = $request->input('id');
+            $data = $request->input('data');
+            $result = PurchaseAccountSupplierService::update($id, $data);
+            if(!$result) return response()->json(['message'=>'Not found'], 404);
+            return $result;
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
         $data = PurchaseAccountSupplierService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
-    public function recover(string $id)
+    public function recover(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
         $data = PurchaseAccountSupplierService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;

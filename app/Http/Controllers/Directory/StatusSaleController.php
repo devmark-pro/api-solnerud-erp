@@ -23,6 +23,7 @@ public function index(Request $request)
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
                 'name'=>'required|unique:directory_status_sales',
+                'color'=>'required',
             ]);
  
             if($validator->fails()){

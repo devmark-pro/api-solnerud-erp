@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('summ');  
             $table->float('summ_nds')->default(0); 
             $table->float('paid')->default(0);  
-            $table->date('payment_data')->nullable();  // срок оплаты
+            $table->date('payment_date')->nullable();  // срок оплаты
             $table->foreignId('purchase_id')->constrained();
             $table->date('deleted_at')->nullable();
             $table->timestamps();

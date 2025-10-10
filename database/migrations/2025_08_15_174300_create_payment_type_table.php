@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('directory_payment_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('color');
             $table->timestamps();
             $table->date('deleted_at')->nullable(); 
         });

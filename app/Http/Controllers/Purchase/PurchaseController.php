@@ -11,11 +11,10 @@ use App\Services\Purchase\Purchase\PurchaseService;
 class PurchaseController extends Controller
 {
 
-    public function index(Request $request)
-    {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 10;
-        return PurchaseService::index($page, $limit);
+     public function index(Request $request)
+    { 
+        $requestAll = $request->all();
+        return PurchaseService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -33,8 +32,7 @@ class PurchaseController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
-            
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             }
 
             return PurchaseService::create($data);
@@ -98,7 +96,7 @@ class PurchaseController extends Controller
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
             $id = $request->input('id');
@@ -112,15 +110,13 @@ class PurchaseController extends Controller
 
     public function recover(Request $request)
     {
-
         try {
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
-            
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             }
             $id = $request->input('id');
             $data = PurchaseService::recover($id);

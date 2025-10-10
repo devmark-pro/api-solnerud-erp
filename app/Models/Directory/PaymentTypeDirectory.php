@@ -13,6 +13,7 @@ class PaymentTypeDirectory extends Model
     protected $fillable = [
         'id',
         'name',
+        'color',
         'deleted_at',
     ];
 }

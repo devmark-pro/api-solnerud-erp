@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Purchase;
 
-use App\Services\Purchase\PurchaseInvoice\PurchaseInvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Services\Purchase\PurchaseInvoice\PurchaseInvoiceService;
 
 
 class PurchaseInvoiceController extends Controller
