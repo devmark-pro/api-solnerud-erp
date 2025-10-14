@@ -9,6 +9,7 @@ class PurchaseAccountSupplierService
         try {
             $page = 1;
             $limit = 10;
+            $filter = [];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -60,9 +61,12 @@ class PurchaseAccountSupplierService
                     'count' => $count,
                 ],
                 'data_total' => [
-                    'summ' => PurchaseAccountSupplier::sum('summ'),
-                    'summ_nds' => PurchaseAccountSupplier::sum('summ_nds'),
-                    'paid' => PurchaseAccountSupplier::sum('paid'),
+                    'summ' => PurchaseAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ'),
+                    'summ_nds' => PurchaseAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ_nds'),
+                    'paid' => PurchaseAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('paid'),
                     'remained' => -1
                 ],
                 'data' => $data,

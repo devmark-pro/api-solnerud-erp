@@ -9,6 +9,7 @@ class PurchaseReceiptService
         try {
             $page = 1;
             $limit = 10;
+            $filter=[];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -53,7 +54,9 @@ class PurchaseReceiptService
             return [
                 'data' => $data,
                 'data_total' => [
-                    'quantity' => PurchaseReceipt::sum('quantity'),
+                    'quantity' => PurchaseReceipt::where($filter)
+                        ->where(['deleted_at' => null])
+                        ->sum('quantity'),
                 ],
                 'pagination' => [
                     'pagesCount' => $pagesCount,
