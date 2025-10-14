@@ -34,7 +34,7 @@ class User extends Authenticatable
         'employment_date',
         'employee_status_id',
         'city',
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $appends = [ 
@@ -42,6 +42,9 @@ class User extends Authenticatable
         'warehouse',
     ];
 
+    protected $with = [
+        'employeePosition'
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -67,16 +70,14 @@ class User extends Authenticatable
 
     public function employeePosition():BelongsTo 
     {
-        return $this->belongsTo(EmployeePositionDirectory::class);
+        return $this->belongsTo(EmployeePositionDirectory::class)
+            ->select(['id', 'name']);
     }
 
     public function employeeStatus():BelongsTo 
     {
-        return $this->belongsTo(EmployeeStatusDirectory::class);
-    }
-    public function user():BelongsTo 
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(EmployeeStatusDirectory::class)
+            ->select(['id', 'name']);
     }
     
     public function getIsPasswordAttribute() 
@@ -86,7 +87,5 @@ class User extends Authenticatable
     public function getWarehouseAttribute() 
     {
         return  Warehouse::where('user_id', $this->id)->first();
-    }
-    
-    
+    }   
 }

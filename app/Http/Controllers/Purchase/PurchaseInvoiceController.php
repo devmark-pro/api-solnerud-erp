@@ -52,7 +52,7 @@ class PurchaseInvoiceController extends Controller
         return $data; 
     }
 
-     public function update(Request $request)
+    public function update(Request $request)
     {
         try {
             $requestData=$request->all();

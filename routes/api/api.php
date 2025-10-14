@@ -126,7 +126,7 @@ Route::prefix('purchase_account_supplier')->group(function () {
     Route::post('/recover', [PurchaseAccountSupplierController::class, 'recover'] );
 });
 
-Route::prefix('purchase_receipts')->group(function () {
+Route::prefix('purchase_receipt')->group(function () {
     Route::post('/', [PurchaseReceiptsController::class, 'index'] );
     Route::post('/create', [PurchaseReceiptsController::class, 'create'] ); 
     Route::post('/get', [PurchaseReceiptsController::class, 'card'] );

@@ -15,12 +15,20 @@ return new class extends Migration
             $table->id();
             $table->date('dispatch_date')->nullable();  
             $table->date('arrival_date')->nullable();  
-            $table->string('invoice_supplier')->nullable();
-            $table->string('invoice_our')->nullable();
+            
+            $table->string('invoice_supplier_number')->nullable();
+            $table->longText('invoice_supplier_file')->nullable();
+            $table->date('invoice_supplier_date')->nullable();
+
+            $table->string('invoice_our_number')->nullable();
+            $table->longText('invoice_our_file')->nullable();
+            $table->date('invoice_our_date')->nullable();
+
             $table->string('transport')->nullable();
-            $table->string('delivery_address')->nullable();
+            $table->foreignId('address_id')->constrained('purchase_delivery_addresses');
+         
             $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');
-            $table->float('quantity')->nullable();
+            $table->float('quantity');
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('purchase_id')->constrained();
             $table->date('deleted_at')->nullable();

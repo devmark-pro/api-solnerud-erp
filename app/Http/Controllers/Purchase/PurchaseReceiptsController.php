@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Purchase;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptService;
 
@@ -13,9 +13,8 @@ class PurchaseReceiptsController extends Controller
 
     public function index(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 10;
-        return PurchaseReceiptService::index($page, $limit);
+        $requestAll = $request->all();
+        return PurchaseReceiptService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -24,11 +23,13 @@ class PurchaseReceiptsController extends Controller
             $data = $request->all();
             $validator = Validator::make($data, [
                 'purchase_id' => 'required',
+                'quantity' => 'required',
+                'address_id' => 'required',
             ]);
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
 
@@ -38,32 +39,71 @@ class PurchaseReceiptsController extends Controller
         }
     }
 
-     public function card(string $id)
+    public function card(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+                'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417);     
+        }
+        $id = $request->input('id');
         $data = PurchaseReceiptService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $data = $request->all();
-        $result = PurchaseReceiptService::update($id, $data);
-        if(!$result) return response()->json(['message'=>'Not found'], 404);
-        return $result;
+        try {
+            $requestData=$request->all();
+            $validator = Validator::make($requestData, [
+                'id'=>'required',
+                'data'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417); 
+            }
+            $id = $request->input('id');
+            $data = $request->input('data');
+            $result = PurchaseReceiptService::update($id, $data);
+            if(!$result) return response()->json(['message'=>'Not found'], 404);
+            return $result;
+        } catch (Exception $e){
+            return $e->getMessage();
+        }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
         $data = PurchaseReceiptService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
 
-    public function recover(string $id)
+    public function recover(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'=>'required',
+        ]);
+        if($validator->fails()){
+            $error = $validator->errors()->toArray();
+            return response()->json(['message'=>$error])->setStatusCode(417); 
+        }
+        $id = $request->input('id');
         $data = PurchaseReceiptService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
+
 }
