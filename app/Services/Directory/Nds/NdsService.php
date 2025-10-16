@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Purchase\PurchaseExpense;
-use App\Models\Purchase\PurchaseExpense;
+namespace App\Services\Directory\Nds;
+use App\Models\Directory\NdsDirectory;
 
-class PurchaseExpenseService
+class NdsService
 {
      public static function index($requestAll) {
         try {
@@ -19,9 +19,7 @@ class PurchaseExpenseService
             }
             
             $offset = $limit * ($page-1);
-            $model = PurchaseExpense::where(['deleted_at' => null])
-                // ->with(['user', 'address'])
-                ;
+            $model = NdsDirectory::where(['deleted_at' => null]);
             
             $total = $model->get()->count();
 
@@ -31,7 +29,7 @@ class PurchaseExpenseService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
+                    ->orWhere('name', 'LIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 
@@ -47,21 +45,13 @@ class PurchaseExpenseService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('rate', 'asc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
                 
             return [
                 'data' => $data,
-                'data_total' => [
-                    'summ' => PurchaseExpense::where($filter)
-                        ->where(['deleted_at' => null])
-                        ->sum('summ'),
-                    'summ_nds' => PurchaseExpense::where($filter)
-                        ->where(['deleted_at' => null])
-                        ->sum('summ_nds'),    
-                ],
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -77,36 +67,35 @@ class PurchaseExpenseService
      
     public static function create($data){
         try {
-            return PurchaseExpense::create($data);
+            return NdsDirectory::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return PurchaseExpense::where(['id' => $id])
-            // ->with(['user', 'address'])
+        return NdsDirectory::where(['id' => $id])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            PurchaseExpense::where('id', $id)->update($data);
-            return PurchaseExpense::where('id', $id)
-                // ->with(['user', 'address'])
+            NdsDirectory::where('id', $id)->update($data);
+            return NdsDirectory::where('id', $id)
                 ->first();
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
         try {
-            return PurchaseExpense::where('id', $id)->update(['deleted_at' => now()]);
+            return NdsDirectory::where('id', $id)->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseExpense::where('id', $id)->update(['deleted_at' => null]);
+            return NdsDirectory::where('id', $id)->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

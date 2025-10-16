@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('transport')->nullable();
             $table->foreignId('address_id')->constrained('purchase_delivery_addresses');
          
-            $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');
+            // $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');
             $table->float('quantity');
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('purchase_id')->constrained();

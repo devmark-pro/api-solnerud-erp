@@ -14,23 +14,37 @@ return new class extends Migration
         Schema::create('purchase_expenses', function (Blueprint $table) {
             $table->id();
 
-            $table->date('service_date')->nullable();
+            $table->date('service_date_from')->nullable();   // Дата услуги
+            $table->date('service_date_to')->nullable();   // Дата услуги
+
             $table->foreignId('address_id')->constrained('purchase_delivery_addresses');
             $table->string('name')->nullable();
-            $table->string('executor');
+            
+            $table->string('executor_type'); // Исполнитель или контрагент  user | counterparty
+
+            $table->foreignId('executor_user_id')->nullable()
+                ->constrained('users');     // Исполнитель сотрудник
+
+            $table->string('executor_counterparty_id')->nullable()
+                ->constrained('counterparties');     // Исполнитель контрагент
+
+
             $table->float('rate')->nullable();  // Ставка
-            $table->float('quantity')->nullable();  // Количество
-            $table->float('summ');                  // Сумма
-            $table->float('summ_nds')->default(0);  // Сумма НДС    
+
+            $table->decimal('summ', 14, 2)->default(0)->nullable();
+            $table->decimal('summ_nds', 14, 2)->default(0)->nullable();
+
+            $table->integer('quantity')->nullable();  // Количество
             $table->boolean('include_in_cost')->default(true);     // Учет в себес.
-            $table->enum('reimbursement_expenses', 
-                [
-                    'refunded',     // Возмещен
-                    'required',     // Требуется   
-                    'not_required'  // Не требуется  
-                ]
-            )->nullable();
-            $table->date('reimbursement_date')->nullable();
+            
+            //Документы id
+            // Возмещение расходов
+            $table->string('reimbursement_expenses'); 
+                //    'refunded',     // Возмещен
+                //    'required',     // Требуется   
+                //    'not_required'  // Не требуется  
+                
+            $table->date('reimbursement_date')->nullable(); //Дата возмещения
             $table->foreignId('purchase_id')->constrained();
             $table->date('deleted_at')->nullable();
             $table->timestamps();

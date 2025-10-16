@@ -13,7 +13,7 @@ use App\Http\Controllers\Directory\PackingTypeController;
 use App\Http\Controllers\Directory\PositionRepresentativeController;
 use App\Http\Controllers\Directory\CounterpartyTypeController;
 use App\Http\Controllers\Directory\PurchaseTypeController;
-
+use App\Http\Controllers\Directory\NdsController;
 
 Route::prefix('status_purchase')->group(function () {
     Route::post('/', [StatusPurchaseController::class, 'index'] );
@@ -115,3 +115,11 @@ Route::prefix('purchase_type')->group(function () {
 });
 
 
+Route::prefix('nds')->group(function () {
+    Route::post('/', [NdsController::class,  'index']);
+    Route::post('/create', [NdsController::class, 'create'] ); 
+    Route::post('/get', [NdsController::class, 'card'] );
+    Route::post('/update', [NdsController::class, 'update'] );
+    Route::post('/delete', [NdsController::class, 'destroy'] );
+    Route::post('/recover', [NdsController::class, 'recover'] );
+});

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('number');
             $table->date('date');
-            $table->float('summ');  
-            $table->float('summ_nds')->default(0);  
+            $table->decimal('summ', 14, 2);
+            $table->decimal('summ_nds', 14, 2)->default(0);
             $table->foreignId('user_id')->nullable()->constrained();
             $table->longText('file')->nullable();
             $table->date('deleted_at')->nullable();

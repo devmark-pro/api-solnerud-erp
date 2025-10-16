@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('payment_type_id')
                 ->constrained('directory_payment_types');  // тип оплаты
-            $table->float('summ');  
-            $table->float('summ_nds')->default(0); 
-            $table->float('paid')->default(0);  
+            
+            $table->decimal('summ', 14, 2);
+            $table->decimal('summ_nds', 14, 2)->default(0);
+            $table->decimal('paid',14, 2)->default(0);  
             $table->date('payment_date')->nullable();  // срок оплаты
             $table->foreignId('purchase_id')->constrained();
             $table->date('deleted_at')->nullable();

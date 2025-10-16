@@ -1,17 +1,18 @@
 <?php
-namespace App\Http\Controllers\Purchase;
+
+namespace App\Http\Controllers\Directory;
 
 use App\Http\Controllers\Controller;
-use App\Services\Purchase\PurchaseExpense\PurchaseExpenseService;
+use App\Services\Directory\Nds\NdsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PurchaseExpenseController extends Controller
+class NdsController extends Controller
 {
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return PurchaseExpenseService::index($requestAll);
+        return NdsService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -19,35 +20,31 @@ class PurchaseExpenseController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'address_id' => 'required', 
-                'executor_type' => 'required',
-                'include_in_cost' => 'required',
-                'purchase_id' => 'required',
-                'reimbursement_expenses' => 'in:refunded,required,not_required'
+                'rate'=>'required',
             ]);
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
-
-            return PurchaseExpenseService::create($data);
+            return NdsService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
     }
 
- public function card(Request $request)
+    public function card(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'=>'required',
+                'id'=>'required',
         ]);
         if($validator->fails()){
             $error = $validator->errors()->toArray();
             return response()->json(['message'=>$error])->setStatusCode(417);     
         }
         $id = $request->input('id');
-        $data = PurchaseExpenseService::card($id);
+        $data = NdsService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -67,7 +64,7 @@ class PurchaseExpenseController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = PurchaseExpenseService::update($id, $data);
+            $result = NdsService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -85,7 +82,7 @@ class PurchaseExpenseController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = PurchaseExpenseService::delete($id);
+        $data = NdsService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
@@ -100,7 +97,7 @@ class PurchaseExpenseController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = PurchaseExpenseService::recover($id);
+        $data = NdsService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
