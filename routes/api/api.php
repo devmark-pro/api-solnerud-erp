@@ -15,15 +15,33 @@ use App\Http\Controllers\Purchase\PurchaseDeliveryAddressController;
 use App\Http\Controllers\Purchase\PurchaseInvoiceController;
 use App\Http\Controllers\Purchase\PurchaseAccountSupplierController;
 use App\Http\Controllers\Purchase\PurchaseReceiptsController;
-use App\Http\Controllers\Purchase\PurchaseExpenseController;
+use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseController;
+use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseDocumentController;
+use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseAddressController;
+
 use App\Http\Controllers\Purchase\PurchaseDocumentController;
 
 use App\Http\Controllers\Counterparty\CounterpartyRepresentativeController;
+
+use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
 
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
+
+
+Route::get('/test', function (Request $request) {
+    // return PurchaseExpenseAddress::where(['deleted_at' => null])->get();
+            
+    return PurchaseExpenseAddress::where([
+            // 'deleted_at' => null
+            'address_id' => 1,//$this->id,
+            'purchase_id' =>1, //$this->purchase_id,
+        ])->get(); 
+    // return '111';
+});
 
 Route::prefix('counterparty')->group(function () {
     Route::post('/', [CounterpartyController::class, 'index'] );
@@ -151,6 +169,24 @@ Route::prefix('purchase_expenses')->group(function () {
     Route::post('/recover', [PurchaseExpenseController::class, 'recover'] );
 });
 
+Route::prefix('purchase_expense_document')->group(function () {
+    Route::post('/', [PurchaseExpenseDocumentController::class,  'index']);
+    Route::post('/create', [PurchaseExpenseDocumentController::class, 'create'] ); 
+    Route::post('/get', [PurchaseExpenseDocumentController::class, 'card'] );
+    Route::post('/update', [PurchaseExpenseDocumentController::class, 'update'] );
+    Route::post('/delete', [PurchaseExpenseDocumentController::class, 'destroy'] );
+    Route::post('/recover', [PurchaseExpenseDocumentController::class, 'recover'] );
+});
+
+Route::prefix('purchase_expense_address')->group(function () {
+    Route::post('/', [PurchaseExpenseAddressController::class,  'index']);
+    Route::post('/create', [PurchaseExpenseAddressController::class, 'create'] ); 
+    Route::post('/get', [PurchaseExpenseAddressController::class, 'card'] );
+    Route::post('/update', [PurchaseExpenseAddressController::class, 'update'] );
+    Route::post('/delete', [PurchaseExpenseAddressController::class, 'destroy'] );
+    Route::post('/recover', [PurchaseExpenseAddressController::class, 'recover'] );
+});
+
 Route::prefix('purchase_document')->group(function () {
     Route::post('/', [PurchaseDocumentController::class, 'index'] );
     Route::post('/create', [PurchaseDocumentController::class, 'create'] ); 
@@ -169,6 +205,9 @@ Route::prefix('warehouse')->group(function () {
     Route::post('/delete', [WarehouseController::class, 'destroy'] );
     Route::post('/recover', [WarehouseController::class, 'recover'] );
 });
+
+
+
 
 
 ?>

@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Purchase;
+namespace App\Http\Controllers\Purchase\PurchaseExpense;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument\PurchaseExpenseDocumentService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptService;
 
-
-class PurchaseReceiptsController extends Controller
+class PurchaseExpenseDocumentController extends Controller
 {
-
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return PurchaseReceiptService::index($requestAll);
+        return PurchaseExpenseDocumentService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -22,8 +20,10 @@ class PurchaseReceiptsController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'purchase_id' => 'required',
-                'quantity' => 'required',
+                'name'=>'required',
+                'file'=>'required',
+                'purchase_id'=>'required',
+                'purchase_expense_id'=>'required',
             ]);
  
             if($validator->fails()){
@@ -31,8 +31,7 @@ class PurchaseReceiptsController extends Controller
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-
-            return PurchaseReceiptService::create($data);
+            return PurchaseExpenseDocumentService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -41,14 +40,14 @@ class PurchaseReceiptsController extends Controller
     public function card(Request $request)
     {
         $validator = Validator::make($request->all(), [
-                'id'=>'required',
+            'id'=>'required',
         ]);
         if($validator->fails()){
             $error = $validator->errors()->toArray();
             return response()->json(['message'=>$error])->setStatusCode(417);     
         }
         $id = $request->input('id');
-        $data = PurchaseReceiptService::card($id);
+        $data = PurchaseExpenseDocumentService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -64,10 +63,11 @@ class PurchaseReceiptsController extends Controller
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = PurchaseReceiptService::update($id, $data);
+            $result = PurchaseExpenseDocumentService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -85,7 +85,7 @@ class PurchaseReceiptsController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = PurchaseReceiptService::delete($id);
+        $data = PurchaseExpenseDocumentService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
@@ -100,9 +100,8 @@ class PurchaseReceiptsController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = PurchaseReceiptService::recover($id);
+        $data = PurchaseExpenseDocumentService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
-
 }

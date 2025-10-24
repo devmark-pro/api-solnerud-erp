@@ -67,7 +67,8 @@ class PurchaseAccountSupplierService
                         ->where($filter)->sum('summ_nds'),
                     'paid' => PurchaseAccountSupplier::where(['deleted_at' => null])
                         ->where($filter)->sum('paid'),
-                    'remained' => -1
+                    'remained' => PurchaseAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('remained'),
                 ],
                 'data' => $data,
             ];

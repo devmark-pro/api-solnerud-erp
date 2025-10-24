@@ -17,6 +17,14 @@ return new class extends Migration
             $table->date('date');
             $table->decimal('summ', 14, 2);
             $table->decimal('summ_nds', 14, 2)->default(0);
+            $table->string('nds_type'); // Тип НДС  
+                                // no_nds  - Без НДС
+                                // nds_in_price - НДС включен в цену
+                                // nds_not_in_price - НДС не включен в цену
+
+
+            $table->integer('nds_rate_id')->nullable()->constrained('directory_nds');  // Ставка
+
             $table->foreignId('user_id')->nullable()->constrained();
             $table->longText('file')->nullable();
             $table->date('deleted_at')->nullable();

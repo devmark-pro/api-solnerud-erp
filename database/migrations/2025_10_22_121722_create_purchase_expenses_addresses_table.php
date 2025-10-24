@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_delivery_addresses', function (Blueprint $table) {
+        Schema::create('purchase_expense_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('purchase_id')->constrained();
-            $table->string('address')->nullable();
-            $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');       
-
-            $table->float('planned_quantity')->default(0)->nullable();
+            $table->foreignId('purchase_expense_id')->constrained();
+            $table->foreignId('address_id')->constrained('purchase_delivery_addresses');
+            $table->foreignId('user_id')->nullable()->constrained();
+            
             $table->date('deleted_at')->nullable();
+        
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_delivery_addresses');
+        Schema::dropIfExists('purchase_expenses_addresses');
     }
 };

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('service_date_from')->nullable();   // Дата услуги
             $table->date('service_date_to')->nullable();   // Дата услуги
 
-            $table->foreignId('address_id')->constrained('purchase_delivery_addresses');
             $table->string('name')->nullable();
+            $table->float('rate')->nullable();  // Ставка
             
             $table->string('executor_type'); // Исполнитель или контрагент  user | counterparty
 
@@ -29,7 +29,13 @@ return new class extends Migration
                 ->constrained('counterparties');     // Исполнитель контрагент
 
 
-            $table->float('rate')->nullable();  // Ставка
+            $table->string('nds_type'); // Тип НДС  
+                                // no_nds  - Без НДС
+                                // nds_in_price - НДС включен в цену
+                                // nds_not_in_price - НДС не включен в цену
+
+
+            $table->integer('nds_rate_id')->nullable()->constrained('directory_nds');  // Ставка
 
             $table->decimal('summ', 14, 2)->default(0)->nullable();
             $table->decimal('summ_nds', 14, 2)->default(0)->nullable();
@@ -57,5 +63,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('purchase_expenses');
+                              
     }
 };

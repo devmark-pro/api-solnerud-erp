@@ -23,6 +23,8 @@ class ClientController extends Controller
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'name'=>'required',
+                'inn'=>'required|unique:clients',
+
             ]);
  
             if($validator->fails()){

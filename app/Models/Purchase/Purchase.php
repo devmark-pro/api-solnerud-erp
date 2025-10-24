@@ -17,6 +17,7 @@ use App\Models\Purchase\PurchaseInvoice;
 use App\Models\Purchase\PurchaseAccountSupplier;
 use App\Models\Purchase\PurchaseExpenses;
 use App\Models\Purchase\PurchaseDocument;
+use App\Models\Purchase\PurchaseReceipt;
 
 // Покупки
 class Purchase extends Model
@@ -33,6 +34,12 @@ class Purchase extends Model
         'price',            // цена за тонну
         'count_plan',       // количество план
                             // адрес отгрузки
+
+        'quantity',
+        'nds_type',
+        'nds_rate_id',
+        'summ',
+        'summ_nds',
         'comment', 
         'created_at',
         'deleted_at',
@@ -40,23 +47,25 @@ class Purchase extends Model
 
     protected $appends = [ 
         'count',        //  Количество  = "Кол-во план" и  "Кол-во факт" из карточки покупки
-        'summ',         //  Сумма поступлений = "Сумма поступлений" из карточки покупки
-        'summ_nds'      //  Сумма НДС 
+        // 'summ',         //  Сумма поступлений = "Сумма поступлений" из карточки покупки
+        // 'summ_nds'      //  Сумма НДС 
     ];
 
 
     public function getCountAttribute() 
     {
-        return '= "Кол-во план" и  "Кол-во факт" из карточки покупки' ;
+        //'= "Кол-во план" и  "Кол-во факт" из карточки покупки' ;
+        return PurchaseReceipt::where(["purchase_id"=>$this->id])->sum('quantity'); 
     }
-    public function getSummAttribute() 
-    {
-        return '= "Сумма поступлений" из карточки покупки';
-    }
-    public function getSummNdsAttribute() 
-    {
-        return  '= "Сумма НДС" из карточки покупки';
-    }
+    // public function getSummAttribute() 
+    // {
+    //     //'= "Сумма поступлений" из карточки покупки';
+    //     return $this->getCountAttribute() * $this->price;
+    // }
+    // public function getSummNdsAttribute() 
+    // {
+    //     return  '= "Сумма НДС" из карточки покупки';
+    // }
     public function statusPurchase():BelongsTo 
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);

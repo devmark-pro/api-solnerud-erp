@@ -1,13 +1,15 @@
 <?php
-namespace App\Services\Client\Client;
-use App\Models\Client\Client;
 
-class ClientService
+namespace App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument;
+use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
+
+class PurchaseExpenseDocumentService
 {
-    public static function index($requestAll) {
+     public static function index($requestAll) {
         try {
             $page = 1;
             $limit = 10;
+            $filter=[];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -17,9 +19,9 @@ class ClientService
             }
             
             $offset = $limit * ($page-1);
-            $model = Client::where(['deleted_at' => null])
-                ->with(['representatives']);
-
+            $model = PurchaseExpenseDocument::where(['deleted_at' => null]);
+               // ->with([])
+            
             $total = $model->get()->count();
 
             if(array_key_exists('find', $requestAll) 
@@ -28,7 +30,7 @@ class ClientService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
+                    ->orWhere('name', 'LIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 
@@ -49,7 +51,8 @@ class ClientService
                 ->limit($limit)
                 ->get();
                 
-        return [
+            return [
+                'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -57,44 +60,63 @@ class ClientService
                     'total' => $total,
                     'count' => $count,
                 ],
-                'data' => $data,
-
             ];
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-
-    public static function create($data){  
-        try{
-            return Client::create($data);
+     
+    public static function create($data){
+        try {
+            return PurchaseExpenseDocument::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-     public static function card($id){ 
-        return Client::where(['id' => $id])
-            ->with(['representatives'])
+
+    public static function updateOrCreateInArray($purchaseExpenseId, $purchaseId, $documents){
+        try {
+            foreach ($documents as $doc) {
+                $doc['purchase_id'] = $purchaseId;
+                $doc['purchase_expense_id'] = $purchaseExpenseId;
+                if(array_key_exists('id', $doc)){
+                    PurchaseExpenseDocument::where(["id" => $doc['id']])
+                        ->update($doc);
+                }else{
+                    PurchaseExpenseDocument::create($doc);
+                }
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function card($id){ 
+        return PurchaseExpenseDocument::where(['id' => $id])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            Client::where('id', $id)->update($data);
-            return Client::where('id', $id)
-            ->with(['representatives'])
-            ->first();
+            PurchaseExpenseDocument::where('id', $id)->update($data);
+            return PurchaseExpenseDocument::where('id', $id)
+                ->first();
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
-        $model = Client::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => now()]); 
+        try {
+            return PurchaseExpenseDocument::where('id', $id)->update(['deleted_at' => now()]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function recover($id){ 
-        $model = Client::find($id);
-        if(!$model) return null; 
-        return $model->update(['deleted_at' => null]);
-    }
+        try {
+            return PurchaseExpenseDocument::where('id', $id)->update(['deleted_at' => null]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+     }
 }

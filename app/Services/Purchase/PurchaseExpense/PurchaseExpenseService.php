@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Services\Purchase\PurchaseExpense;
-use App\Models\Purchase\PurchaseExpense;
+use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
+use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument\PurchaseExpenseDocumentService;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\PurchaseExpenseAddressService;
+
 
 class PurchaseExpenseService
 {
@@ -20,7 +24,7 @@ class PurchaseExpenseService
             
             $offset = $limit * ($page-1);
             $model = PurchaseExpense::where(['deleted_at' => null])
-                // ->with(['user', 'address'])
+                // ->with('addresses')
                 ;
             
             $total = $model->get()->count();
@@ -77,22 +81,51 @@ class PurchaseExpenseService
      
     public static function create($data){
         try {
-            return PurchaseExpense::create($data);
+            $documents = [];
+            if(array_key_exists('documents', $data)){
+                $documents = $data['documents'];
+                unset($data['documents']);              
+            }
+
+            if(array_key_exists('addresses', $data)){
+                $addresses = $data['addresses'];
+                unset($data['addresses']);   
+            }
+            $result =  PurchaseExpense::create($data);
+            if(count($documents)>0){
+                $resultDocuments = PurchaseExpenseDocumentService::updateOrCreateInArray($result['id'], $result['purchase_id'], $documents);
+                $result['documents'] = $resultDocuments;
+            }
+            if(count($addresses)>0){    
+                $resultAddresses = PurchaseExpenseAddressService::updateOrCreateInArray($result['id'], $result['purchase_id'], $addresses);
+                $result['addresses'] = $resultAddresses;
+
+            }
+            return $result;
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return PurchaseExpense::where(['id' => $id])
-            // ->with(['user', 'address'])
-            ->first();    
+        return PurchaseExpense::where(['id' => $id]);
     }
     public static function update($id, $data){ 
         try {
-            PurchaseExpense::where('id', $id)->update($data);
-            return PurchaseExpense::where('id', $id)
-                // ->with(['user', 'address'])
-                ->first();
+            if(array_key_exists('documents', $data)){
+                $documents = $data['documents'];
+                unset($data['documents']);              
+                PurchaseExpenseDocumentService::updateOrCreateInArray($id, $data['purchase_id'], $documents);
+            }
+
+            if(array_key_exists('addresses', $data)){
+                $addresses = $data['addresses'];
+                unset($data['addresses']);              
+                PurchaseExpenseAddressService::updateOrCreateInArray($id, $data['purchase_id'], $addresses);
+            }
+            
+            PurchaseExpense::where(['id' => $id])->update($data);
+            return PurchaseExpense::where(['id' => $id])->first();
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -110,5 +143,18 @@ class PurchaseExpenseService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
+
+    private function updateDocuments($id, $documents){
+
+        // purchase_expense_id:
+
+        $doc = $documents[0];
+        $doc['purchase_expense_id'] =1;
+        $doc['user_id'] =57;
+        $doc['purchase_id'] = $id;
+    
+
+        PurchaseExpenseDocument::create($doc);
+    }
 }
