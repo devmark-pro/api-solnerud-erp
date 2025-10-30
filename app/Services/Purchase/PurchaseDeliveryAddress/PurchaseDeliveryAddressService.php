@@ -78,7 +78,16 @@ class PurchaseDeliveryAddressService
     }
     public static function update($id, $data){ 
         try {
-            PurchaseDeliveryAddress::where('id', $id)->update($data);
+            $model = PurchaseDeliveryAddress::where('id', $id)->first();
+            if(array_key_exists('planned_quantity', $data)){
+                $plannedQuantity = $data['planned_quantity'];
+                $actualQuantity = $model->actual_quantity;
+                $data['remaining_quantity']=$plannedQuantity-$actualQuantity;
+            }
+            $model->update($data);
+            // PurchaseDeliveryAddress::where('id', $id)
+            //     ->first()
+            //     ->update($data);
             return PurchaseDeliveryAddress::where('id', $id)
                 //->with([])
                 ->first();

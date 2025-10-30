@@ -8,10 +8,11 @@ use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\User\User;
 use App\Models\Directory\WarehouseDirectory;
-
-
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptObserver;
 
 // Поступления
+#[ObservedBy([PurchaseReceiptObserver::class])]
 class PurchaseReceipt extends Model
 {
     protected $fillable = [
@@ -52,10 +53,9 @@ class PurchaseReceipt extends Model
     {
         return $this->belongsTo(WarehouseDirectory::class);
     }
+
     public function address(): BelongsTo 
     {
         return $this->belongsTo(PurchaseDeliveryAddress::class);
     }
-
-
 }

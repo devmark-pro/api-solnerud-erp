@@ -9,9 +9,13 @@ use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
 use App\Models\Purchase\PurchaseReceipt;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+// use App\Observers\PurchaseDeliveryAddressObserver;
+use App\Services\Purchase\PurchaseDeliveryAddress\PurchaseDeliveryAddressObserver;
 
 
 // Адреса доставки
+#[ObservedBy([PurchaseDeliveryAddressObserver::class])]
 class PurchaseDeliveryAddress extends Model
 {
     protected $table = 'purchase_delivery_addresses';
@@ -20,34 +24,23 @@ class PurchaseDeliveryAddress extends Model
         'id',
         'address',
         'planned_quantity', // плановое количество
+        'actual_quantity', // фактическое количество
+        'remaining_quantity', // осталось
+       
         'warehouse_id',
         'purchase_id',
         'deleted_at',
     ];
 
     protected $appends = [ 
-        'actual_quantity',  // фактическое количество
-        'remained',         // осталось
+        // 'actual_quantity',  // фактическое количество
+        // 'remained',         // осталось
         'cost',             // Себестоимость
     ];
 
     protected $with = [
         'warehouse'
     ];
-
-    public function getActualQuantityAttribute() 
-    {
-        return PurchaseReceipt::where([
-            'purchase_id' => $this->purchase_id,
-            'address_id' => $this->id    
-        ])->sum('quantity');
-    }
-
-    public function getRemainedAttribute() 
-    {
-        $actualQuantity = $this->getActualQuantityAttribute();
-        return $this->planned_quantity - $actualQuantity;
-    }
 
     public function getCostAttribute() 
     {

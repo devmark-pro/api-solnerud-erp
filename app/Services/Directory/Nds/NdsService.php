@@ -99,5 +99,8 @@ class NdsService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
+    public  static function getRateById($id) {
+        return NdsDirectory::where('id', $id)->first()->rate;
+    }
 }

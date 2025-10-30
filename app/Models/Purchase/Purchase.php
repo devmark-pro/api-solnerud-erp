@@ -19,7 +19,12 @@ use App\Models\Purchase\PurchaseExpenses;
 use App\Models\Purchase\PurchaseDocument;
 use App\Models\Purchase\PurchaseReceipt;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+// use App\Services\Purchase\PurchaseObserver;
+
 // Покупки
+
+// #[ObservedBy([PurchaseObserver::class])]
 class Purchase extends Model
 {
     protected $fillable = [
@@ -36,36 +41,18 @@ class Purchase extends Model
                             // адрес отгрузки
 
         'quantity',
+        'count',
         'nds_type',
         'nds_rate_id',
         'summ',
         'summ_nds',
         'comment', 
+ 
         'created_at',
         'deleted_at',
     ];
 
-    protected $appends = [ 
-        'count',        //  Количество  = "Кол-во план" и  "Кол-во факт" из карточки покупки
-        // 'summ',         //  Сумма поступлений = "Сумма поступлений" из карточки покупки
-        // 'summ_nds'      //  Сумма НДС 
-    ];
 
-
-    public function getCountAttribute() 
-    {
-        //'= "Кол-во план" и  "Кол-во факт" из карточки покупки' ;
-        return PurchaseReceipt::where(["purchase_id"=>$this->id])->sum('quantity'); 
-    }
-    // public function getSummAttribute() 
-    // {
-    //     //'= "Сумма поступлений" из карточки покупки';
-    //     return $this->getCountAttribute() * $this->price;
-    // }
-    // public function getSummNdsAttribute() 
-    // {
-    //     return  '= "Сумма НДС" из карточки покупки';
-    // }
     public function statusPurchase():BelongsTo 
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);

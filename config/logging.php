@@ -126,7 +126,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-
+        'my' => [
+            'driver' => 'daily',
+            'bubble' => false,
+            'path' => storage_path('logs/my/my.log')
+        ],
     ],
 
 ];

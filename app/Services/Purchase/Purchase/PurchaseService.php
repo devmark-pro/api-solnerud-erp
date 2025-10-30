@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\Purchase\Purchase;
 use App\Models\Purchase\Purchase;
+use App\Services\Directory\Nds\NdsService;
+use App\Helpers\Nds; 
 
 class PurchaseService
 {
@@ -107,7 +109,19 @@ class PurchaseService
     }
    public static function update($id, $data){ 
         try {
-            Purchase::where('id', $id)->update($data);
+
+            $model = Purchase::where('id', $id)->first();
+                
+            $price = $data['price'];
+            $count = $model->count;
+            
+            $summ = $price * $count;
+            $data['summ'] = $summ;
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsType = $data['nds_type'];
+            $data['summ_nds'] = Nds::calculateNds($summ, $ndsType,  $ndsRate);
+            $model->update($data);
+
             return Purchase::where('id', $id)
                 ->with([
                     'statusPurchase', 

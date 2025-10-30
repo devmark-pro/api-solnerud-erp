@@ -85,7 +85,9 @@ class PurchaseReceiptService
     }
     public static function update($id, $data){ 
         try {
-            PurchaseReceipt::where('id', $id)->update($data);
+            PurchaseReceipt::where('id', $id)
+                ->first()
+                ->update($data);
             return PurchaseReceipt::where('id', $id)
                 ->with(['user', 'address'])
                 ->first();
