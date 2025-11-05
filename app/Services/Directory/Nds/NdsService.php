@@ -3,6 +3,9 @@
 namespace App\Services\Directory\Nds;
 use App\Models\Directory\NdsDirectory;
 
+use Illuminate\Support\Facades\Log;
+
+
 class NdsService
 {
      public static function index($requestAll) {
@@ -101,6 +104,7 @@ class NdsService
         }
     }
     public  static function getRateById($id) {
+        if(!$id) return 0;
         return NdsDirectory::where('id', $id)->first()->rate;
     }
 }

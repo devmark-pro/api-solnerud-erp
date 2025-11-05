@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Services\Purchase\PurchaseDeliveryAddress;
+use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
+
 
 class PurchaseDeliveryAddressService
 {
@@ -44,7 +46,7 @@ class PurchaseDeliveryAddressService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -66,6 +68,8 @@ class PurchaseDeliveryAddressService
      
     public static function create($data){
         try {
+            $price = Purchase::find($data['purchase_id'])->price;
+            $data['cost']=$price;
             return PurchaseDeliveryAddress::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
@@ -85,9 +89,7 @@ class PurchaseDeliveryAddressService
                 $data['remaining_quantity']=$plannedQuantity-$actualQuantity;
             }
             $model->update($data);
-            // PurchaseDeliveryAddress::where('id', $id)
-            //     ->first()
-            //     ->update($data);
+
             return PurchaseDeliveryAddress::where('id', $id)
                 //->with([])
                 ->first();
@@ -109,5 +111,5 @@ class PurchaseDeliveryAddressService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
 }

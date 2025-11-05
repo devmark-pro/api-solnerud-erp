@@ -46,7 +46,7 @@ class PurchaseReceiptService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -97,14 +97,14 @@ class PurchaseReceiptService
     }
     public static function delete($id){ 
         try {
-            return PurchaseReceipt::where('id', $id)->update(['deleted_at' => now()]);
+            return PurchaseReceipt::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseReceipt::where('id', $id)->update(['deleted_at' => null]);
+            return PurchaseReceipt::where('id', $id)->first()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

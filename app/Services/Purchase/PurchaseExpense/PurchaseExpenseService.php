@@ -5,6 +5,10 @@ use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument\PurchaseExpenseDocumentService;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\PurchaseExpenseAddressService;
+use App\Services\Directory\Nds\NdsService;
+use App\Helpers\Nds;
+
+use Illuminate\Support\Facades\Log;
 
 
 class PurchaseExpenseService
@@ -122,8 +126,19 @@ class PurchaseExpenseService
                 unset($data['addresses']);              
                 PurchaseExpenseAddressService::updateOrCreateInArray($id, $data['purchase_id'], $addresses);
             }
+
+            $model = PurchaseExpense::where(['id' => $id])->first();
+
+            $summ = $data['quantity'] * $data['rate'];
+            $model->summ = $summ;
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsType = $data['nds_type'];
+            $model->summ_nds = Nds::calculateNds($summ, $ndsType,  $ndsRate);
+
+            $model->update($data);
             
-            PurchaseExpense::where(['id' => $id])->update($data);
+
+            // PurchaseExpense::where(['id' => $id])->first()->update($data);
             return PurchaseExpense::where(['id' => $id])->first();
 
         } catch (Exception $e) {

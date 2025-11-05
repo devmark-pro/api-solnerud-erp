@@ -5,15 +5,18 @@ namespace App\Models\Purchase\PurchaseExpense;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Models\User\User;
 use App\Models\Counterparty\Counterparty;
 use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseObserver;
 
 
 
+#[ObservedBy([PurchaseExpenseObserver::class])]
 class PurchaseExpense extends Model
 {
     protected $fillable = [

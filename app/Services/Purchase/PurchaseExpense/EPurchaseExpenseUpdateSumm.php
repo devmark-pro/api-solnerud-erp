@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Purchase\PurchaseReceipt;
+namespace App\Services\Purchase\PurchaseExpense;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PurchaseReceiptUpdateQuantityEvent
+class EPurchaseExpenseUpdateSumm
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $data;

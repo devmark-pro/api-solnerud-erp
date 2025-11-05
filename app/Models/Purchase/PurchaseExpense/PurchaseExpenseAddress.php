@@ -8,8 +8,12 @@ use App\Models\User\User;
 use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseExpense;
 use App\Models\Purchase\PurchaseDeliveryAddress;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\PurchaseExpenseAddressObserver;
 
 
+
+#[ObservedBy([PurchaseExpenseAddressObserver::class])]
 class PurchaseExpenseAddress extends Model
 {
     protected $fillable = [

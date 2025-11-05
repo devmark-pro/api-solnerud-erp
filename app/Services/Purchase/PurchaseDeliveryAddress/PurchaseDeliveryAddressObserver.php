@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\Purchase\PurchaseDeliveryAddress;
-
 use App\Models\Purchase\PurchaseDeliveryAddress;
 
 use Illuminate\Support\Facades\Log;
@@ -23,9 +22,9 @@ class PurchaseDeliveryAddressObserver
      */
     public function updated(PurchaseDeliveryAddress $purchaseDeliveryAddress): void
     {
-        
+     
         if($purchaseDeliveryAddress->isDirty('planned_quantity'))
-        {
+        {   
             $purchaseId = $purchaseDeliveryAddress->getAttribute('purchase_id');
             PurchaseDeliveryAddressUpdateActualQuantityEvent::dispatch([
                 'purchase_id' => $purchaseId

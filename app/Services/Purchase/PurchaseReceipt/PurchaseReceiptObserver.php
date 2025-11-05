@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Services\Purchase\PurchaseReceipt;
-
 use App\Models\Purchase\PurchaseReceipt;
-// use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptUpdateQuantityEvent;
 use Illuminate\Support\Facades\Log;
 
 
@@ -15,22 +13,26 @@ class PurchaseReceiptObserver
      */
     public function created(PurchaseReceipt $purchaseReceipt): void
     {
-        //
+        $data = [
+            'address_id' => $purchaseReceipt->getAttribute('address_id'),
+            'purchase_id' => $purchaseReceipt->getAttribute('purchase_id'),
+        ];
+        EPurchaseReceiptUpdateQuantity::dispatch($data);
     }
 
     /**
      * Handle the PurchaseReceipt "updated" event.
      */
     public function updated(PurchaseReceipt $purchaseReceipt): void
-    {    
-
-        if($purchaseReceipt->isDirty('quantity')){
+    {
+        if($purchaseReceipt->isDirty('quantity') || $purchaseReceipt->isDirty('deleted_at'))
+        {
             $data = [
                 'address_id' => $purchaseReceipt->getAttribute('address_id'),
                 'purchase_id' => $purchaseReceipt->getAttribute('purchase_id'),
             ];
             // Количество обновлено
-            PurchaseReceiptUpdateQuantityEvent::dispatch($data);
+            EPurchaseReceiptUpdateQuantity::dispatch($data);
         }
     }
 

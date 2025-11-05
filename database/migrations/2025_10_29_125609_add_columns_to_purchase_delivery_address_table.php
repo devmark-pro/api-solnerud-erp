@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('purchase_delivery_addresses', function (Blueprint $table) {
             $table->float('actual_quantity')->default(0)->nullable();
             $table->float('remaining_quantity')->default(0)->nullable();
+            $table->decimal('cost', 14, 2)->default(0)->nullable();
+           
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('purchase_delivery_addresses', function (Blueprint $table) {
             $table->dropColumn('actual_quantity');
-            $table->dropColumn('remaining_quantity');   
+            $table->dropColumn('remaining_quantity');
+            $table->dropColumn('cost');   
+ 
         });
     }
 };

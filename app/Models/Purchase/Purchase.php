@@ -18,13 +18,18 @@ use App\Models\Purchase\PurchaseAccountSupplier;
 use App\Models\Purchase\PurchaseExpenses;
 use App\Models\Purchase\PurchaseDocument;
 use App\Models\Purchase\PurchaseReceipt;
-
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-// use App\Services\Purchase\PurchaseObserver;
+use App\Services\Purchase\Purchase\PurchaseObserver;
+
+use Illuminate\Support\Facades\Log;
+
+
+
+
 
 // Покупки
 
-// #[ObservedBy([PurchaseObserver::class])]
+#[ObservedBy([PurchaseObserver::class])]
 class Purchase extends Model
 {
     protected $fillable = [
@@ -51,7 +56,6 @@ class Purchase extends Model
         'created_at',
         'deleted_at',
     ];
-
 
     public function statusPurchase():BelongsTo 
     {
