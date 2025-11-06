@@ -13,6 +13,10 @@ use App\Services\Purchase\Purchase\EPurchaseUpdatePrice;
 use Illuminate\Support\Facades\Log;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
 use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseUpdateSumm;
+use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseCreate;
+use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseDelete;
+use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\EPurchaseExpenseDeleteAddress;
+
 
 
 class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
@@ -30,12 +34,67 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
         );
 
         Event::listen(
+            EPurchaseExpenseDelete::class,
+            [$this, 'calculateCostForAllAddresses']
+        );
+        Event::listen(
             EPurchaseUpdatePrice::class,
-            [$this, 'calculateCostAfteUpdatePrice']
+            [$this, 'calculateCostForAllAddresses']
+        );
+        Event::listen(
+            EPurchaseExpenseDeleteAddress::class,
+            [$this, 'calculateCostForAllAddresses']
+        );
+        Event::listen(
+            EPurchaseExpenseCreate::class,
+            [$this, 'calculateCostForAllAddresses']
         );
 
+        
     }
    
+    
+    // Пересчет себестоимости для необходимых адресов
+    public function calculateCost(object $event): void
+    {
+        
+        if(!array_key_exists('purchase_id', $event->data) || 
+            !array_key_exists('purchase_expense_id', $event->data)) return;        
+        $purchaseId = $event->data['purchase_id'];     
+        $purchaseExpenseId = $event->data['purchase_expense_id'];
+
+        $this->initCost($purchaseId);
+        $addresses = $this->purchaseExpenseAdresses[$purchaseExpenseId];
+
+
+        /* 
+            1. Обновление Расходы
+            2. Узнать Адреса и Фактическое количестов по Адресам
+            3. Расчитать Сумму Расход и Фактическое количестов по Адресам
+            4. Расчитать общую сумму
+        */
+      
+        $costs = $this->getCosts($addresses);
+     
+        $this->updateCosts($costs);
+    }
+
+    // Пересчет себестоимости для всех адресов
+    public function calculateCostForAllAddresses(object $event): void
+    {
+        if(!array_key_exists('purchase_id', $event->data)) return;           
+        $purchaseId = $event->data['purchase_id'];
+        $addresses = PurchaseDeliveryAddress::select('id')->
+            where([
+                'purchase_id' => $purchaseId,
+                'deleted_at' => null
+            ])->pluck('id')->toArray();
+
+        $this->initCost($purchaseId);
+        $costs = $this->getCosts($addresses);
+        $this->updateCosts($costs);
+    }
+
     private function initCost($purchaseId){
         
         $this->puchasePrice = Purchase::where(['id'=>$purchaseId])->first()->price;
@@ -70,43 +129,6 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
                 $item1 = $item1['address_id'];
             }
         }
-    }
-    // Пересчет себестоимости
-    public function calculateCost(object $event): void
-    {
-        if(!array_key_exists('purchase_id', $event->data) || 
-            !array_key_exists('purchase_expense_id', $event->data)) return;        
-        $purchaseId = $event->data['purchase_id'];     
-        $purchaseExpenseId = $event->data['purchase_expense_id'];
-
-     
-        
-        $this->initCost($purchaseId);
-        $addresses = $this->purchaseExpenseAdresses[$purchaseExpenseId];
-
-        /* 
-            1. Обновление Расходы
-            2. Узнать Адреса и Фактическое количестов по Адресам
-            3. Расчитать Сумму Расход и Фактическое количестов по Адресам
-            4. Расчитать общую сумму
-        */
-      
-        $costs = $this->getCosts($addresses);
-        $this->updateCosts($costs);
-    }
-
-    public function calculateCostAfteUpdatePrice(object $event): void
-    {
-        if(!array_key_exists('purchase_id', $event->data)) return;           
-        $purchaseId = $event->data['purchase_id'];
-        $deliveryAddress = PurchaseDeliveryAddress::select('id')->
-            where([
-                'purchase_id' => $purchaseId,
-                'deleted_at' => null
-            ])->pluck('id')->toArray();
-        $this->initCost($purchaseId);
-        $costs = $this->getCosts($deliveryAddress);
-        $this->updateCosts($costs);
     }
 
     // Расчет сусммы Расходов

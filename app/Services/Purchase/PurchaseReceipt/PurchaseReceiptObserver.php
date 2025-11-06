@@ -25,7 +25,8 @@ class PurchaseReceiptObserver
      */
     public function updated(PurchaseReceipt $purchaseReceipt): void
     {
-        if($purchaseReceipt->isDirty('quantity') || $purchaseReceipt->isDirty('deleted_at'))
+        if($purchaseReceipt->isDirty('quantity') || 
+            $purchaseReceipt->isDirty('deleted_at'))
         {
             $data = [
                 'address_id' => $purchaseReceipt->getAttribute('address_id'),
@@ -33,6 +34,14 @@ class PurchaseReceiptObserver
             ];
             // Количество обновлено
             EPurchaseReceiptUpdateQuantity::dispatch($data);
+        }
+        if($purchaseReceipt->isDirty('address_id')){
+            
+            $data = [
+                'purchase_id' => $purchaseReceipt->getAttribute('purchase_id'),
+                'address_id' => $purchaseReceipt->getAttribute('address_id'),
+            ];
+            EPurchaseReceiptUpdateAddress::dispatch($data);
         }
     }
 

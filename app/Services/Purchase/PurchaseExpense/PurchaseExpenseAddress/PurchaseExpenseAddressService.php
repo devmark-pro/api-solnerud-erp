@@ -111,14 +111,16 @@ class PurchaseExpenseAddressService
     }
     public static function delete($id){ 
         try {
-            return PurchaseExpenseAddress::where('id', $id)->update(['deleted_at' => now()]);
+            return PurchaseExpenseAddress::where('id', $id)
+                ->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseExpenseAddress::where('id', $id)->update(['deleted_at' => null]);
+            return PurchaseExpenseAddress::where('id', $id)
+                ->first()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

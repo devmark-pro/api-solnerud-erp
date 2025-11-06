@@ -95,6 +95,19 @@ class PurchaseExpenseService
                 $addresses = $data['addresses'];
                 unset($data['addresses']);   
             }
+            
+            $summ = $data['quantity'] * $data['rate'];
+            $data['summ'] = $summ;
+                        
+            $ndsRate = 0;
+            if(array_key_exists('nds_rate_id', $data)){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
+
+            $ndsType = $data['nds_type'];
+            $data['summ_nds'] = Nds::calculateNds($summ, $ndsType, $ndsRate);
+
+            
             $result =  PurchaseExpense::create($data);
             if(count($documents)>0){
                 $resultDocuments = PurchaseExpenseDocumentService::updateOrCreateInArray($result['id'], $result['purchase_id'], $documents);
@@ -103,7 +116,6 @@ class PurchaseExpenseService
             if(count($addresses)>0){    
                 $resultAddresses = PurchaseExpenseAddressService::updateOrCreateInArray($result['id'], $result['purchase_id'], $addresses);
                 $result['addresses'] = $resultAddresses;
-
             }
             return $result;
         } catch (Exception $e) {
@@ -147,14 +159,18 @@ class PurchaseExpenseService
     }
     public static function delete($id){ 
         try {
-            return PurchaseExpense::where('id', $id)->update(['deleted_at' => now()]);
+            return PurchaseExpense::where('id', $id)
+                ->first()
+                ->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseExpense::where('id', $id)->update(['deleted_at' => null]);
+            return PurchaseExpense::where('id', $id)
+                ->first()
+                ->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

@@ -2,7 +2,6 @@
 
 namespace App\Services\Purchase\Purchase;
 use App\Models\Purchase\Purchase;
-use App\Services\Purchase\Purchase\EPurchaseExpenseUpdateSumm;
 use Illuminate\Support\Facades\Log;
 
 class PurchaseObserver
