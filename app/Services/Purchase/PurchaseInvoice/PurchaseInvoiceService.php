@@ -61,6 +61,14 @@ class PurchaseInvoiceService
                     'total' => $total,
                     'count' => $count,
                 ],
+                'data_total' => [
+                    'summ' => PurchaseInvoice::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ'),
+                    'summ_nds' => PurchaseInvoice::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ_nds'),
+               
+                ]
+                
             ];
         } catch (Exception $e) {
             return $e->getMessage();
