@@ -31,6 +31,16 @@ class PurchaseExpenseObserver
             
             EPurchaseExpenseUpdateSumm::dispatch($data);
         }
+
+        if($purchaseExpense->isDirty('include_in_cost') ){
+            $data = [
+                'purchase_id' => $purchaseExpense['purchase_id'],
+                'purchase_expense_id' => $purchaseExpense['id'],
+            ];      
+            
+            EPurchaseExpenseIncludeInCost::dispatch($data);
+        }
+
         if($purchaseExpense->isDirty('deleted_at'))
         {
             $data = [

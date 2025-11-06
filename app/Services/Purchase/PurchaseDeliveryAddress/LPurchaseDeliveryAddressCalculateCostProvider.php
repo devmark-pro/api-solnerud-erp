@@ -15,8 +15,8 @@ use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
 use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseUpdateSumm;
 use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseCreate;
 use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseDelete;
+use App\Services\Purchase\PurchaseExpense\EPurchaseExpenseIncludeInCost;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\EPurchaseExpenseDeleteAddress;
-
 
 
 class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
@@ -30,9 +30,8 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
     {
         Event::listen(
             EPurchaseExpenseUpdateSumm::class,
-            [$this, 'calculateCost']
+            [$this, 'calculateCostForAllAddresses']
         );
-
         Event::listen(
             EPurchaseExpenseDelete::class,
             [$this, 'calculateCostForAllAddresses']
@@ -47,6 +46,10 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
         );
         Event::listen(
             EPurchaseExpenseCreate::class,
+            [$this, 'calculateCostForAllAddresses']
+        );
+        Event::listen(
+            EPurchaseExpenseIncludeInCost::class,
             [$this, 'calculateCostForAllAddresses']
         );
 
@@ -110,7 +113,8 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
 
         $purchaseExpense = PurchaseExpense::
             where([
-                'purchase_id'=>$purchaseId,
+                'purchase_id' => $purchaseId,
+                'include_in_cost' => true,
                 'deleted_at' => null
             ])->get();
 
