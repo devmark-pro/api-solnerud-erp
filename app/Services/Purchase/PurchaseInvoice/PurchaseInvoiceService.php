@@ -77,7 +77,10 @@ class PurchaseInvoiceService
      
     public static function create($data){
         try {
-            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsRate = 0;
+            if(array_key_exists('nds_rate_id', $data)){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
             $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
             $data['nds_rate'] = $ndsRate;
             return PurchaseInvoice::create($data);
@@ -92,7 +95,10 @@ class PurchaseInvoiceService
     }
     public static function update($id, $data){ 
         try {   
-            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsRate = 0;
+            if(array_key_exists('nds_rate_id', $data)){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
             $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
             $data['nds_rate'] = $ndsRate;
             PurchaseInvoice::where('id', $id)

@@ -117,7 +117,10 @@ class PurchaseService
             
             $summ = $price * $count;
             $data['summ'] = $summ;
-            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsRate = 0;
+            if($data['nds_type']!=='no_nds'){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
             $ndsType = $data['nds_type'];
             $data['summ_nds'] = Nds::calculateNds($summ, $ndsType,  $ndsRate);
             $data['nds_rate'] = $ndsRate;

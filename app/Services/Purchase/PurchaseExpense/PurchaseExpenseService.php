@@ -143,7 +143,10 @@ class PurchaseExpenseService
 
             $summ = $data['quantity'] * $data['rate'];
             $model->summ = $summ;
-            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $ndsRate = 0;
+            if(array_key_exists('nds_rate_id', $data)){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
             $ndsType = $data['nds_type'];
             $data['nds_rate'] = $ndsRate;
             $model->summ_nds = Nds::calculateNds($summ, $ndsType,  $ndsRate);
