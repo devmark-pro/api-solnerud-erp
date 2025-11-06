@@ -47,7 +47,7 @@ class PurchaseExpense extends Model
                         // no_nds  - Без НДС
                         // nds_in_price - НДС включен в цену
                         // nds_not_in_price - НДС не включен в цену
-
+        'nds_rate',
         'nds_rate_id',                
         'reimbursement_date',       // Дата возмещения расходов
         'purchase_id',

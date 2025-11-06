@@ -2,6 +2,8 @@
 
 namespace App\Services\Purchase\PurchaseAccountSupplier;
 use App\Models\Purchase\PurchaseAccountSupplier;
+use App\Helpers\Nds; 
+use App\Services\Directory\Nds\NdsService;
 
 class PurchaseAccountSupplierService
 {
@@ -46,7 +48,7 @@ class PurchaseAccountSupplierService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -79,6 +81,9 @@ class PurchaseAccountSupplierService
      
     public static function create($data){
         try {
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['nds_rate'] = $ndsRate;
             return PurchaseAccountSupplier::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
@@ -91,6 +96,9 @@ class PurchaseAccountSupplierService
     }
     public static function update($id, $data){ 
         try {
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['nds_rate'] = $ndsRate;
             PurchaseAccountSupplier::where('id', $id)->update($data);
             return PurchaseAccountSupplier::where('id', $id)
                 ->with(['paymentType'])

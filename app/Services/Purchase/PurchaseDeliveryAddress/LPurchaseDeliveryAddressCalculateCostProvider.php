@@ -66,7 +66,6 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
         $this->initCost($purchaseId);
         $addresses = $this->purchaseExpenseAdresses[$purchaseExpenseId];
 
-
         /* 
             1. Обновление Расходы
             2. Узнать Адреса и Фактическое количестов по Адресам
@@ -135,7 +134,6 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
     private function purchaseExpenseSumm($purchaseExpenseId, $addressId) {
         $purchaseExpenseCurrentSumm = $this->purchaseExpenseSumm[$purchaseExpenseId];
         $actualQuantity = $this->deliveryAddressActualQuantity[$addressId];
-
     
         $purchaseExpenseCurrentAdressesArr = $this->purchaseExpenseCurrentAdresses[$purchaseExpenseId];
         $summAdr = 0;

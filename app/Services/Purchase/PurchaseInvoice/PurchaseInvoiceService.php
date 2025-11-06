@@ -2,6 +2,8 @@
 
 namespace App\Services\Purchase\PurchaseInvoice;
 use App\Models\Purchase\PurchaseInvoice;
+use App\Services\Directory\Nds\NdsService;
+use App\Helpers\Nds; 
 
 class PurchaseInvoiceService
 {
@@ -45,7 +47,7 @@ class PurchaseInvoiceService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -67,9 +69,10 @@ class PurchaseInvoiceService
      
     public static function create($data){
         try {
-            return PurchaseInvoice::create($data)
-            
-            ;
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['nds_rate'] = $ndsRate;
+            return PurchaseInvoice::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -80,8 +83,13 @@ class PurchaseInvoiceService
             ->first();    
     }
     public static function update($id, $data){ 
-        try {
-            PurchaseInvoice::where('id', $id)->update($data);
+        try {   
+            $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['nds_rate'] = $ndsRate;
+            PurchaseInvoice::where('id', $id)
+                ->first()
+                ->update($data);
             return PurchaseInvoice::where('id', $id)
                 ->with(['user'])
                 ->first();

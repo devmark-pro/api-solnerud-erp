@@ -106,8 +106,8 @@ class PurchaseExpenseService
 
             $ndsType = $data['nds_type'];
             $data['summ_nds'] = Nds::calculateNds($summ, $ndsType, $ndsRate);
-
-            
+            $data['nds_rate'] = $ndsRate;
+         
             $result =  PurchaseExpense::create($data);
             if(count($documents)>0){
                 $resultDocuments = PurchaseExpenseDocumentService::updateOrCreateInArray($result['id'], $result['purchase_id'], $documents);
@@ -145,6 +145,7 @@ class PurchaseExpenseService
             $model->summ = $summ;
             $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             $ndsType = $data['nds_type'];
+            $data['nds_rate'] = $ndsRate;
             $model->summ_nds = Nds::calculateNds($summ, $ndsType,  $ndsRate);
 
             $model->update($data);

@@ -44,7 +44,7 @@ class Purchase extends Model
         'price',            // цена за тонну
         'count_plan',       // количество план
                             // адрес отгрузки
-
+        'nds_rate',
         'quantity',
         'count',
         'nds_type',

@@ -46,7 +46,7 @@ class LPurchaseProvider extends ServiceProvider
             
         $summ = $price * $count;
         $model->summ = $summ;
-        $ndsRate = NdsService::getRateById($model->nds_rate_id);
+        $ndsRate = $model->nds_rate;
         $ndsType = $model->nds_type;
         $model->summ_nds = Nds::calculateNds($summ, $ndsType,  $ndsRate);
         $model->count = $actualQuantity;

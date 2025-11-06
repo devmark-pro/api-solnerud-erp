@@ -1,8 +1,8 @@
 <?php
 namespace App\Services\Purchase\Purchase;
 use App\Models\Purchase\Purchase;
-use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds; 
+use App\Services\Directory\Nds\NdsService;
 
 class PurchaseService
 {
@@ -120,6 +120,7 @@ class PurchaseService
             $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             $ndsType = $data['nds_type'];
             $data['summ_nds'] = Nds::calculateNds($summ, $ndsType,  $ndsRate);
+            $data['nds_rate'] = $ndsRate;
             $model->update($data);
 
             return Purchase::where('id', $id)
