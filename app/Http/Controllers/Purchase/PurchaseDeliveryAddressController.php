@@ -20,7 +20,6 @@ class PurchaseDeliveryAddressController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'address'=>'required',
                 'purchase_id' => 'required',
             ]);
  
