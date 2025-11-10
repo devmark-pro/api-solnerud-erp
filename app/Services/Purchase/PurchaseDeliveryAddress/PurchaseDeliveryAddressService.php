@@ -100,14 +100,18 @@ class PurchaseDeliveryAddressService
     }
     public static function delete($id){ 
         try {
-            return PurchaseDeliveryAddress::where('id', $id)->update(['deleted_at' => now()]);
+            return PurchaseDeliveryAddress::where('id', $id)
+                ->first()
+                ->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseDeliveryAddress::where('id', $id)->update(['deleted_at' => null]);
+            return PurchaseDeliveryAddress::where('id', $id)
+                ->first()
+                ->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

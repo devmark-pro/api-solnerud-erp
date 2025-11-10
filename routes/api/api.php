@@ -32,17 +32,6 @@ use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
 
 
 
-Route::get('/test', function (Request $request) {
-    // return PurchaseExpenseAddress::where(['deleted_at' => null])->get();
-            
-    return PurchaseExpenseAddress::where([
-            // 'deleted_at' => null
-            'address_id' => 1,//$this->id,
-            'purchase_id' =>1, //$this->purchase_id,
-        ])->get(); 
-    // return '111';
-});
-
 Route::prefix('counterparty')->group(function () {
     Route::post('/', [CounterpartyController::class, 'index'] );
     Route::post('/create', [CounterpartyController::class, 'create'] ); 

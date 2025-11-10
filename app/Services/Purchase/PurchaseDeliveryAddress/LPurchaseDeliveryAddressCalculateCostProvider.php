@@ -136,15 +136,15 @@ class LPurchaseDeliveryAddressCalculateCostProvider extends ServiceProvider
 
     // Расчет сусммы Расходов
     private function purchaseExpenseSumm($purchaseExpenseId, $addressId) {
-        $purchaseExpenseCurrentSumm = $this->purchaseExpenseSumm[$purchaseExpenseId];
-        $actualQuantity = $this->deliveryAddressActualQuantity[$addressId];
+        $purchaseExpenseCurrentSumm = (int)$this->purchaseExpenseSumm[$purchaseExpenseId];
+        $actualQuantity = (int)$this->deliveryAddressActualQuantity[$addressId];
     
         $purchaseExpenseCurrentAdressesArr = $this->purchaseExpenseCurrentAdresses[$purchaseExpenseId];
         $summAdr = 0;
         foreach($purchaseExpenseCurrentAdressesArr as $addrId){
-            $summAdr += $this->deliveryAddressActualQuantity[$addrId];
+            $summAdr += (int)$this->deliveryAddressActualQuantity[$addrId];
         }
-        if($summAdr === 0) return 0;
+        if($purchaseExpenseCurrentSumm === 0 || $actualQuantity ===0 ||$summAdr === 0) return 0;
         return  round($purchaseExpenseCurrentSumm / $summAdr * $actualQuantity / $summAdr, 2);
     }
 

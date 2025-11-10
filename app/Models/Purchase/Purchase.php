@@ -57,6 +57,11 @@ class Purchase extends Model
         'deleted_at',
     ];
 
+
+    protected $appends = [ 
+        'last_cost'
+    ];
+
     public function statusPurchase():BelongsTo 
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);
@@ -84,26 +89,35 @@ class Purchase extends Model
     }
     public function deliveryAddress(): HasMany
     {
-        return $this->hasMany(PurchaseDeliveryAddress::class);
+        return $this->hasMany(PurchaseDeliveryAddress::class)->where('deleted_at', null);
     }
     public function invoice(): HasMany
     {
-        return $this->hasMany(PurchaseInvoice::class);
+        return $this->hasMany(PurchaseInvoice::class)->where('deleted_at', null);
     }
     public function accountSupplier(): HasMany
     {
-        return $this->hasMany(PurchaseAccountSupplier::class);
+        return $this->hasMany(PurchaseAccountSupplier::class)->where('deleted_at', null);
     }
     public function receipts(): HasMany
     {
-        return $this->hasMany(PurchaseReceipt::class);
+        return $this->hasMany(PurchaseReceipt::class)->where('deleted_at', null);
     }
     public function expenses(): HasMany
     {
-        return $this->hasMany(PurchaseExpenses::class);
+        return $this->hasMany(PurchaseExpenses::class)->where('deleted_at', null);
     }
     public function document(): HasMany
     {
-        return $this->hasMany(PurchaseDocument::class);
+        return $this->hasMany(PurchaseDocument::class)->where('deleted_at', null);
+    }
+
+    public function getLastCostAttribute(){
+        $purchaseDeliveryAddress = PurchaseDeliveryAddress::where(['purchase_id'=>$this->id])->orderBy('id', 'desc')->first();
+        if( $purchaseDeliveryAddress === null)
+        {
+            return 0;
+        }
+        return $purchaseDeliveryAddress->cost;
     }
 }
