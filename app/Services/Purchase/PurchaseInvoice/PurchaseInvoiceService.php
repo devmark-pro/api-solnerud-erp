@@ -10,7 +10,7 @@ class PurchaseInvoiceService
      public static function index($requestAll) {
         try {
             $page = 1;
-            $limit = 10;
+            $limit = 100;
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    

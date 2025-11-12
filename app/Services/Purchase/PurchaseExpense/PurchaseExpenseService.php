@@ -16,7 +16,7 @@ class PurchaseExpenseService
      public static function index($requestAll) {
         try {
             $page = 1;
-            $limit = 10;
+            $limit = 100;
             $filter=[];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
