@@ -72,7 +72,7 @@ class ClientService
             return $e->getMessage();
         }
     }
-     public static function card($id){ 
+    public static function card($id){ 
         return Client::where(['id' => $id])
             ->with(['representatives'])
             ->first();    

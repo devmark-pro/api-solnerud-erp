@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('executor_user_id')->nullable()
                 ->constrained('users');     // Исполнитель сотрудник
 
-            $table->string('executor_counterparty_id')->nullable()
+            $table->foreignId('executor_counterparty_id')->nullable()
                 ->constrained('counterparties');     // Исполнитель контрагент
 
 
