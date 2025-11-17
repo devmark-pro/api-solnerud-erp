@@ -29,6 +29,10 @@ class PurchaseInvoice extends Model
         'deleted_at',
     ];
 
+    protected $hidden = [
+        'file'
+    ];
+    
     public function purchase(): BelongsTo 
     {
         return $this->belongsTo(Purchase::class);

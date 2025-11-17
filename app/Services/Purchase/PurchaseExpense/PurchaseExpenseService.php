@@ -192,4 +192,14 @@ class PurchaseExpenseService
 
         PurchaseExpenseDocument::create($doc);
     }
+
+    public static function field($id, $field){ 
+        try {
+            $result = PurchaseExpense::where('id', $id)->select($field)->first();
+            if(!$result ) return;
+            return $result[$field];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

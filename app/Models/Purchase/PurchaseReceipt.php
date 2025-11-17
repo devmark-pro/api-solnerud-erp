@@ -22,12 +22,10 @@ class PurchaseReceipt extends Model
 
         // Накладная от поставщика
         'invoice_supplier_number',
-        'invoice_supplier_file',
         'invoice_supplier_date',
 
         // Накладная наша
         'invoice_our_number',
-        'invoice_our_file',
         'invoice_our_date',
    
         'transport',        // Транспорт
@@ -39,6 +37,11 @@ class PurchaseReceipt extends Model
         'deleted_at',
     ];
 
+
+    protected $hidden = [
+        'invoice_our_file',
+        'invoice_supplier_file',
+    ];
     public function purchase(): BelongsTo 
     {
         return $this->belongsTo(Purchase::class);

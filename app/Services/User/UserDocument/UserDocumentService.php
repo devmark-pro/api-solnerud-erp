@@ -99,5 +99,15 @@ class UserDocumentService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
+
+    public static function field($id, $field){ 
+        try {
+            $result = UserDocument::where('id', $id)->select($field)->first();
+            if(!$result ) return;
+            return $result[$field];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Services\Purchase\PurchaseInvoice\PurchaseInvoiceService;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Purchase\PurchaseInvoice;
+
 
 
 class PurchaseInvoiceController extends Controller
@@ -104,5 +108,13 @@ class PurchaseInvoiceController extends Controller
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
-
+    
+    public function field($id, $field)
+    {   
+        if(!(new PurchaseInvoice())->isFillable($field)) {
+            return response()->json(['message'=>"Field $field not found"], 404);}
+        $data = PurchaseInvoiceService::field($id, $field);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
+        return $data;
+    }
 }

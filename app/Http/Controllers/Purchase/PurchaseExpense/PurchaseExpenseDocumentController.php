@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument\PurchaseExpenseDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
+
 
 class PurchaseExpenseDocumentController extends Controller
 {
@@ -101,6 +103,15 @@ class PurchaseExpenseDocumentController extends Controller
         }
         $id = $request->input('id');
         $data = PurchaseExpenseDocumentService::recover($id);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
+        return $data;
+    }
+
+      public function field($id, $field)
+    {   
+        if(!(new PurchaseExpenseDocument())->isFillable($field)) {
+            return response()->json(['message'=>"Field $field not found"], 404);}
+        $data = PurchaseExpenseDocumentService::field($id, $field);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

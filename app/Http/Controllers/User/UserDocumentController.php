@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Services\User\UserDocument\UserDocumentService;
+use App\Models\User\UserDocument;
 
 
 class UserDocumentController extends Controller
@@ -99,6 +100,15 @@ class UserDocumentController extends Controller
         }
         $id = $request->input('id');
         $data = UserDocumentService::recover($id);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
+        return $data;
+    }
+    
+    public function field($id, $field)
+    {   
+        if(!(new UserDocument())->isFillable($field)) {
+            return response()->json(['message'=>"Field $field not found"], 404);}
+        $data = UserDocumentService::field($id, $field);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

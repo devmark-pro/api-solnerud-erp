@@ -20,6 +20,11 @@ class UserDocument extends Model
         'deleted_at',
     ];
 
+    protected $hidden = [
+        'file',
+    ];
+
+
     public function user(): BelongsTo 
     {
         return $this->belongsTo(User::class);

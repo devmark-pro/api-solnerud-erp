@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Purchase\PurchaseReceipt\PurchaseReceiptService;
+use App\Models\Purchase\PurchaseReceipt;
 
 
 class PurchaseReceiptsController extends Controller
@@ -104,5 +105,13 @@ class PurchaseReceiptsController extends Controller
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
-
+    
+    public function field($id, $field)
+    {   
+        if(!(new PurchaseReceipt())->isFillable($field)) {
+            return response()->json(['message'=>"Field $field not found"], 404);}
+        $data = PurchaseReceiptService::field($id, $field);
+        if(!$data) return response()->json(['message'=>'Not found'], 404);
+        return $data;
+    }
 }

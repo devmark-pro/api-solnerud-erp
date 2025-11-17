@@ -22,6 +22,10 @@ class PurchaseExpenseDocument extends Model
         'deleted_at'
     ];
 
+    protected $hidden =[
+        'file',
+    ];
+
 
     public function purchaseExpense(): BelongsTo 
     {

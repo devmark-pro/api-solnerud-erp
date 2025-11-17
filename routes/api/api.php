@@ -95,6 +95,8 @@ Route::prefix('user_document')->group(function () {
     Route::post('/update', [UserDocumentController::class, 'update'] );
     Route::post('/delete', [UserDocumentController::class, 'destroy'] );
     Route::post('/recover', [UserDocumentController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [UserDocumentController::class, 'field'] );
+
 });
 
 Route::prefix('purchase')->group(function () {
@@ -122,6 +124,8 @@ Route::prefix('purchase_invoice')->group(function () {
     Route::post('/update', [PurchaseInvoiceController::class, 'update'] );
     Route::post('/delete', [PurchaseInvoiceController::class, 'destroy'] );
     Route::post('/recover', [PurchaseInvoiceController::class, 'recover'] );
+    Route::get('field/{id}/{field}', [PurchaseInvoiceController::class, 'field'] );
+
 });
 
 Route::prefix('purchase_account_supplier')->group(function () {
@@ -140,6 +144,7 @@ Route::prefix('purchase_receipt')->group(function () {
     Route::post('/update', [PurchaseReceiptsController::class, 'update'] );
     Route::post('/delete', [PurchaseReceiptsController::class, 'destroy'] );
     Route::post('/recover', [PurchaseReceiptsController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [PurchaseReceiptsController::class, 'field'] );
 });
 Route::prefix('user_document')->group(function () {
     Route::post('/', [UserDocumentController::class,  'index']);
@@ -165,6 +170,7 @@ Route::prefix('purchase_expense_document')->group(function () {
     Route::post('/update', [PurchaseExpenseDocumentController::class, 'update'] );
     Route::post('/delete', [PurchaseExpenseDocumentController::class, 'destroy'] );
     Route::post('/recover', [PurchaseExpenseDocumentController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [PurchaseExpenseDocumentController::class, 'field'] );
 });
 
 Route::prefix('purchase_expense_address')->group(function () {
