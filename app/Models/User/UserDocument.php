@@ -24,6 +24,9 @@ class UserDocument extends Model
         'file',
     ];
 
+    protected $appends = [
+        'is_file_added',
+    ];
 
     public function user(): BelongsTo 
     {
@@ -33,6 +36,11 @@ class UserDocument extends Model
     public function addedUser(): BelongsTo 
     {
         return $this->belongsTo(User::class, 'added_user_id');
+    }
+    
+    public function getIsFileAddedAttribute() 
+    {
+        return (bool)$this->file;
     }
 }
 

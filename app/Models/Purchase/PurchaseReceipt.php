@@ -37,6 +37,10 @@ class PurchaseReceipt extends Model
         'deleted_at',
     ];
 
+    protected $appends = [
+        'is_invoice_our_file_added',
+        'is_invoice_supplier_file_added',
+    ];
 
     protected $hidden = [
         'invoice_our_file',
@@ -60,5 +64,15 @@ class PurchaseReceipt extends Model
     public function address(): BelongsTo 
     {
         return $this->belongsTo(PurchaseDeliveryAddress::class);
+    }
+    
+    public function getIsInvoiceOurFileAddedAttribute() 
+    {
+        return (bool)$this->invoice_our_file;
+    }
+    
+    public function getIsInvoiceSupplierFileAddedAttribute() 
+    {
+        return (bool)$this->invoice_supplier_file;
     }
 }

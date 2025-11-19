@@ -33,6 +33,11 @@ class PurchaseInvoice extends Model
         'file'
     ];
     
+    protected $appends = [
+        'is_file_added',
+    ];
+    
+
     public function purchase(): BelongsTo 
     {
         return $this->belongsTo(Purchase::class);
@@ -40,6 +45,11 @@ class PurchaseInvoice extends Model
     public function user(): BelongsTo 
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getIsFileAddedAttribute() 
+    {
+        return (bool)$this->file;
     }
 
 }
