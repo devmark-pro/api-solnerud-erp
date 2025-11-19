@@ -26,6 +26,9 @@ class PurchaseExpenseDocument extends Model
         'file',
     ];
 
+    protected $appends = [
+        'is_file_added',
+    ];
 
     public function purchaseExpense(): BelongsTo 
     {
@@ -42,4 +45,8 @@ class PurchaseExpenseDocument extends Model
         return $this->belongsTo(Purchase::class);
     }
 
+    public function getIsFileAddedAttribute() 
+    {
+        return (bool)$this->file;
+    }
 }
