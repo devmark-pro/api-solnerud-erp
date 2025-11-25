@@ -21,10 +21,11 @@ class WarehouseRemains extends Model
         'purchase_id',
         'packing_type_id',     // Тип фасовки
         'warehouse_id',
-        'availability',     // Наличие
+        'actual_quantity',  // Наличие       
+        'availability',     // Доступно
         'reserve',          // Резрв
-        'presence',         // Доступно
         'cost',             // Себестоимость
+        'purchase_delivery_address_id',
         'deleted_at',
     ];
     protected $with= [

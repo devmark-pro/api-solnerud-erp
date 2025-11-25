@@ -15,14 +15,20 @@ return new class extends Migration
             $table->id();
             $table->foreignId('nomenclature_id')->constrained();    // товар
             $table->foreignId('purchase_id')->constrained();
-            $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');       
+            $table->foreignId('warehouse_id')
+                ->nullable()
+                ->constrained('directory_warehouses');
+
+             $table->foreignId('purchase_delivery_address_id')
+                ->nullable()->constrained('purchase_delivery_addresses');     
+
             $table->foreignId('packing_type_id')
                 ->nullable()
                 ->constrained('directory_packing_types');           //тип фасовки
 
-            $table->float('availability')->default(0)->nullable();
+            $table->float('actual_quantity')->default(0)->nullable();
             $table->float('reserve')->default(0)->nullable();
-            $table->float('presence')->default(0)->nullable();
+            $table->float('availability')->default(0)->nullable();
             $table->decimal('cost', 14, 2)->default(0)->nullable(); // Себестоимость
             $table->date('deleted_at')->nullable();
             $table->timestamps();

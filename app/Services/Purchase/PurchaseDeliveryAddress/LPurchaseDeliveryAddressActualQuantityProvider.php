@@ -51,7 +51,7 @@ class LPurchaseDeliveryAddressActualQuantityProvider extends ServiceProvider
         $deliveryAddress = PurchaseDeliveryAddress::where([
             'id' => $addressId,
             'deleted_at' => null,
-        ]);
+        ])->first();
 
         $plannedQuantity = $deliveryAddress->first()->planned_quantity;
 
@@ -86,6 +86,7 @@ class LPurchaseDeliveryAddressActualQuantityProvider extends ServiceProvider
                 $actualQuantity = $actualQuantityArray[$addresId];
             }
             PurchaseDeliveryAddress::where('id', $addresId)
+                ->first()
                 ->update([
                     'actual_quantity' => $actualQuantity,
                     'remaining_quantity' => $plannedQuantity - $actualQuantity
