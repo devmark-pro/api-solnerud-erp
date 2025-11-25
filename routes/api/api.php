@@ -18,12 +18,9 @@ use App\Http\Controllers\Purchase\PurchaseReceiptsController;
 use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseController;
 use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseDocumentController;
 use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseAddressController;
-
 use App\Http\Controllers\Purchase\PurchaseDocumentController;
-
 use App\Http\Controllers\Counterparty\CounterpartyRepresentativeController;
-
-use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
+use App\Http\Controllers\WarehouseRemains\WarehouseRemainsController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -96,7 +93,6 @@ Route::prefix('user_document')->group(function () {
     Route::post('/delete', [UserDocumentController::class, 'destroy'] );
     Route::post('/recover', [UserDocumentController::class, 'recover'] );
     Route::get('/field/{id}/{field}', [UserDocumentController::class, 'field'] );
-
 });
 
 Route::prefix('purchase')->group(function () {
@@ -202,6 +198,15 @@ Route::prefix('warehouse')->group(function () {
 });
 
 
+Route::prefix('warehouse_remains')->group(function () {
+    Route::post('/', [WarehouseRemainsController::class,  'index']);
+    Route::post('/create', [WarehouseRemainsController::class, 'create'] ); 
+    Route::post('/get', [WarehouseRemainsController::class, 'card'] );
+    Route::post('/update', [WarehouseRemainsController::class, 'update'] );
+    Route::post('/delete', [WarehouseRemainsController::class, 'destroy'] );
+    Route::post('/recover', [WarehouseRemainsController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [WarehouseRemainsController::class, 'field'] );
+});
 
 
 
