@@ -13,6 +13,9 @@ use App\Services\Purchase\PurchaseDeliveryAddress\Events\EPurchaseDeliveryAddres
 use App\Services\Purchase\PurchaseDeliveryAddress\Events\EPurchaseDeliveryAddressUpdateCost;
 use App\Services\Purchase\PurchaseDeliveryAddress\Events\EPurchaseDeliveryAddressUpdateActualQuantity;
 use App\Services\Purchase\PurchaseDeliveryAddress\Events\PurchaseDeliveryAddressDeleteEvent;
+use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePackingType;
+use App\Services\Purchase\Purchase\Events\EPurchaseUpdateNomenclature;
+
 
 use Illuminate\Support\Facades\Log;
 
@@ -40,7 +43,14 @@ class LWarehouseRemainsProvider extends ServiceProvider
             PurchaseDeliveryAddressDeleteEvent::class,
             [$this, 'deleteWarehouseRemains'],
         );
-        
+        Event::listen(
+            EPurchaseUpdatePackingType::class,
+            [$this, 'purchaseUpdatePackingType'],
+        );
+        Event::listen(
+            EPurchaseUpdateNomenclature::class,
+            [$this, 'purchaseUpdateNomenclature'],
+        );        
     }
     public function addWarehouseRemains(object $event): void
     {     
@@ -138,4 +148,54 @@ class LWarehouseRemainsProvider extends ServiceProvider
         }
     }
     
+    public function purchaseUpdatePackingType(object $event): void
+    {
+        try {
+            if(!array_key_exists('purchase_id', $event->data) || 
+                !array_key_exists('packing_type_id', $event->data)    
+            ) throw new \Exception('LWarehouseRemainsProvider->purchaseUpdatePackingType error'); 
+            
+            $purchaseId = $event->data['purchase_id'];  
+            $packingTypeId = $event->data['packing_type_id'];  
+        
+            $model = WarehouseRemains::where([
+                'purchase_id' => $purchaseId
+            ])->first();
+            if(!$model) return;
+
+            $model->update([
+                'packing_type_id' => $packingTypeId
+            ]);
+
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+    
+    public function purchaseUpdateNomenclature(object $event): void
+    {
+        try {
+            if(!array_key_exists('purchase_id', $event->data) || 
+                !array_key_exists('nomenclature_id', $event->data)    
+            ) throw new \Exception('LWarehouseRemainsProvider->purchaseUpdateNomenclature error'); 
+            
+            $purchaseId = $event->data['purchase_id'];  
+            $nomenclatureId = $event->data['nomenclature_id'];  
+        
+
+            $model = WarehouseRemains::where([
+                'purchase_id' => $purchaseId
+            ])->first();
+            if(!$model) return;
+
+            $model->update([
+                'nomenclature_id' => $nomenclatureId
+            ]);
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+        
+        
 }

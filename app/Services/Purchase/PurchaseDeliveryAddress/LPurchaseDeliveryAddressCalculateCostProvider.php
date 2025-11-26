@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Purchase\Purchase;
 use App\Models\Purchase\PurchaseReceipt;
 use App\Models\Purchase\PurchaseDeliveryAddress;
-use App\Services\Purchase\Purchase\EPurchaseUpdatePrice;
+use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePrice;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpense;

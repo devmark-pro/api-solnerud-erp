@@ -6,7 +6,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class EPurchaseCreateToWarehouse
+class EPurchaseUpdatePackingType
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $data;

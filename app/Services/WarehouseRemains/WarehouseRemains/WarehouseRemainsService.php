@@ -82,16 +82,45 @@ class WarehouseRemainsService
         }
     }
     public static function card($id) {
-        return WarehouseRemains::where(['nomenclature_id' => $id])
-            ->select('nomenclature_id', 
+        try {
+
+        $data = WarehouseRemains::where(['nomenclature_id' => $id])
+            ->select('nomenclature_id',
                 \DB::raw('
+                    nomenclature_id as id,
                     sum(actual_quantity) as actual_quantity, 
                     sum(availability) as availability,
                     sum(reserve) as reserve,
                     sum(cost) as cost
                 '))
             ->groupBy('nomenclature_id')
-            ->first();    
+            ->first();
+
+        
+        $warehouses =  WarehouseRemains::where(['nomenclature_id' => $id])
+            ->select('warehouse_id', 
+                \DB::raw('sum(availability) as availability'))
+            ->groupBy('warehouse_id')
+            ->get();
+
+
+        $packingTypes =  WarehouseRemains::where(['nomenclature_id' => $id])
+            ->select('packing_type_id', 
+                \DB::raw('
+                    sum(availability) as availability
+                ')
+                )
+            ->groupBy('packing_type_id')
+            ->get();
+
+            $data['warehouses']= $warehouses;
+            $data['packing_types'] = $packingTypes;
+
+        return $data;
+            
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public static function update($id, $data){ 
         try {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Purchase\Purchase;
+namespace App\Services\Purchase\Purchase\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class EPurchaseUpdatePrice
+class EPurchaseUpdateNomenclature
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $data;
