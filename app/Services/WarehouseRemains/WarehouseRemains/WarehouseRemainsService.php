@@ -51,9 +51,16 @@ class WarehouseRemainsService
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
-                
+
+            $dataTotal = WarehouseRemains::where($filter)->where(['deleted_at' => null]);
             return [
+
                 'data' => $data,
+                'data_total' => [
+                    'actual_quantity' => $dataTotal->sum('actual_quantity'),
+                    'availability' => $dataTotal->sum('availability'),
+                    'reserve' => $dataTotal->sum('reserve'),
+                ],
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -74,9 +81,16 @@ class WarehouseRemainsService
             return $e->getMessage();
         }
     }
-    public static function card($id){ 
-        return WarehouseRemains::where(['id' => $id])
-            //->with([])
+    public static function card($id) {
+        return WarehouseRemains::where(['nomenclature_id' => $id])
+            ->select('nomenclature_id', 
+                \DB::raw('
+                    sum(actual_quantity) as actual_quantity, 
+                    sum(availability) as availability,
+                    sum(reserve) as reserve,
+                    sum(cost) as cost
+                '))
+            ->groupBy('nomenclature_id')
             ->first();    
     }
     public static function update($id, $data){ 

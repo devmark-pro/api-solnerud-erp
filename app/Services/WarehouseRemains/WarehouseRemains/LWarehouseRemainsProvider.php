@@ -127,7 +127,12 @@ class LWarehouseRemainsProvider extends ServiceProvider
                 'purchase_delivery_address_id' => $purchaseDeliveryAddressId
             ])->first();
             if(!$model) return;
-            $model->update(['actual_quantity' => $actualQuantity]);
+
+            $availability = $actualQuantity - $model->reserve;
+            $model->update([
+                'actual_quantity' => $actualQuantity,
+                'availability' => $availability
+            ]);
         } catch (Exception $e) {
             throw new \Exception($e->getMessage());
         }

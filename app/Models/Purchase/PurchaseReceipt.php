@@ -46,6 +46,10 @@ class PurchaseReceipt extends Model
         'invoice_our_file',
         'invoice_supplier_file',
     ];
+
+    protected $with = [
+        'purchase'
+    ];
     public function purchase(): BelongsTo 
     {
         return $this->belongsTo(Purchase::class);
