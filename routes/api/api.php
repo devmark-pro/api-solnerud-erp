@@ -23,6 +23,11 @@ use App\Http\Controllers\Counterparty\CounterpartyRepresentativeController;
 use App\Http\Controllers\WarehouseRemains\WarehouseRemainsController;
 
 
+use App\Http\Controllers\Sale\SaleController;
+use App\Http\Controllers\Sale\SaleInvoiceController;
+use App\Http\Controllers\Sale\SaleAccountSupplierController;
+
+
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
@@ -209,5 +214,36 @@ Route::prefix('warehouse_remains')->group(function () {
 });
 
 
+
+
+Route::prefix('sale')->group(function () {
+    Route::post('/', [SaleController::class,  'index']);
+    Route::post('/create', [SaleController::class, 'create'] ); 
+    Route::post('/get', [SaleController::class, 'card'] );
+    Route::post('/update', [SaleController::class, 'update'] );
+    Route::post('/delete', [SaleController::class, 'destroy'] );
+    Route::post('/recover', [SaleController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleController::class, 'field'] );
+});
+
+Route::prefix('sale_invoice')->group(function () {
+    Route::post('/', [SaleInvoiceController::class,  'index']);
+    Route::post('/create', [SaleInvoiceController::class, 'create'] ); 
+    Route::post('/get', [SaleInvoiceController::class, 'card'] );
+    Route::post('/update', [SaleInvoiceController::class, 'update'] );
+    Route::post('/delete', [SaleInvoiceController::class, 'destroy'] );
+    Route::post('/recover', [SaleInvoiceController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleInvoiceController::class, 'field'] );
+});
+
+Route::prefix('sale_account_supplier')->group(function () {
+    Route::post('/', [SaleAccountSupplierController::class,  'index']);
+    Route::post('/create', [SaleAccountSupplierController::class, 'create'] ); 
+    Route::post('/get', [SaleAccountSupplierController::class, 'card'] );
+    Route::post('/update', [SaleAccountSupplierController::class, 'update'] );
+    Route::post('/delete', [SaleAccountSupplierController::class, 'destroy'] );
+    Route::post('/recover', [SaleAccountSupplierController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleAccountSupplierController::class, 'field'] );
+});
 
 ?>
