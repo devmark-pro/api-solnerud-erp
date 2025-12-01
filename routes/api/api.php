@@ -26,6 +26,7 @@ use App\Http\Controllers\WarehouseRemains\WarehouseRemainsController;
 use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\Sale\SaleInvoiceController;
 use App\Http\Controllers\Sale\SaleAccountSupplierController;
+use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -245,5 +246,18 @@ Route::prefix('sale_account_supplier')->group(function () {
     Route::post('/recover', [SaleAccountSupplierController::class, 'recover'] );
     Route::get('/field/{id}/{field}', [SaleAccountSupplierController::class, 'field'] );
 });
+
+
+
+Route::prefix('sale_contract_and_specification')->group(function () {
+    Route::post('/', [SaleContractAndSpecificationController::class,  'index']);
+    Route::post('/create', [SaleContractAndSpecificationController::class, 'create'] ); 
+    Route::post('/get', [SaleContractAndSpecificationController::class, 'card'] );
+    Route::post('/update', [SaleContractAndSpecificationController::class, 'update'] );
+    Route::post('/delete', [SaleContractAndSpecificationController::class, 'destroy'] );
+    Route::post('/recover', [SaleContractAndSpecificationController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleContractAndSpecificationController::class, 'field'] );
+});
+
 
 ?>
