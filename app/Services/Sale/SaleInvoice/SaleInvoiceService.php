@@ -60,6 +60,13 @@ class SaleInvoiceService
                     'total' => $total,
                     'count' => $count,
                 ],
+                'data_total' => [
+                    'summ' => SaleInvoice::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ'),
+                    'summ_nds' => SaleInvoice::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ_nds'),
+               
+                ]
             ];
         } catch (Exception $e) {
             return $e->getMessage();

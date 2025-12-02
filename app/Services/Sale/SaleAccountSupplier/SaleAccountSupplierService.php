@@ -60,6 +60,16 @@ class SaleAccountSupplierService
                     'total' => $total,
                     'count' => $count,
                 ],
+                'data_total' => [
+                    'summ' => SaleAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ'),
+                    'summ_nds' => SaleAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ_nds'),
+                    'paid' => SaleAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('paid'),
+                    'remained' => SaleAccountSupplier::where(['deleted_at' => null])
+                        ->where($filter)->sum('remained'),
+                ],
             ];
         } catch (Exception $e) {
             return $e->getMessage();
