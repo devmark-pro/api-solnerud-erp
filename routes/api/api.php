@@ -27,6 +27,7 @@ use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\Sale\SaleInvoiceController;
 use App\Http\Controllers\Sale\SaleAccountSupplierController;
 use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
+use App\Http\Controllers\Sale\SaleProductController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -259,5 +260,14 @@ Route::prefix('sale_contract_and_specification')->group(function () {
     Route::get('/field/{id}/{field}', [SaleContractAndSpecificationController::class, 'field'] );
 });
 
+Route::prefix('sale_product')->group(function () {
+    Route::post('/', [SaleProductController::class,  'index']);
+    Route::post('/create', [SaleProductController::class, 'create'] ); 
+    Route::post('/get', [SaleProductController::class, 'card'] );
+    Route::post('/update', [SaleProductController::class, 'update'] );
+    Route::post('/delete', [SaleProductController::class, 'destroy'] );
+    Route::post('/recover', [SaleProductController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleProductController::class, 'field'] );
+});
 
 ?>

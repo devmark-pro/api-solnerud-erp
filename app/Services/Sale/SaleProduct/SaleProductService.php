@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Services\Purchase\PurchaseInvoice;
-use App\Models\Purchase\PurchaseInvoice;
-use App\Services\Directory\Nds\NdsService;
-use App\Helpers\Nds; 
+namespace App\Services\Sale\SaleProduct;
+use App\Models\Sale\SaleProduct;
 
-class PurchaseInvoiceService
+class SaleProductService
 {
      public static function index($requestAll) {
         try {
             $page = 1;
-            $limit = 100;
-            $filter = [];
+            $limit = 10;
+            $filter=[];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -21,8 +19,8 @@ class PurchaseInvoiceService
             }
             
             $offset = $limit * ($page-1);
-            $model = PurchaseInvoice::where(['deleted_at' => null])
-                ->with(['user']);
+            $model = SaleProduct::where(['deleted_at' => null]);
+               // ->with([])
             
             $total = $model->get()->count();
 
@@ -32,7 +30,7 @@ class PurchaseInvoiceService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
+                    ->orWhere('name', 'LIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 
@@ -48,7 +46,7 @@ class PurchaseInvoiceService
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
@@ -62,14 +60,6 @@ class PurchaseInvoiceService
                     'total' => $total,
                     'count' => $count,
                 ],
-                'data_total' => [
-                    'summ' => PurchaseInvoice::where(['deleted_at' => null])
-                        ->where($filter)->sum('summ'),
-                    'summ_nds' => PurchaseInvoice::where(['deleted_at' => null])
-                        ->where($filter)->sum('summ_nds'),
-               
-                ]
-                
             ];
         } catch (Exception $e) {
             return $e->getMessage();
@@ -78,36 +68,21 @@ class PurchaseInvoiceService
      
     public static function create($data){
         try {
-            $ndsRate = null;
-            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
-                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
-            }
-            
-            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['is_nds_in_price'],  $ndsRate);
-            $data['nds_rate'] = $ndsRate;
-            return PurchaseInvoice::create($data);
+            return SaleProduct::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return PurchaseInvoice::where(['id' => $id])
-            ->with(['user'])
+        return SaleProduct::where(['id' => $id])
+            //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
-        try {   
-            $ndsRate = null;
-            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
-                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
-            }
-            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['is_nds_in_price'],  $ndsRate);
-            $data['nds_rate'] = $ndsRate;
-            PurchaseInvoice::where('id', $id)
-                ->first()
-                ->update($data);
-            return PurchaseInvoice::where('id', $id)
-                ->with(['user'])
+        try {
+            SaleProduct::where('id', $id)->first()->update($data);
+            return SaleProduct::where('id', $id)
+                //->with([])
                 ->first();
 
         } catch (Exception $e) {
@@ -116,21 +91,21 @@ class PurchaseInvoiceService
     }
     public static function delete($id){ 
         try {
-            return PurchaseInvoice::where('id', $id)->update(['deleted_at' => now()]);
+            return SaleProduct::where('id', $id)->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseInvoice::where('id', $id)->update(['deleted_at' => null]);
+            return SaleProduct::where('id', $id)->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function field($id, $field){ 
         try {
-            $result = PurchaseInvoice::where('id', $id)->select($field)->first();
+            $result = SaleProduct::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
         } catch (Exception $e) {

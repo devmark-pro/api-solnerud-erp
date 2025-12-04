@@ -17,20 +17,29 @@ class Nds {
         return round($result, 2);
     }
 
+    
 
-    public static function calculateNds($summ, $ndsType,  $ndsRate) {
-        if ($ndsType === "no_nds") {
-            return 0;
-        }
+    public static function calculateNds($summ, $isNdsInPrice,  $ndsRate) {
 
-        if ($ndsType === "nds_in_price") {
+        if ($isNdsInPrice) {
             return static::getNdsInPrice($summ, $ndsRate);
         }
-
-        if ($ndsType === "nds_not_in_price") {
-            return static::getNdsNotInPrice($summ, $ndsRate);
-        }
-        return 0;
+        return static::getNdsNotInPrice($summ, $ndsRate);
     }
+
+    // public static function calculateNds($summ, $ndsType,  $ndsRate) {
+    //     if ($ndsType === "no_nds") {
+    //         return 0;
+    //     }
+
+    //     if ($ndsType === "nds_in_price") {
+    //         return static::getNdsInPrice($summ, $ndsRate);
+    //     }
+
+    //     if ($ndsType === "nds_not_in_price") {
+    //         return static::getNdsNotInPrice($summ, $ndsRate);
+    //     }
+    //     return 0;
+    // }
 
 }

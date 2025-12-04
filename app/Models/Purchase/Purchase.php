@@ -49,6 +49,7 @@ class Purchase extends Model
         'count',
         'nds_type',
         'nds_rate_id',
+        'is_nds_in_price',
         'summ',
         'summ_nds',
         'comment', 

@@ -99,13 +99,16 @@ class PurchaseExpenseService
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
                         
-            $ndsRate = 0;
-            if(array_key_exists('nds_rate_id', $data)){
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
 
-            $ndsType = $data['nds_type'];
-            $data['summ_nds'] = Nds::calculateNds($summ, $ndsType, $ndsRate);
+            // $ndsType = $data['nds_type'];
+
+            $isNdsInPrice = $data['is_nds_in_price'];
+
+            $data['summ_nds'] = Nds::calculateNds($summ, $isNdsInPrice, $ndsRate);
             $data['nds_rate'] = $ndsRate;
          
             $result =  PurchaseExpense::create($data);
@@ -143,13 +146,14 @@ class PurchaseExpenseService
 
             $summ = $data['quantity'] * $data['rate'];
             $model->summ = $summ;
-            $ndsRate = 0;
-            if(array_key_exists('nds_rate_id', $data)){
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            $ndsType = $data['nds_type'];
+            // $ndsType = $data['nds_type'];
             $data['nds_rate'] = $ndsRate;
-            $model->summ_nds = Nds::calculateNds($summ, $ndsType,  $ndsRate);
+            $isNdsInPrice = $data['is_nds_in_price'];
+            $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);
 
             $model->update($data);
             

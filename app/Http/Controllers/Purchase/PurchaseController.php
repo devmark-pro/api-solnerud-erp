@@ -24,10 +24,9 @@ class PurchaseController extends Controller
             $validator = Validator::make($data, [
                 'counterparty_id'=>'required',
                 'nomenclature_id'=>'required',
-                'client_id'=>'required', 
-                'delivery_method_id'=>'required',
-                'price'=>'required', 
-                'count_plan'=>'required',
+                // 'delivery_method_id'=>'required',
+                // 'price'=>'required', 
+                // 'count_plan'=>'required',
             ]);
  
             if($validator->fails()){

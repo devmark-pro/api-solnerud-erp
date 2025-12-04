@@ -69,7 +69,10 @@ class PurchaseDeliveryAddressService
     public static function create($data){
         try {
             $price = Purchase::find($data['purchase_id'])->price;
-            $data['cost']=$price;
+            $data['cost'] = $price;
+            if(array_key_exists('planned_quantity', $data)){
+                $data['remaining_quantity'] = $data['planned_quantity'];
+            }
             return PurchaseDeliveryAddress::create($data);
         } catch (Exception $e) {
             return $e->getMessage();

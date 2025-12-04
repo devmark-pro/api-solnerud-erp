@@ -34,20 +34,33 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            $table->dropColumn('nds_rate');
-        });
-
-        Schema::table('purchase_invoices', function (Blueprint $table) {
-            $table->dropColumn('nds_rate');
-        });
-
-        Schema::table('purchase_account_suppliers', function (Blueprint $table) {
-            $table->dropColumn('nds_rate');
-        });
-
-        Schema::table('purchase_expenses', function (Blueprint $table) {
-            $table->dropColumn('nds_rate');
-        });
+        if (Schema::hasTable('purchases')) {
+            Schema::table('purchases', function (Blueprint $table) {
+                if (Schema::hasColumn('nds_rate')) {
+                    $table->dropColumn('nds_rate');
+                }
+            });
+        }
+        if (Schema::hasTable('purchase_invoices')) {
+            Schema::table('purchase_invoices', function (Blueprint $table) {
+                if (Schema::hasColumn('nds_rate')) {
+                    $table->dropColumn('nds_rate');
+                }
+            }); 
+        }
+        if (Schema::hasTable('purchase_account_suppliers')) {
+            Schema::table('purchase_account_suppliers', function (Blueprint $table) {
+                if (Schema::hasColumn('nds_rate')) {
+                    $table->dropColumn('nds_rate');
+                }
+            });
+        }
+        if (Schema::hasTable('purchase_expenses')) {
+            Schema::table('purchase_expenses', function (Blueprint $table) {
+                if (Schema::hasColumn('nds_rate')) {
+                    $table->dropColumn('nds_rate');
+                }
+            });
+        }
     }
 };

@@ -22,7 +22,7 @@ class PurchaseInvoice extends Model
                         // nds_not_in_price - НДС не включен в цену
         'nds_rate',
         'nds_rate_id',                
-      
+        'is_nds_in_price',
         'user_id',
         'file',
         'purchase_id',

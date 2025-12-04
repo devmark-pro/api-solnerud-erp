@@ -31,13 +31,23 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (!Schema::hasTable('purchases')) return;
         Schema::table('purchases', function (Blueprint $table) {
-            $table->dropColumn('nds_rate_id');
-            $table->dropColumn('summ');
-            $table->dropColumn('summ_nds');
-            $table->dropColumn('count');
-            $table->dropColumn('nds_type');
-
+            if (Schema::hasColumn('purchases','nds_rate_id')) {
+                $table->dropColumn('nds_rate_id');
+            }
+            if (Schema::hasColumn('purchases','summ')) {
+                $table->dropColumn('summ');
+            }
+            if (Schema::hasColumn('purchases','summ_nds')) {
+                $table->dropColumn('summ_nds');
+            }
+            if (Schema::hasColumn('purchases','count')) {
+                $table->dropColumn('count');
+            }
+            if (Schema::hasColumn('purchases','nds_type')) {
+                $table->dropColumn('nds_type');
+            }
         });
     }
 };

@@ -117,12 +117,14 @@ class PurchaseService
             
             $summ = $price * $count;
             $data['summ'] = $summ;
-            $ndsRate = 0;
-            if($data['nds_type']!=='no_nds'){
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            $ndsType = $data['nds_type'];
-            $data['summ_nds'] = Nds::calculateNds($summ, $ndsType,  $ndsRate);
+            // $ndsType = $data['nds_type'];
+            $isNdsInPrice = $data['is_nds_in_price'];
+
+            $data['summ_nds'] = Nds::calculateNds($summ, $isNdsInPrice, $ndsRate);
             $data['nds_rate'] = $ndsRate;
             $model->update($data);
 

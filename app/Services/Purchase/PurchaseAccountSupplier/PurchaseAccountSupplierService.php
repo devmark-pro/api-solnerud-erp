@@ -81,11 +81,11 @@ class PurchaseAccountSupplierService
      
     public static function create($data){
         try {
-            $ndsRate = 0;
-            if(array_key_exists('nds_rate_id', $data)){
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['is_nds_in_price'],  $ndsRate);
             $data['nds_rate'] = $ndsRate;
             return PurchaseAccountSupplier::create($data);
         } catch (Exception $e) {
@@ -99,11 +99,11 @@ class PurchaseAccountSupplierService
     }
     public static function update($id, $data){ 
         try {
-            $ndsRate = 0;
-            if(array_key_exists('nds_rate_id', $data)){
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['nds_type'],  $ndsRate);
+            $data['summ_nds'] = Nds::calculateNds($data['summ'], $data['is_nds_in_price'],  $ndsRate);
             $data['nds_rate'] = $ndsRate;
             PurchaseAccountSupplier::where('id', $id)->update($data);
             return PurchaseAccountSupplier::where('id', $id)

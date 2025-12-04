@@ -24,11 +24,18 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (!Schema::hasTable('purchase_delivery_addresses')) return;
+
         Schema::table('purchase_delivery_addresses', function (Blueprint $table) {
-            $table->dropColumn('actual_quantity');
-            $table->dropColumn('remaining_quantity');
-            $table->dropColumn('cost');   
- 
+            if (Schema::hasColumn('actual_quantity')) {
+                $table->dropColumn('actual_quantity');
+            }
+            if (Schema::hasColumn('remaining_quantity')) {
+                $table->dropColumn('remaining_quantity');
+            }
+            if (Schema::hasColumn('cost')) {
+                $table->dropColumn('cost'); 
+            }  
         });
     }
 };
