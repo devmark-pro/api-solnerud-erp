@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\WarehouseRemains;
+namespace App\Http\Controllers\Sale\SaleProduct;
 
 use App\Http\Controllers\Controller;
-use App\Models\WarehouseRemains\WarehouseRemains\WarehouseRemains;
-use App\Services\WarehouseRemains\WarehouseRemains\WarehouseRemainsService;
+use App\Models\Sale\SaleProduct\SaleProduct;
+use App\Services\Sale\SaleProduct\SaleProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
-class WarehouseRemainsController extends Controller
+class SaleProductController extends Controller
 {
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return WarehouseRemainsService::index($requestAll);
+        return SaleProductService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -22,17 +22,16 @@ class WarehouseRemainsController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'nomenclature_id'=>'required',
-                'purchase_id'=>'required',
-                'warehouse_id'=>'required',
+                'sale_id'=>'required',
+                'nomenclature_id'=>'required', 
             ]);
  
-            if($validator->fails()){
+            if($validator->fails())
+            {
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
-            
             }
-            return WarehouseRemainsService::create($data);
+            return SaleProductService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -48,9 +47,7 @@ class WarehouseRemainsController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417);     
         }
         $id = $request->input('id');
-        $type = $request->input('type');
-
-        $data = WarehouseRemainsService::card($id, $type);
+        $data = SaleProductService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -70,7 +67,7 @@ class WarehouseRemainsController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = WarehouseRemainsService::update($id, $data);
+            $result = SaleProductService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -88,7 +85,7 @@ class WarehouseRemainsController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = WarehouseRemainsService::delete($id);
+        $data = SaleProductService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
@@ -103,15 +100,15 @@ class WarehouseRemainsController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = WarehouseRemainsService::recover($id);
+        $data = SaleProductService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
     public function field($id, $field)
     {   
-        if(!(new WarehouseRemains())->isFillable($field)) {
+        if(!(new SaleProduct())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}
-        $data = WarehouseRemainsService::field($id, $field);
+        $data = SaleProductService::field($id, $field);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }

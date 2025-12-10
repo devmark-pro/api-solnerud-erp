@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Sale\SaleProduct;
-use App\Models\Sale\SaleProduct;
+use App\Models\Sale\SaleProduct\SaleProduct;
 
 
 class SaleProductObserver

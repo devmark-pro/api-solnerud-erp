@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Services\Sale\SaleProduct;
-use App\Models\Sale\SaleProduct\SaleProduct;
-use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
-use App\Services\Directory\Nds\NdsService;
+namespace App\Services\Sale\SaleProduct\SaleProductPurchase;
+use App\Models\Sale\SaleProduct\SaleProductPurchase;
 
-class SaleProductService
+
+class SaleProductPurchaseService
 {
      public static function index($requestAll) {
         try {
@@ -21,7 +20,7 @@ class SaleProductService
             }
             
             $offset = $limit * ($page-1);
-            $model = SaleProduct::where(['deleted_at' => null]);
+            $model = SaleProductPurchase::where(['deleted_at' => null]);
                // ->with([])
             
             $total = $model->get()->count();
@@ -70,50 +69,20 @@ class SaleProductService
      
     public static function create($data){
         try {
-            $purchases = [];
-            
-            if(array_key_exists('purchases', $data)){
-                $purchases = $data['purchases'];
-                unset($data['purchases']);              
-            }
-            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
-                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
-                $data['nds_rate'] = $ndsRate;
-            }
-
-            $result = SaleProduct::create($data);
-            if(count($purchases)>0){
-                $resultPurchases = SaleProductPurchaseService::updateOrCreateInArray($result['id'], $result['sale_id'], $purchases);
-                $result['purchases'] = $resultPurchases;
-            }
-            return $result;
-
+            return SaleProductPurchase::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return SaleProduct::where(['id' => $id])
+        return SaleProductPurchase::where(['id' => $id])
             //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-
-
-            if(array_key_exists('purchases', $data)){
-                $purchases = $data['purchases'];
-                unset($data['purchases']);
-                SaleProductPurchaseService::updateOrCreateInArray($id, $data['sale_id'], $purchases);
-            }
-            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
-                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
-                $data['nds_rate'] = $ndsRate;
-            }
-
-            SaleProduct::where('id', $id)->first()->update($data);
-
-            return SaleProduct::where('id', $id)
+            SaleProductPurchase::where('id', $id)->first()->update($data);
+            return SaleProductPurchase::where('id', $id)
                 //->with([])
                 ->first();
 
@@ -123,23 +92,40 @@ class SaleProductService
     }
     public static function delete($id){ 
         try {
-            return SaleProduct::where('id', $id)->first()->update(['deleted_at' => now()]);
+            return SaleProductPurchase::where('id', $id)->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return SaleProduct::where('id', $id)->first()->update(['deleted_at' => null]);
+            return SaleProductPurchase::where('id', $id)->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function field($id, $field){ 
         try {
-            $result = SaleProduct::where('id', $id)->select($field)->first();
+            $result = SaleProductPurchase::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+     public static function updateOrCreateInArray($saleProductId, $saleId, $data){
+        try {
+            foreach ($data as $item) {
+                $item['sale_id'] = $saleId;
+                $item['sale_product_id'] = $saleProductId;
+                if(array_key_exists('id', $item)){
+                    SaleProductPurchase::where(["id" => $item['id']])
+                        ->update($item);
+                }else{
+                    SaleProductPurchase::create($item);
+                }
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }

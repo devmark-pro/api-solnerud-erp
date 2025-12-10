@@ -27,7 +27,8 @@ use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\Sale\SaleInvoiceController;
 use App\Http\Controllers\Sale\SaleAccountSupplierController;
 use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
-use App\Http\Controllers\Sale\SaleProductController;
+use App\Http\Controllers\Sale\SaleProduct\SaleProductController;
+use App\Http\Controllers\Sale\SaleProduct\SaleProductPurchaseController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -270,4 +271,13 @@ Route::prefix('sale_product')->group(function () {
     Route::get('/field/{id}/{field}', [SaleProductController::class, 'field'] );
 });
 
+Route::prefix('sale_product_purchase')->group(function () {
+    Route::post('/', [SaleProductPurchaseController::class,  'index']);
+    Route::post('/create', [SaleProductPurchaseController::class, 'create'] ); 
+    Route::post('/get', [SaleProductPurchaseController::class, 'card'] );
+    Route::post('/update', [SaleProductPurchaseController::class, 'update'] );
+    Route::post('/delete', [SaleProductPurchaseController::class, 'destroy'] );
+    Route::post('/recover', [SaleProductPurchaseController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleProductPurchaseController::class, 'field'] );
+});
 ?>

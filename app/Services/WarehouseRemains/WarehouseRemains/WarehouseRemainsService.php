@@ -81,42 +81,47 @@ class WarehouseRemainsService
             return $e->getMessage();
         }
     }
-    public static function card($id) {
-        try {
 
-        $data = WarehouseRemains::where(['nomenclature_id' => $id])
-            ->select('nomenclature_id',
-                \DB::raw('
-                    nomenclature_id as id,
-                    sum(actual_quantity) as actual_quantity, 
-                    sum(availability) as availability,
-                    sum(reserve) as reserve,
-                    sum(cost) as cost
-                '))
-            ->groupBy('nomenclature_id')
-            ->first();
+
+    public static function card($id, $type) {
+        try {
+            // return $type;
+            if($type!=='filters') {
+                return WarehouseRemains::where(['id' => $id])->first();
+            }
+            $data = WarehouseRemains::where(['nomenclature_id' => $id])
+                ->select('nomenclature_id',
+                    \DB::raw('
+                        nomenclature_id as id,
+                        sum(actual_quantity) as actual_quantity, 
+                        sum(availability) as availability,
+                        sum(reserve) as reserve,
+                        sum(cost) as cost
+                    '))
+                ->groupBy('nomenclature_id')
+                ->first();
 
         
-        $warehouses =  WarehouseRemains::where(['nomenclature_id' => $id])
-            ->select('warehouse_id', 
-                \DB::raw('sum(availability) as availability'))
-            ->groupBy('warehouse_id')
-            ->get();
+            $warehouses =  WarehouseRemains::where(['nomenclature_id' => $id])
+                ->select('warehouse_id', 
+                    \DB::raw('sum(availability) as availability'))
+                ->groupBy('warehouse_id')
+                ->get();
 
 
-        $packingTypes =  WarehouseRemains::where(['nomenclature_id' => $id])
-            ->select('packing_type_id', 
-                \DB::raw('
-                    sum(availability) as availability
-                ')
-                )
-            ->groupBy('packing_type_id')
-            ->get();
+            $packingTypes =  WarehouseRemains::where(['nomenclature_id' => $id])
+                ->select('packing_type_id', 
+                    \DB::raw('
+                        sum(availability) as availability
+                    ')
+                    )
+                ->groupBy('packing_type_id')
+                ->get();
 
-            $data['warehouses']= $warehouses;
-            $data['packing_types'] = $packingTypes;
+                $data['warehouses']= $warehouses;
+                $data['packing_types'] = $packingTypes;
 
-        return $data;
+            return $data;
             
         } catch (Exception $e) {
             return $e->getMessage();

@@ -63,6 +63,10 @@ class Purchase extends Model
         'last_cost'
     ];
 
+    protected $with = [
+        'counterparty'
+    ];
+
     public function statusPurchase():BelongsTo 
     {
         return $this->belongsTo(StatusPurchaseDirectory::class);

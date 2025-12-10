@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Sale;
+namespace App\Http\Controllers\Sale\SaleProduct;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sale\SaleProduct\SaleProduct;
-use App\Services\Sale\SaleProduct\SaleProductService;
+use App\Models\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchase;
+use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
-class SaleProductController extends Controller
+class SaleProductPurchaseController extends Controller
 {
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return SaleProductService::index($requestAll);
+        return SaleProductPurchaseService::index($requestAll);
     }
 
     public function create(Request $request)
@@ -25,12 +25,12 @@ class SaleProductController extends Controller
                 'name'=>'required',
             ]);
  
-            if($validator->fails())
-            {
+            if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
-            return SaleProductService::create($data);
+            return SaleProductPurchaseService::create($data);
         } catch (Exception $e){
             return $e->getMessage();
         }
@@ -46,7 +46,7 @@ class SaleProductController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417);     
         }
         $id = $request->input('id');
-        $data = SaleProductService::card($id);
+        $data = SaleProductPurchaseService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
     }
@@ -66,7 +66,7 @@ class SaleProductController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
-            $result = SaleProductService::update($id, $data);
+            $result = SaleProductPurchaseService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;
         } catch (Exception $e){
@@ -84,7 +84,7 @@ class SaleProductController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = SaleProductService::delete($id);
+        $data = SaleProductPurchaseService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
@@ -99,15 +99,15 @@ class SaleProductController extends Controller
             return response()->json(['message'=>$error])->setStatusCode(417); 
         }
         $id = $request->input('id');
-        $data = SaleProductService::recover($id);
+        $data = SaleProductPurchaseService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
     public function field($id, $field)
     {   
-        if(!(new SaleProduct())->isFillable($field)) {
+        if(!(new SaleProductPurchase())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}
-        $data = SaleProductService::field($id, $field);
+        $data = SaleProductPurchaseService::field($id, $field);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
     }
