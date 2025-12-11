@@ -24,7 +24,7 @@ class SaleProduct extends Model
         'id',
         'nomenclature_id',
         'packing_type_id',  // Тип фасовки для клиента
-        // 'client_packing_type_id',          
+        'is_request_shipment',  // Заявка на отгрузку
         'shipment',         // from_warehouse/ from_factory  Со склада / С завода  R
         'warehouse_id',     // Адрес отгрузки
         'counterparty_id',

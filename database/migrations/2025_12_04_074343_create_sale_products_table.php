@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sale_products', function (Blueprint $table) {
             $table->id();
+            $table->boolean('is_request_shipment')->default(false);
             $table->foreignId('nomenclature_id')->constrained();   // товар
             $table->foreignId('packing_type_id')
                 ->nullable()
