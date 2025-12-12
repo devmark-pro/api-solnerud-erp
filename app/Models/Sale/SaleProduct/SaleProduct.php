@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Models\Nomenclature;
 use App\Models\Warehouse;
+use App\Models\Counterparty\Counterparty;
 use App\Models\Purchase\Purchase;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Directory\PackingTypeDirectory;
@@ -25,7 +26,7 @@ class SaleProduct extends Model
         'nomenclature_id',
         'packing_type_id',  // Тип фасовки для клиента
         'is_request_shipment',  // Заявка на отгрузку
-        'shipment',         // from_warehouse/ from_factory  Со склада / С завода  R
+        'shipment',         // from_warehouse/ from_factory  Со склада / С завода  
         'warehouse_id',     // Адрес отгрузки
         'counterparty_id',
         'purchase_id',   
@@ -60,6 +61,7 @@ class SaleProduct extends Model
         'packingType',
         'deliveryMethod',
         'warehouse',
+        'counterparty'
     ];
     protected $appends = [ 
         'purchases',
@@ -87,6 +89,12 @@ class SaleProduct extends Model
         return $this->belongsTo(Warehouse::class);
     }
 
+    public function counterparty():BelongsTo 
+    {
+        return $this->belongsTo(Counterparty::class);
+    }
+
+    
     
     public function sale(): BelongsTo 
     {

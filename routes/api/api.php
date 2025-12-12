@@ -29,6 +29,7 @@ use App\Http\Controllers\Sale\SaleAccountSupplierController;
 use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductPurchaseController;
+use App\Http\Controllers\Sale\SaleShipmentController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -280,4 +281,15 @@ Route::prefix('sale_product_purchase')->group(function () {
     Route::post('/recover', [SaleProductPurchaseController::class, 'recover'] );
     Route::get('/field/{id}/{field}', [SaleProductPurchaseController::class, 'field'] );
 });
+
+Route::prefix('sale_shipment')->group(function () {
+    Route::post('/', [SaleShipmentController::class,  'index']);
+    Route::post('/create', [SaleShipmentController::class, 'create'] ); 
+    Route::post('/get', [SaleShipmentController::class, 'card'] );
+    Route::post('/update', [SaleShipmentController::class, 'update'] );
+    Route::post('/delete', [SaleShipmentController::class, 'destroy'] );
+    Route::post('/recover', [SaleShipmentController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleShipmentController::class, 'field'] );
+});
+
 ?>
