@@ -11,27 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('sale_product_purchases', function (Blueprint $table) {
+        Schema::create('sale_expense_documents', function (Blueprint $table) {
             $table->id();
+                 $table->string('name')->nullable();
+            $table->date('date')->nullable();    
             
+            $table->longText('file')->nullable();
+            
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('sale_id')->constrained();
-            $table->foreignId('sale_product_id')->constrained();
+            $table->foreignId('sale_expense_id')->constrained();
 
-            $table->string('shipment_type')->nullable();    //  Со склада / С завода  R  
-
-            $table->foreignId('purchase_id')->nullable()->constrained();
-            $table->foreignId('warehouse_remains_id')->nullable()->constrained();
-            
-            // $table->float('quantity')->default(0);
             $table->date('deleted_at')->nullable();
+       
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('sale_product_purchases');
+        Schema::dropIfExists('sale_expense_documents');
     }
 };

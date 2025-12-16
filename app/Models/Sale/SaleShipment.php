@@ -41,7 +41,8 @@ class SaleShipment extends Model
 
     protected $with = [
         'saleProduct',
-        'saleProductPurchase'
+        'saleProductPurchase',
+        'user'
     ];
 
     public function saleProduct(): BelongsTo 

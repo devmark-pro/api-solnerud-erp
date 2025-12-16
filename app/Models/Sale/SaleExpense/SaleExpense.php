@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Models\Purchase\PurchaseExpense;
+namespace App\Models\Sale\SaleExpense;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Services\Sale\SaleExpense\SaleExpense\SaleExpenseObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Model;
+
 use App\Models\User\User;
 use App\Models\Counterparty\Counterparty;
-use App\Models\Purchase\Purchase;
-use App\Models\Purchase\PurchaseDeliveryAddress;
-use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
-use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
-use App\Services\Purchase\PurchaseExpense\PurchaseExpenseObserver;
+use App\Models\Sale\Sale;
+use App\Models\Sale\SaleDeliveryAddress;
+use App\Models\Sale\SaleExpense\SaleExpenseDocument;
+use App\Models\Sale\SaleExpense\SaleExpenseAddress;
 
-
-
-#[ObservedBy([PurchaseExpenseObserver::class])]
-class PurchaseExpense extends Model
+#[ObservedBy([SaleExpenseObserver::class])]
+class SaleExpense extends Model
 {
     protected $fillable = [
         'id',
+        'date',
+        'sale_product_id',
         'service_date_from', // Дата услуги
         'service_date_to', 
         'name',         // Наименование 
@@ -47,22 +46,16 @@ class PurchaseExpense extends Model
         'nds_rate_id',
         'is_nds_in_price',    
         'reimbursement_date',       // Дата возмещения расходов
-        'purchase_id',
+        'sale_id',
         'deleted_at',
     ];
-    
-    protected $with = [
-        'addresses',
-        'executorCounterparty',
-        'executorUser',
-        'documents'
-    ];
-   
 
 
-    public function purchase(): BelongsTo 
+
+
+    public function sale(): BelongsTo 
     {
-        return $this->belongsTo(Purchase::class);
+        return $this->belongsTo(Sale::class);
     }
 
     public function executorUser(): BelongsTo 
@@ -76,11 +69,13 @@ class PurchaseExpense extends Model
 
     public function documents(): HasMany
     {
-        return $this->hasMany(PurchaseExpenseDocument::class)->where(['deleted_at'=>null]);
+        return $this->hasMany(SaleExpenseDocument::class)->where(['deleted_at'=>null]);
     }
 
     public function addresses(): HasMany
     {
-        return $this->hasMany(PurchaseExpenseAddress::class)->where(['deleted_at'=>null]);
+        return $this->hasMany(SaleExpenseAddress::class)->where(['deleted_at'=>null]);
     }
+
 }
+

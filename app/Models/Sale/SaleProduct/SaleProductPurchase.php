@@ -17,9 +17,9 @@ class SaleProductPurchase extends Model
         'id',
         'purchase_id',
         'warehouse_remains_id',
+        'shipment_type',
         'sale_id',
         'sale_product_id',
-        'quantity',
         'deleted_at',
     ];
 

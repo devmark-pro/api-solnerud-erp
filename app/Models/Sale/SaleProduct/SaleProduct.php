@@ -26,10 +26,9 @@ class SaleProduct extends Model
         'nomenclature_id',
         'packing_type_id',  // Тип фасовки для клиента
         'is_request_shipment',  // Заявка на отгрузку
-        'shipment',         // from_warehouse/ from_factory  Со склада / С завода  
+        'shipment_type',         // from_warehouse/ from_factory  Со склада / С завода  
         'warehouse_id',     // Адрес отгрузки
         'counterparty_id',
-        'purchase_id',   
         'quantity',
         'availability',     // Доступно
         'cost',
@@ -54,6 +53,7 @@ class SaleProduct extends Model
         'comment',
         'sale_id',
         'deleted_at',
+        'purchases'
     ];
 
     protected $with = [
@@ -64,8 +64,9 @@ class SaleProduct extends Model
         'counterparty'
     ];
     protected $appends = [ 
-        'purchases',
-        // 'shipping_address'
+        'purchase_ids',
+        'warehouse_remains_ids',
+        'warehouse_remains_purchase_ids',
     ];
 
     public function nomenclature():BelongsTo 
@@ -101,57 +102,54 @@ class SaleProduct extends Model
         return $this->belongsTo(Sale::class);
     }
 
-    public function getPurchasesAttribute(){
-        if($this->shipment==="from_warehouse") {
+    public function getPurchaseIdsAttribute(){
+        if($this->shipment_type==="from_factory") {
+            $saleProductPurchase = SaleProductPurchase::where([
+                'deleted_at' => null,
+                "sale_id" => $this->sale_id,
+				"sale_product_id" => $this->id,
+            ])->select('id', 'purchase_id', 'warehouse_remains_id')
+                ->get()->toArray(); 
+            $result = array_map(function($item) {
+                return  $item['purchase_id'];
+            }, $saleProductPurchase);
+            return $result;
+        }
+
+        return null;
+    }
+    public function getWarehouseRemainsIdsAttribute(){
+        if($this->shipment_type==="from_warehouse") {
             $saleProductPurchase = SaleProductPurchase::where([
                 'deleted_at' => null,
                 "sale_id" => $this->sale_id,
 				"sale_product_id" => $this->id,
             ])
-            ->select('id', 'warehouse_remains_id', 'quantity')
+            ->select('id', 'warehouse_remains_id')
             ->get()->toArray();
 
             $result = array_map(function($item) {
-                return [
-                    'id' => $item['id'],
-                    'purchase_id' => $item['warehouse_remains']['purchase_id'],
-                    'quantity' => $item['quantity'],
-                    'warehouse_remains_id' => $item['warehouse_remains_id'],
-                    'shipping_address' => [
-                        'name' => $item['warehouse_remains']['warehouse']['name'],
-                        'address' => $item['warehouse_remains']['warehouse']['address']
-                    ]
-                ];
+                return $item['warehouse_remains']['id'];
             }, $saleProductPurchase);
             return $result;
         }
-
-        if($this->shipment==="from_factory") {
+        return null;
+    }
+    public function getWarehouseRemainsPurchaseIdsAttribute(){
+        if($this->shipment_type==="from_warehouse") {
             $saleProductPurchase = SaleProductPurchase::where([
                 'deleted_at' => null,
                 "sale_id" => $this->sale_id,
 				"sale_product_id" => $this->id,
-            ])->select('id', 'purchase_id', 'warehouse_remains_id', 'quantity')
+            ])
+            ->select('id', 'warehouse_remains_id')
             ->get()->toArray();
-            
-            $result = array_map(function($item) {
 
-                return [
-                  'id' => $item['id'],
-                    'purchase_id' => $item['purchase_id'],
-                    'quantity' => $item['quantity'],
-                    'warehouse_remains_id' => $item['warehouse_remains_id'],
-                    'shipping_address' => [
-                        'name' => $item['purchase']['counterparty']['name'],
-                        'address' => $item['purchase']['counterparty']['address']
-                    ]
-                ];
-            
+            $result = array_map(function($item) {
+                return $item['warehouse_remains']['purchase_id'];
             }, $saleProductPurchase);
             return $result;
-
         }
-
         return null;
     }
 

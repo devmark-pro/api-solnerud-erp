@@ -4,6 +4,7 @@ namespace App\Services\Sale\SaleProduct;
 use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
 use App\Services\Directory\Nds\NdsService;
+use Illuminate\Support\Facades\Log;
 
 class SaleProductService
 {
@@ -40,19 +41,30 @@ class SaleProductService
             ) 
             {
                 $filter = $requestAll['filter']; 
+                if(array_key_exists('whereIn', $filter)) {
+                    $whereIn = $filter['whereIn'];
+                    if(array_key_exists('key', $whereIn) && 
+                        array_key_exists('data', $whereIn)) {
+                        $key = $whereIn['key'];
+                        $data = $whereIn['data'];
+                        if(array_key_exists('whereIn', $filter)) {
+                            $model->whereIn($key, $data);
+                        }
+                    }
+                    unset($filter['whereIn']);
+                }
                 $model->where($filter);
             }
-            
+
             $count = $model->where(['deleted_at' => null])->get()->count();
-
             $pagesCount = ceil($count/$limit);
-
             $data = $model
                 ->orderBy('created_at', 'desc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
-                
+                                        
+
             return [
                 'data' => $data,
                 'pagination' => [
@@ -71,19 +83,32 @@ class SaleProductService
     public static function create($data){
         try {
             $purchases = [];
-            
-            if(array_key_exists('purchases', $data)){
-                $purchases = $data['purchases'];
-                unset($data['purchases']);              
+
+            if(array_key_exists('shipment_type', $data)
+                && $data['shipment_type'] === "from_warehouse"){
+                if(array_key_exists('warehouse_remains_id', $data)){
+                    $purchases['warehouse_remains_id'] = $data['warehouse_remains_id'];
+                    unset($data['warehouse_remains_id']);              
+                }
             }
+            if(array_key_exists('shipment_type', $data) &&
+                $data['shipment_type'] === "from_factory") {    
+                if(array_key_exists('purchase_id', $data)) {
+                    $purchases['purchase_id'] = $data['purchase_id'];
+                    unset($data['purchase_id']);              
+                }
+            }
+
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
                 $data['nds_rate'] = $ndsRate;
             }
 
             $result = SaleProduct::create($data);
-            if(count($purchases)>0){
-                $resultPurchases = SaleProductPurchaseService::updateOrCreateInArray($result['id'], $result['sale_id'], $purchases);
+            if(count($purchases) > 0){
+                $resultPurchases = SaleProductPurchaseService::deleteAndCreateArray(
+                    $result['id'], $result['sale_id'], $data['shipment_type'], $purchases);
+
                 $result['purchases'] = $resultPurchases;
             }
             return $result;
@@ -99,13 +124,36 @@ class SaleProductService
     }
     public static function update($id, $data){ 
         try {
-
-
-            if(array_key_exists('purchases', $data)){
-                $purchases = $data['purchases'];
-                unset($data['purchases']);
-                SaleProductPurchaseService::updateOrCreateInArray($id, $data['sale_id'], $purchases);
+             if(array_key_exists('shipment_type', $data)
+                && $data['shipment_type'] === "from_warehouse"){
+                if(array_key_exists('warehouse_remains_id', $data)){
+                    $purchases['warehouse_remains_id'] = $data['warehouse_remains_id'];
+                    unset($data['warehouse_remains_id']);     
+                    SaleProductPurchaseService::deleteAndCreateArray(
+                        $id, $data['sale_id'], $data['shipment_type'], $purchases
+                    );
+         
+                }
             }
+            if(array_key_exists('shipment_type', $data) &&
+                $data['shipment_type'] === "from_factory") {    
+                if(array_key_exists('purchase_id', $data)) {
+                    $purchases['purchase_id'] = $data['purchase_id'];
+                    unset($data['purchase_id']);
+                    SaleProductPurchaseService::deleteAndCreateArray(
+                        $id, $data['sale_id'], $data['shipment_type'], $purchases
+                    );         
+                }
+            }
+
+            // if(array_key_exists('purchases', $data)) {
+            //     $purchases = $data['purchases'];
+            //     unset($data['purchases']);
+            //     SaleProductPurchaseService::updateOrCreateInArray($id, $data['sale_id'], $purchases);
+            // }
+
+
+            
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
                 $data['nds_rate'] = $ndsRate;

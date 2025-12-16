@@ -30,6 +30,9 @@ use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductPurchaseController;
 use App\Http\Controllers\Sale\SaleShipmentController;
+use App\Http\Controllers\Sale\SaleExpense\SaleExpenseController;
+use App\Http\Controllers\Sale\SaleExpense\SaleExpenseDocumentController;
+use App\Http\Controllers\Sale\SaleExpense\SaleExpenseProductController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -292,4 +295,34 @@ Route::prefix('sale_shipment')->group(function () {
     Route::get('/field/{id}/{field}', [SaleShipmentController::class, 'field'] );
 });
 
+Route::prefix('sale_expense')->group(function () {
+    Route::post('/', [SaleExpenseController::class,  'index']);
+    Route::post('/create', [SaleExpenseController::class, 'create'] ); 
+    Route::post('/get', [SaleExpenseController::class, 'card'] );
+    Route::post('/update', [SaleExpenseController::class, 'update'] );
+    Route::post('/delete', [SaleExpenseController::class, 'destroy'] );
+    Route::post('/recover', [SaleExpenseController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleExpenseController::class, 'field'] );
+});
+
+Route::prefix('sale_expense_document')->group(function () {
+    Route::post('/', [SaleExpenseDocumentController::class,  'index']);
+    Route::post('/create', [SaleExpenseDocumentController::class, 'create'] ); 
+    Route::post('/get', [SaleExpenseDocumentController::class, 'card'] );
+    Route::post('/update', [SaleExpenseDocumentController::class, 'update'] );
+    Route::post('/delete', [SaleExpenseDocumentController::class, 'destroy'] );
+    Route::post('/recover', [SaleExpenseDocumentController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleExpenseDocumentController::class, 'field'] );
+});
+
+
+Route::prefix('sale_expense_product')->group(function () {
+    Route::post('/', [SaleExpenseProductController::class,  'index']);
+    Route::post('/create', [SaleExpenseProductController::class, 'create'] ); 
+    Route::post('/get', [SaleExpenseProductController::class, 'card'] );
+    Route::post('/update', [SaleExpenseProductController::class, 'update'] );
+    Route::post('/delete', [SaleExpenseProductController::class, 'destroy'] );
+    Route::post('/recover', [SaleExpenseProductController::class, 'recover'] );
+    Route::get('/field/{id}/{field}', [SaleExpenseProductController::class, 'field'] );
+});
 ?>

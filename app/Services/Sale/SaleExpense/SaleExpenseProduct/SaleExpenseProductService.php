@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Services\Sale\SaleProduct\SaleProductPurchase;
-use App\Models\Sale\SaleProduct\SaleProductPurchase;
-use Illuminate\Support\Facades\Log;
+namespace App\Services\Sale\SaleExpense\SaleExpenseProduct;
+use App\Models\Sale\SaleExpense\SaleExpenseProduct;
 
-
-class SaleProductPurchaseService
+class SaleExpenseProductService
 {
      public static function index($requestAll) {
         try {
@@ -21,7 +19,7 @@ class SaleProductPurchaseService
             }
             
             $offset = $limit * ($page-1);
-            $model = SaleProductPurchase::where(['deleted_at' => null]);
+            $model = SaleExpenseProduct::where(['deleted_at' => null]);
                // ->with([])
             
             $total = $model->get()->count();
@@ -70,20 +68,20 @@ class SaleProductPurchaseService
      
     public static function create($data){
         try {
-            return SaleProductPurchase::create($data);
+            return SaleExpenseProduct::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return SaleProductPurchase::where(['id' => $id])
+        return SaleExpenseProduct::where(['id' => $id])
             //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            SaleProductPurchase::where('id', $id)->first()->update($data);
-            return SaleProductPurchase::where('id', $id)
+            SaleExpenseProduct::where('id', $id)->first()->update($data);
+            return SaleExpenseProduct::where('id', $id)
                 //->with([])
                 ->first();
 
@@ -93,21 +91,21 @@ class SaleProductPurchaseService
     }
     public static function delete($id){ 
         try {
-            return SaleProductPurchase::where('id', $id)->update(['deleted_at' => now()]);
+            return SaleExpenseProduct::where('id', $id)->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return SaleProductPurchase::where('id', $id)->update(['deleted_at' => null]);
+            return SaleExpenseProduct::where('id', $id)->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function field($id, $field){ 
         try {
-            $result = SaleProductPurchase::where('id', $id)->select($field)->first();
+            $result = SaleExpenseProduct::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
         } catch (Exception $e) {
@@ -115,22 +113,16 @@ class SaleProductPurchaseService
         }
     }
 
-     public static function deleteAndCreateArray($saleProductId, $saleId, $shipmentType, $data){
+    public static function updateOrCreateInArray($saleExpenseId, $saleId, $list){
         try {
-            SaleProductPurchase::where([
-                'sale_id' => $saleId,
-                'sale_product_id' => $saleProductId
-            ])->delete();
-
-            foreach ($data as $key => $list) {
-                foreach ($list as $item) {
-                    SaleProductPurchase::create([
-                        'sale_id' => $saleId,
-                        'sale_product_id' => $saleProductId,
-                        'shipment_type' => $shipmentType,
-                        $key => $item
-                        ]
-                    );
+            foreach ($list as $item) {
+                $item['sale_id'] = $saleId;
+                $item['sale_expense_id'] = $saleExpenseId;
+                if(array_key_exists('id', $item)){
+                    SaleExpenseProduct::where(["id" => $item['id']])
+                        ->update($item);
+                }else{
+                    SaleExpenseProduct::create($item);
                 }
             }
         } catch (Exception $e) {

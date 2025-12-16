@@ -18,9 +18,12 @@ return new class extends Migration
             $table->foreignId('packing_type_id')
                 ->nullable()
                 ->constrained('directory_packing_types');  
-            $table->string('shipment')->nullable();    //  Со склада / С завода  R  
-            $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');       
+            
+            $table->string('shipment_type')->nullable();    //  Со склада / С завода  R  
+            $table->foreignId('purchase_id')->nullable()->constrained();
             $table->foreignId('counterparty_id')->nullable()->constrained();   // поставщик
+
+            $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');       
 
             $table->string('delivery_address')->nullable();
             $table->float('quantity')->default(0);    // план тон
@@ -36,6 +39,11 @@ return new class extends Migration
             $table->foreignId('delivery_method_id')     // способ доставки
                 ->constrained('directory_delivery_methods'); 
             
+
+
+
+
+
             $table->date('delivery_date')->nullable(); // Срок поставки (скрыто по умолчанию)
 
             $table->float('shipped')->default(0);  //Отгружено (скрыто по умолчанию)
