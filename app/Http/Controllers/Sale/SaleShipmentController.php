@@ -25,7 +25,6 @@ class SaleShipmentController extends Controller
                 'shipment_date'=>'required',
                 'sale_id'=>'required',
                 'sale_product_id'=>'required',
-                'sale_product_purchase_id'=>'required',
             ]);
  
             if($validator->fails()){

@@ -23,7 +23,6 @@ class SaleShipment extends Model
         'file_number',
         'file_date',
         'sale_product_id',      // Товар
-        'sale_product_purchase_id',
         'shipped_quantity',          // Отгружено
         "transport",
         'user_id',          // Ответственный

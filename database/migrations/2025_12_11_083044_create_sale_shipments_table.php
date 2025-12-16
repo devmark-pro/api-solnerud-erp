@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('sale_shipments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sale_product_id')->constrained();
-            $table->foreignId('sale_product_purchase_id')->constrained();            
             $table->date('shipment_date');      // R Дата отгрузки
             $table->longText('file')->nullable();   //Накладная
             $table->string('file_number')->nullable();
