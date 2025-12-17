@@ -129,4 +129,22 @@ class SaleExpenseProductService
             return $e->getMessage();
         }
     }
+    public static function deleteAndCreateArray($saleProductId, $saleId, $data){
+        try {
+            SaleExpenseProduct::where([
+                'sale_id' => $saleId,
+                'sale_expense_id' => $saleProductId
+            ])->delete();
+
+            foreach ($data as  $item) {
+                SaleExpenseProduct::create([
+                    'sale_id' => $saleId,
+                    'sale_expense_id' => $saleProductId,
+                    'sale_product_id' => $item
+                ]);  
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

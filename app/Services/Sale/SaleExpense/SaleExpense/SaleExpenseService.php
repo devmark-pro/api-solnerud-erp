@@ -4,7 +4,10 @@ namespace App\Services\Sale\SaleExpense\SaleExpense;
 use App\Models\Sale\SaleExpense\SaleExpense;
 use App\Services\Sale\SaleExpense\SaleExpenseProduct\SaleExpenseProductService;
 use App\Services\Sale\SaleExpense\SaleExpenseDocument\SaleExpenseDocumentService;
+use App\Services\Directory\Nds\NdsService;
+use App\Helpers\Nds;
 
+use Illuminate\Support\Facades\Log;
 
 
 class SaleExpenseService
@@ -74,15 +77,17 @@ class SaleExpenseService
         try {
 
             $documents = [];
+            $products = [];
             if(array_key_exists('documents', $data)){
                 $documents = $data['documents'];
                 unset($data['documents']);              
             }
 
-            if(array_key_exists('products', $data)){
-                $products = $data['products'];
-                unset($data['products']);   
-            }
+             
+            // if(array_key_exists('products', $data)){
+            //     $products = $data['products'];
+            //     unset($data['products']);   
+            // }
             
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
@@ -103,27 +108,62 @@ class SaleExpenseService
                 $resultDocuments = SaleExpenseDocumentService::updateOrCreateInArray($result['id'], $result['sale_id'], $documents);
                 $result['documents'] = $resultDocuments;
             }
-            if(count($products)>0){    
-                $resultAddresses = SaleExpenseProductService::updateOrCreateInArray($result['id'], $result['sale_id'], $addresses);
-                $result['products'] = $resultProducts;
-            }
+            // if(count($products)>0){    
+            //     $resultAddresses = SaleExpenseProductService::updateOrCreateInArray($result['id'], $result['sale_id'], $addresses);
+            //     $result['products'] = $resultProducts;
+            // }
             return $result;
 
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-    public static function card($id){ 
+    public static function card($id) { 
         return SaleExpense::where(['id' => $id])
             //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
         try {
-            SaleExpense::where('id', $id)->first()->update($data);
-            return SaleExpense::where('id', $id)
-                //->with([])
-                ->first();
+             if(array_key_exists('documents', $data)){
+                $documents = $data['documents'];
+                unset($data['documents']);              
+                SaleExpenseDocumentService::updateOrCreateInArray($id, $data['sale_id'], $documents);
+            }
+
+
+
+            if(array_key_exists('sale_product_ids', $data)) {
+                $products = $data['sale_product_ids'];
+                unset($data['sale_product_ids']);
+                SaleExpenseProductService::deleteAndCreateArray(
+                    $id, $data['sale_id'], $products
+                );         
+            }
+            
+
+
+            $model = SaleExpense::where(['id' => $id])->first();
+
+            $summ = $data['quantity'] * $data['rate'];
+            $model->summ = $summ;
+            $ndsRate = null;
+            if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
+                $ndsRate = NdsService::getRateById($data['nds_rate_id']);
+            }
+            // $ndsType = $data['nds_type'];
+            $data['nds_rate'] = $ndsRate;
+            $isNdsInPrice = $data['is_nds_in_price'];
+            $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);
+
+            $model->update($data);
+            
+            return SaleExpense::where(['id' => $id])->first();
+            
+            // SaleExpense::where('id', $id)->first()->update($data);
+            // return SaleExpense::where('id', $id)
+            //     //->with([])
+            //     ->first();
 
         } catch (Exception $e) {
             return $e->getMessage();

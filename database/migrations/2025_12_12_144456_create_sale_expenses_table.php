@@ -31,7 +31,9 @@ return new class extends Migration
 
             $table->decimal('summ', 14, 2)->default(0)->nullable();
             $table->decimal('summ_nds', 14, 2)->default(0)->nullable();
-
+            $table->boolean('is_nds_in_price')->default(false);
+            $table->decimal('nds_rate', 14, 2)->default(null)->nullable(); 
+          
             $table->integer('quantity')->nullable();  // Количество
             $table->boolean('include_in_cost')->default(true);     // Учет в себес.
             

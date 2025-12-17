@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Sale\SaleExpense;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sale\SaleExpense\SaleExpenseDocument\SaleExpenseDocument;
+use App\Models\Sale\SaleExpense\SaleExpenseDocument;
 use App\Services\Sale\SaleExpense\SaleExpenseDocument\SaleExpenseDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,7 +106,8 @@ class SaleExpenseDocumentController extends Controller
     public function field($id, $field)
     {   
         if(!(new SaleExpenseDocument())->isFillable($field)) {
-            return response()->json(['message'=>"Field $field not found"], 404);}
+            return response()->json(['message' => "Field $field not found"], 404);
+        }
         $data = SaleExpenseDocumentService::field($id, $field);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;

@@ -28,21 +28,21 @@ class LSaleProductProvider extends ServiceProvider
     }
     public function calculateQuantity(object $event): void
     {
-        $warehouseRemainsId = $event->data['warehouse_remains_id'];
-        $saleProductId = $event->data['sale_product_id'];
+        // $warehouseRemainsId = $event->data['warehouse_remains_id'];
+        // $saleProductId = $event->data['sale_product_id'];
 
-        $model = SaleProduct::where(['id'=>$saleProductId])->first();
-        $quantity = 0;
+        // $model = SaleProduct::where(['id'=>$saleProductId])->first();
+        // $quantity = 0;
         
-        $quantity = SaleProductPurchase::where([
-            'deleted_at' => null,
-            'sale_product_id' => $saleProductId
-        ])->groupBy('sale_product_id')
-            ->selectRaw('sum(quantity) as summ_quantity')
-            ->first()->summ_quantity;
+        // $quantity = SaleProductPurchase::where([
+        //     'deleted_at' => null,
+        //     'sale_product_id' => $saleProductId
+        // ])->groupBy('sale_product_id')
+        //     ->selectRaw('sum(quantity) as summ_quantity')
+        //     ->first()->summ_quantity;
         
-        $model->quantity = $quantity;
-        $model->summ = $quantity * $model->price;
-        $model->save();
+        // $model->quantity = $quantity;
+        // $model->summ = $quantity * $model->price;
+        // $model->save();
     }
 }

@@ -24,7 +24,15 @@ class SaleExpenseDocument extends Model
         'deleted_at',
     ];
 
- public function saleExpense(): BelongsTo 
+    protected $hidden =[
+        'file',
+    ];
+
+    protected $appends = [
+        'is_file_added',
+    ];
+
+    public function saleExpense(): BelongsTo 
     {
         return $this->belongsTo(SaleExpense::class);
     }

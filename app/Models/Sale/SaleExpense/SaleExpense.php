@@ -2,16 +2,17 @@
 
 namespace App\Models\Sale\SaleExpense;
 
-use App\Services\Sale\SaleExpense\SaleExpense\SaleExpenseObserver;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
-
 use App\Models\User\User;
-use App\Models\Counterparty\Counterparty;
 use App\Models\Sale\Sale;
 use App\Models\Sale\SaleDeliveryAddress;
+use App\Models\Counterparty\Counterparty;
 use App\Models\Sale\SaleExpense\SaleExpenseDocument;
-use App\Models\Sale\SaleExpense\SaleExpenseAddress;
+use App\Services\Sale\SaleExpense\SaleExpense\SaleExpenseObserver;
+use App\Models\Sale\SaleExpense\SaleExpenseProduct;
 
 #[ObservedBy([SaleExpenseObserver::class])]
 class SaleExpense extends Model
@@ -33,7 +34,8 @@ class SaleExpense extends Model
         'executor_type',    // тип исполнителя
                         //  user - Сотрудник
                         //  counterparty - Контрагент
-
+        'nds_rate',
+        'is_nds_in_price',
         'executor_user_id',
         'executor_counterparty_id',
 
@@ -50,9 +52,18 @@ class SaleExpense extends Model
         'deleted_at',
     ];
 
+    protected $with = [
+        'documents',
+        'executorCounterparty',
+        'executorUser',
+    ];
 
 
+    protected $appends = [ 
+        'sale_product_ids',
+    ];
 
+    
     public function sale(): BelongsTo 
     {
         return $this->belongsTo(Sale::class);
@@ -72,10 +83,14 @@ class SaleExpense extends Model
         return $this->hasMany(SaleExpenseDocument::class)->where(['deleted_at'=>null]);
     }
 
-    public function addresses(): HasMany
-    {
-        return $this->hasMany(SaleExpenseAddress::class)->where(['deleted_at'=>null]);
+    public function getSaleProductIdsAttribute(){
+        return SaleExpenseProduct::where([
+            "deleted_at" => null,
+            "sale_id" => $this->sale_id,
+			"sale_expense_id" => $this->id,
+        ])->select('id', 'sale_product_id')
+        ->get()
+        ->pluck('sale_product_id');             
     }
-
 }
 

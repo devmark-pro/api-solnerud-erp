@@ -115,7 +115,7 @@ class SaleProductPurchaseService
         }
     }
 
-     public static function deleteAndCreateArray($saleProductId, $saleId, $shipmentType, $data){
+    public static function deleteAndCreateArray($saleProductId, $saleId, $shipmentType, $data){
         try {
             SaleProductPurchase::where([
                 'sale_id' => $saleId,

@@ -11,15 +11,6 @@ class SaleProductPurchaseObserver
 {    
     public function created(SaleProductPurchase $saleProductPurchase): void
     {
-        // Log::channel('my')->info('333', ['shipment'=>$saleProductPurchase->shipment]);
-
-        // if($saleProductPurchase->shipment==='from_factory'){
-        //     $purchase = Purchase::where(['id'===$data['purchase_id']]->first());
-        //     $saleProductPurchase->quantity=$purchase->count;
-        //             Log::channel('my')->info('444', ['purchase'=>$purchase->count]);
-
-        //     $saleProductPurchase->save();
-        // }
         ESaleProductPurchaseCreate::dispatch($saleProductPurchase);
     }
 

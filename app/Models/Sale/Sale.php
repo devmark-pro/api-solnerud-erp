@@ -5,8 +5,6 @@ namespace App\Models\Sale;
 use App\Services\Sale\Sale\SaleObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
-
-
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Counterparty\Counterparty;
 use App\Models\Client\Client;

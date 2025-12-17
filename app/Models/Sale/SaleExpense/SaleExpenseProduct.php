@@ -22,7 +22,7 @@ class SaleExpenseProduct extends Model
         'sale_product_id',
         'deleted_at',
     ];
-
+    
 
     public function saleExpense(): BelongsTo 
     {
@@ -44,18 +44,5 @@ class SaleExpenseProduct extends Model
         return $this->belongsTo(Sale::class);
     }
 
-/*
-    use Illuminate\Database\Eloquent\Relations\BelongsTo;
-    public function _(): BelongsTo 
-    {
-        return $this->belongsTo(_::class);
-    }
 
-
-    use Illuminate\Database\Eloquent\Relations\HasMany;
-    public function _(): HasMany
-    {
-        return $this->hasMany(_::class);
-    }
-*/
 }

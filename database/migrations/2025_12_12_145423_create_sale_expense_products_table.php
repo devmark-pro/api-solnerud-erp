@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('sale_expense_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sale_id')->constrained();
-            $table->foreignId('sale_expense_id')->constrained();
             $table->foreignId('sale_product_id')->constrained();
-            $table->foreignId('user_id')->nullable()->constrained();
-            
+            $table->foreignId('sale_expense_id')->constrained();            
             $table->date('deleted_at')->nullable();
-        
             $table->timestamps();
         });
     }

@@ -21,11 +21,6 @@ use App\Models\Purchase\PurchaseReceipt;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Services\Purchase\Purchase\PurchaseObserver;
 
-use Illuminate\Support\Facades\Log;
-
-
-
-
 
 // Покупки
 
