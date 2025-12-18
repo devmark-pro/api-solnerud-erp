@@ -86,15 +86,30 @@ class PurchaseExpenseService
     public static function create($data){
         try {
             $documents = [];
+            $addresses = [];
             if(array_key_exists('documents', $data)){
                 $documents = $data['documents'];
                 unset($data['documents']);              
             }
 
-            if(array_key_exists('addresses', $data)){
-                $addresses = $data['addresses'];
-                unset($data['addresses']);   
+            // if(array_key_exists('addresses', $data)){
+            //     $addresses = $data['addresses'];
+            //     unset($data['addresses']);   
+            // }
+
+            if(array_key_exists('purchase_address_ids', $data)){
+                $addresses = $data['purchase_address_ids'];
+                unset($data['purchase_address_ids']);              
             }
+
+
+            // if(array_key_exists('purchase_address_ids', $data)) {
+            //     $addresses = $data['purchase_address_ids'];
+            //     unset($data['purchase_address_ids']);
+            //     SaleExpenseProductService::deleteAndCreateArray(
+            //         $id, $data['purchase_id'], $list
+            //     );         
+            // }
             
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
@@ -117,7 +132,7 @@ class PurchaseExpenseService
                 $result['documents'] = $resultDocuments;
             }
             if(count($addresses)>0){    
-                $resultAddresses = PurchaseExpenseAddressService::updateOrCreateInArray($result['id'], $result['purchase_id'], $addresses);
+                $resultAddresses = PurchaseExpenseAddressService::deleteAndCreateArray($result['id'], $result['purchase_id'], $addresses);
                 $result['addresses'] = $resultAddresses;
             }
             return $result;
@@ -136,12 +151,13 @@ class PurchaseExpenseService
                 PurchaseExpenseDocumentService::updateOrCreateInArray($id, $data['purchase_id'], $documents);
             }
 
-            if(array_key_exists('addresses', $data)){
-                $addresses = $data['addresses'];
-                unset($data['addresses']);              
-                PurchaseExpenseAddressService::updateOrCreateInArray($id, $data['purchase_id'], $addresses);
+            if(array_key_exists('purchase_address_ids', $data)) {
+                $list = $data['purchase_address_ids'];
+                unset($data['purchase_address_ids']);
+                PurchaseExpenseAddressService::deleteAndCreateArray(
+                    $id, $data['purchase_id'], $list
+                );         
             }
-
             $model = PurchaseExpense::where(['id' => $id])->first();
 
             $summ = $data['quantity'] * $data['rate'];

@@ -15,7 +15,6 @@ use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseObserver;
 
 
-
 #[ObservedBy([PurchaseExpenseObserver::class])]
 class PurchaseExpense extends Model
 {
@@ -58,7 +57,9 @@ class PurchaseExpense extends Model
         'documents'
     ];
    
-
+    protected $appends = [ 
+        'purchase_address_ids',
+    ];
 
     public function purchase(): BelongsTo 
     {
@@ -69,6 +70,7 @@ class PurchaseExpense extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function executorCounterparty(): BelongsTo 
     {
         return $this->belongsTo(Counterparty::class);
@@ -82,5 +84,15 @@ class PurchaseExpense extends Model
     public function addresses(): HasMany
     {
         return $this->hasMany(PurchaseExpenseAddress::class)->where(['deleted_at'=>null]);
+    }
+
+    public function getPurchaseAddressIdsAttribute() {
+        return PurchaseExpenseAddress::where([
+            "deleted_at" => null,
+            "purchase_id" => $this->purchase_id,
+			"purchase_expense_id" => $this->id,
+        ])->select('id', 'address_id')
+        ->get()
+        ->pluck('address_id');
     }
 }

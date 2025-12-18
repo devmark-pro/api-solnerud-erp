@@ -66,6 +66,14 @@ class SaleProductService
                                         
 
             return [
+                'data_total' => [
+                    'summ' => SaleProduct::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ'),
+                    'summ_nds' => SaleProduct::where(['deleted_at' => null])
+                        ->where($filter)->sum('summ_nds'),
+                    'quantity' => SaleProduct::where(['deleted_at' => null])
+                        ->where($filter)->sum('quantity'),
+                ],
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,

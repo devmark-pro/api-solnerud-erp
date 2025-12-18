@@ -83,11 +83,10 @@ class SaleExpenseService
                 unset($data['documents']);              
             }
 
-             
-            // if(array_key_exists('products', $data)){
-            //     $products = $data['products'];
-            //     unset($data['products']);   
-            // }
+            if(array_key_exists('sale_product_ids', $data)){
+                $products = $data['sale_product_ids'];
+                unset($data['sale_product_ids']);   
+            }
             
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
@@ -96,7 +95,6 @@ class SaleExpenseService
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-
 
             $isNdsInPrice = $data['is_nds_in_price'];
 
@@ -108,10 +106,10 @@ class SaleExpenseService
                 $resultDocuments = SaleExpenseDocumentService::updateOrCreateInArray($result['id'], $result['sale_id'], $documents);
                 $result['documents'] = $resultDocuments;
             }
-            // if(count($products)>0){    
-            //     $resultAddresses = SaleExpenseProductService::updateOrCreateInArray($result['id'], $result['sale_id'], $addresses);
-            //     $result['products'] = $resultProducts;
-            // }
+            if(count($products)>0){    
+                $resultProducts = SaleExpenseProductService::deleteAndCreateArray($result['id'], $result['sale_id'], $products);
+                $result['products'] = $resultProducts;
+            }
             return $result;
 
         } catch (Exception $e) {
@@ -131,8 +129,6 @@ class SaleExpenseService
                 SaleExpenseDocumentService::updateOrCreateInArray($id, $data['sale_id'], $documents);
             }
 
-
-
             if(array_key_exists('sale_product_ids', $data)) {
                 $products = $data['sale_product_ids'];
                 unset($data['sale_product_ids']);
@@ -141,8 +137,6 @@ class SaleExpenseService
                 );         
             }
             
-
-
             $model = SaleExpense::where(['id' => $id])->first();
 
             $summ = $data['quantity'] * $data['rate'];

@@ -19,7 +19,7 @@ class PurchaseExpenseController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'addresses' => 'required', 
+                'purchase_address_ids' => 'required', 
                 'executor_type' => 'required',
                 'include_in_cost' => 'required',
                 'purchase_id' => 'required',

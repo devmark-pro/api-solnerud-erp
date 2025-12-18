@@ -74,26 +74,6 @@ class PurchaseExpenseAddressService
         }
     }
 
-    public static function updateOrCreateInArray($purchaseExpenseId, $purchaseId, $addresses){
-        try {
-            foreach ($addresses as $item) { 
-                $updateData = [
-                    'address_id' => $item['address_id'],
-                    'purchase_id' => $purchaseId,
-                    'purchase_expense_id' => $purchaseExpenseId,
-                ];
-                if(array_key_exists('id', $item)){
-                    PurchaseExpenseAddress::where(["id" => $item['id']])
-                        ->update($updateData);
-                } else {
-                    PurchaseExpenseAddress::create($updateData);
-                }
-            }
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
     public static function card($id){ 
         return PurchaseExpenseAddress::where(['id' => $id])
             ->with('address')
@@ -124,5 +104,43 @@ class PurchaseExpenseAddressService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
+
+    public static function updateOrCreateInArray($purchaseExpenseId, $purchaseId, $addresses){
+        try {
+            foreach ($addresses as $item) { 
+                $updateData = [
+                    'address_id' => $item['address_id'],
+                    'purchase_id' => $purchaseId,
+                    'purchase_expense_id' => $purchaseExpenseId,
+                ];
+                if(array_key_exists('id', $item)){
+                    PurchaseExpenseAddress::where(["id" => $item['id']])
+                        ->update($updateData);
+                } else {
+                    PurchaseExpenseAddress::create($updateData);
+                }
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public static function deleteAndCreateArray($purchaseProductId, $purchaseId, $data){
+        try {
+            PurchaseExpenseAddress::where([
+                'purchase_id' => $purchaseId,
+                'purchase_expense_id' => $purchaseProductId
+            ])->delete();
+
+            foreach ($data as  $item) {
+                PurchaseExpenseAddress::create([
+                    'purchase_id' => $purchaseId,
+                    'purchase_expense_id' => $purchaseProductId,
+                    'address_id' => $item
+                ]);  
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    } 
 }
