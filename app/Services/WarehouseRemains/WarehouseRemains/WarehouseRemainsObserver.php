@@ -13,7 +13,7 @@ class WarehouseRemainsObserver
 
     public function updated(WarehouseRemains $warehouseRemains): void
     {
-        //
+        
     }
 
     public function deleted(WarehouseRemains $warehouseRemains): void

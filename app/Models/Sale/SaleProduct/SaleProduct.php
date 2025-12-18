@@ -61,7 +61,7 @@ class SaleProduct extends Model
         'packingType',
         'deliveryMethod',
         'warehouse',
-        'counterparty'
+        'counterparty',
     ];
     protected $appends = [ 
         'purchase_ids',
@@ -135,6 +135,7 @@ class SaleProduct extends Model
         }
         return null;
     }
+
     public function getWarehouseRemainsPurchaseIdsAttribute(){
         if($this->shipment_type==="from_warehouse") {
             $saleProductPurchase = SaleProductPurchase::where([
