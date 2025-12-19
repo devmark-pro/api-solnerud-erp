@@ -34,7 +34,7 @@ return new class extends Migration
             $table->boolean('is_nds_in_price')->default(false);
             $table->decimal('nds_rate', 14, 2)->default(null)->nullable(); 
           
-            $table->integer('quantity')->nullable();  // Количество
+            $table->float('quantity')->nullable();  // Количество
             $table->boolean('include_in_cost')->default(true);     // Учет в себес.
             
             //Документы id

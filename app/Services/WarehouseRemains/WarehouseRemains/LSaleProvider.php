@@ -110,8 +110,8 @@ class LSaleProvider extends ServiceProvider
             ]);
 
 
-                    // WarehouseRemains::where('id', $id)
-                    //     ->first()
+            // WarehouseRemains::where('id', $id)
+            //     ->first()
     
     }
         

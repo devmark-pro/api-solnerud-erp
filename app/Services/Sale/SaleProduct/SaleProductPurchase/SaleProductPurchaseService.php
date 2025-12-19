@@ -117,21 +117,29 @@ class SaleProductPurchaseService
 
     public static function deleteAndCreateArray($saleProductId, $saleId, $shipmentType, $data){
         try {
+            
+            $key = '';
+            if($shipmentType==='from_factory'){
+                $key =  'purchase_id';
+            }
+
+            if($shipmentType==='from_warehouse'){
+                $key =  'warehouse_remains_id';
+            }
             SaleProductPurchase::where([
                 'sale_id' => $saleId,
                 'sale_product_id' => $saleProductId
             ])->delete();
-
-            foreach ($data as $key => $list) {
-                foreach ($list as $item) {
-                    SaleProductPurchase::create([
-                        'sale_id' => $saleId,
-                        'sale_product_id' => $saleProductId,
-                        'shipment_type' => $shipmentType,
-                        $key => $item
-                        ]
-                    );
-                }
+            
+            
+            if(!$key) return;
+            foreach ($data as $item) {
+                SaleProductPurchase::create([
+                    'sale_id' => $saleId,
+                    'sale_product_id' => $saleProductId,
+                    'shipment_type' => $shipmentType,
+                    $key => $item
+                ]);
             }
         } catch (Exception $e) {
             return $e->getMessage();

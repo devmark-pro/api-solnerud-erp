@@ -68,22 +68,20 @@ class SaleShipmentService
      
     public static function create($data){
         try {
+            $data['last_quantity'] = $data['shipped_quantity'];
             return SaleShipment::create($data);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return SaleShipment::where(['id' => $id])
-            //->with([])
-            ->first();    
+        return SaleShipment::where(['id' => $id])->first();    
     }
     public static function update($id, $data){ 
         try {
+            // $data['last_quantity'] = $data['shipped_quantity'];
             SaleShipment::where('id', $id)->first()->update($data);
-            return SaleShipment::where('id', $id)
-                //->with([])
-                ->first();
+            return SaleShipment::where('id', $id)->first();
 
         } catch (Exception $e) {
             return $e->getMessage();

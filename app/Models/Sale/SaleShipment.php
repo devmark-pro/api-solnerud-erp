@@ -27,6 +27,7 @@ class SaleShipment extends Model
         "transport",
         'user_id',          // Ответственный
         'sale_id',
+        'last_quantity',
         'deleted_at',
       ];
 
