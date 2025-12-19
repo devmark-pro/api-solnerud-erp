@@ -104,7 +104,7 @@ class UserService
     }
     public static function delete($id){ 
         try {
-            return User::where('id', $id)->update(['deleted_at' => now()]);
+            return User::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

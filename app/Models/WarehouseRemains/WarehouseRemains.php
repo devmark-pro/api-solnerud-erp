@@ -22,8 +22,8 @@ class WarehouseRemains extends Model
         'packing_type_id',     // Тип фасовки
         'warehouse_id',
         'actual_quantity',  // Наличие       
-        'availability',     // Доступно
         'reserve',          // Резрв
+        'availability',     // Доступно
         'cost',             // Себестоимость
         'purchase_delivery_address_id',
         'deleted_at',

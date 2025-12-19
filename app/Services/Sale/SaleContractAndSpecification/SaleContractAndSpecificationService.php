@@ -100,14 +100,14 @@ class SaleContractAndSpecificationService
     }
     public static function delete($id){ 
         try {
-            return SaleContractAndSpecification::where('id', $id)->update(['deleted_at' => now()]);
+            return SaleContractAndSpecification::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return SaleContractAndSpecification::where('id', $id)->update(['deleted_at' => null]);
+            return SaleContractAndSpecification::where('id', $id)->fitst()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

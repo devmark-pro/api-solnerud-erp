@@ -143,7 +143,6 @@ class WarehouseRemainsService
         try {
             WarehouseRemains::where('id', $id)->first()->update($data);
             return WarehouseRemains::where('id', $id)
-                //->with([])
                 ->first();
 
         } catch (Exception $e) {
@@ -152,14 +151,14 @@ class WarehouseRemainsService
     }
     public static function delete($id){ 
         try {
-            return WarehouseRemains::where('id', $id)->update(['deleted_at' => now()]);
+            return WarehouseRemains::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return WarehouseRemains::where('id', $id)->update(['deleted_at' => null]);
+            return WarehouseRemains::where('id', $id)->fitst()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

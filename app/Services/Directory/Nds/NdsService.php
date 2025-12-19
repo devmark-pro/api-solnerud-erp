@@ -91,14 +91,14 @@ class NdsService
     }
     public static function delete($id){ 
         try {
-            return NdsDirectory::where('id', $id)->update(['deleted_at' => now()]);
+            return NdsDirectory::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return NdsDirectory::where('id', $id)->update(['deleted_at' => null]);
+            return NdsDirectory::where('id', $id)->fitst()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

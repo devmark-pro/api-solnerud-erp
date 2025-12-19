@@ -91,14 +91,14 @@ class SaleExpenseDocumentService
     }
     public static function delete($id){ 
         try {
-            return SaleExpenseDocument::where('id', $id)->update(['deleted_at' => now()]);
+            return SaleExpenseDocument::where('id', $id)->first()->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return SaleExpenseDocument::where('id', $id)->update(['deleted_at' => null]);
+            return SaleExpenseDocument::where('id', $id)->fitst()->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }

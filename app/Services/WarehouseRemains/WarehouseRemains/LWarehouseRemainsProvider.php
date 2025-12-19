@@ -16,7 +16,6 @@ use App\Services\Purchase\PurchaseDeliveryAddress\Events\PurchaseDeliveryAddress
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePackingType;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdateNomenclature;
 
-
 use Illuminate\Support\Facades\Log;
 
 
