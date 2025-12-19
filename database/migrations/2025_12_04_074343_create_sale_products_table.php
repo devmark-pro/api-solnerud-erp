@@ -20,7 +20,8 @@ return new class extends Migration
                 ->constrained('directory_packing_types');  
             
             $table->string('shipment_type')->nullable();    //  Со склада / С завода  R  
-            $table->foreignId('purchase_id')->nullable()->constrained();
+            $table->foreignId('address_id')->nullable()->constrained('purchase_delivery_addresses');
+
             $table->foreignId('counterparty_id')->nullable()->constrained();   // поставщик
 
             $table->foreignId('warehouse_id')->nullable()->constrained('directory_warehouses');       
@@ -38,12 +39,7 @@ return new class extends Migration
             $table->decimal('profit', 14, 2)->default(0);  // прибыль '= Сумма - (Себестоимость * Количество (тн))
             $table->foreignId('delivery_method_id')     // способ доставки
                 ->constrained('directory_delivery_methods'); 
-            
-
-
-
-
-
+    
             $table->date('delivery_date')->nullable(); // Срок поставки (скрыто по умолчанию)
 
             $table->float('shipped')->default(0);  //Отгружено (скрыто по умолчанию)

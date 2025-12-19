@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Sale;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sale\SaleContractAndSpecification\SaleContractAndSpecification;
+use App\Models\Sale\SaleContractAndSpecification;
 use App\Services\Sale\SaleContractAndSpecification\SaleContractAndSpecificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

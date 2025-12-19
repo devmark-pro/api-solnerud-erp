@@ -2,8 +2,10 @@
 
 namespace App\Services\Sale\SaleProduct;
 use App\Models\Sale\SaleProduct\SaleProduct;
-use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
 use App\Services\Directory\Nds\NdsService;
+use App\Models\WarehouseRemains\WarehouseRemains;
+use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
+
 use Illuminate\Support\Facades\Log;
 
 class SaleProductService
@@ -135,8 +137,8 @@ class SaleProductService
     public static function update($id, $data){ 
         try {
              if(array_key_exists('shipment_type', $data)
-                && $data['shipment_type'] === "from_warehouse"){
-                if(array_key_exists('warehouse_remains_ids', $data)){
+                && $data['shipment_type'] === "from_warehouse") {
+                if(array_key_exists('warehouse_remains_ids', $data)) {
                     $purchases = $data['warehouse_remains_ids'];
                     unset($data['warehouse_remains_ids']);     
                     SaleProductPurchaseService::deleteAndCreateArray(
@@ -161,7 +163,6 @@ class SaleProductService
                 }
             }
 
-
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
                 $data['nds_rate'] = $ndsRate;
@@ -171,8 +172,13 @@ class SaleProductService
                 $data['remains_ship'] = $data['quantity'];
             }
 
-            SaleProduct::where('id', $id)->first()->update($data);
-            
+            if(array_key_exists('is_request_shipment', $data)) {
+                if($data['is_request_shipment']) {     
+                    self::calculateCost($id);
+                }
+            }
+
+            SaleProduct::where('id', $id)->first()->update($data);            
             return SaleProduct::where('id', $id)->first();
 
         } catch (Exception $e) {
@@ -200,6 +206,30 @@ class SaleProductService
             return $result[$field];
         } catch (Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    private static function calculateCost($id) {
+        $saleProduct = SaleProduct::where('id', $id)->first();
+        if($saleProduct['shipment_type']==="from_warehouse") {
+            $warehouseRemains = WarehouseRemains::select('cost','availability')
+                ->whereIn('id', $saleProduct['warehouse_remains_ids'])
+                ->get()
+                ->toArray();
+
+            $cost = 0;
+            $costAvailability = 0;
+            $summCount = 0;
+            foreach($warehouseRemains as $item){
+                $costAvailability += $item['cost'] * $item['availability'];
+                $summCount += $item['availability'];
+            }
+            if($summCount !== 0 && $costAvailability !== 0){
+                $cost = $costAvailability / $summCount;
+            }
+        }
+        if($saleProduct['shipment_type']==="from_factory") {
+        
         }
     }
 }

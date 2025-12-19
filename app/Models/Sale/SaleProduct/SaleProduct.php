@@ -39,6 +39,7 @@ class SaleProduct extends Model
         'nds_rate_id',     
         'is_nds_in_price',
         'profit',   // прибыль '= Сумма - (Себестоимость * Количество (тн))
+        'address_id',   // Адрес из покупок
 
         'delivery_method_id', // способ доставки
         'delivery_address',  // Адрес доставки

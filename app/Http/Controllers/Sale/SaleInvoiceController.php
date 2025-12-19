@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Sale;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sale\SaleInvoice\SaleInvoice;
+use App\Models\Sale\SaleInvoice;
 use App\Services\Sale\SaleInvoice\SaleInvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

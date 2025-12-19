@@ -14,11 +14,10 @@ class SaleAccountSupplier extends Model
     protected $fillable = [
         'id',
         'payment_type_id',  // Тип оплаты 
-        'nds_type',
-
+        
         'summ',         
         'summ_nds',
-        'nds_type',     // Тип НДС  
+        'is_nds_in_price',       
                         // no_nds  - Без НДС
                         // nds_in_price - НДС включен в цену
                         // nds_not_in_price - НДС не включен в цену

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::table('purchases', function (Blueprint $table) {
             $table->boolean('is_nds_in_price')->default(false);
             $table->decimal('nds_rate', 14, 2)->default(null)->nullable()->change(); 
-          });
+        });
         Schema::table('purchase_invoices', function (Blueprint $table) {
             $table->boolean('is_nds_in_price')->default(false);
             $table->decimal('nds_rate', 14, 2)->default(null)->nullable()->change(); 
-          });
+        });
 
         Schema::table('purchase_account_suppliers', function (Blueprint $table) {
             $table->boolean('is_nds_in_price')->default(false);
