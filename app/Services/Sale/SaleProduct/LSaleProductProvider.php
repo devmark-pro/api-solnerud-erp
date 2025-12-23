@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Sale\SaleProduct\SaleProduct;
 use Illuminate\Support\Facades\Log;
 use App\Services\Sale\SaleShipment\Events\ESaleShipped;
+use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 
 class LSaleProductProvider extends ServiceProvider
 {
@@ -20,25 +21,52 @@ class LSaleProductProvider extends ServiceProvider
             ESaleShipped::class,
             [$this, 'calculateShipped'],
         );
+        Event::listen(
+            ESaleExpenseUpdateCost::class,
+            [$this, 'calculateCost'],
+        );
+        
     }
 
     public function calculateShipped(object $event): void
     {
-
-        if(!array_key_exists('sale_product_id', $event->data) || 
-            !array_key_exists('quantity', $event->data) 
-        ) 
+        
+        
+            if(!array_key_exists('sale_product_id', $event->data) || 
+                !array_key_exists('quantity', $event->data) 
+            ) 
             throw new \Exception('LSaleProductProvider->calculateShipped error');
 
-        $saleProductId = $event->data['sale_product_id'];
-        $quantity = $event->data['quantity'];
+            $saleProductId = $event->data['sale_product_id'];
+            $quantity = $event->data['quantity'];
 
-        $model = SaleProduct::where('id', $saleProductId)->first();
+            $model = SaleProduct::where('id', $saleProductId)->first();
 
-        $model->increment('shipped', $quantity);
-        $model->remains_ship = $model->quantity - $model->shipped ;
-        $model->save();       
+            $model->increment('shipped', $quantity);
+            $model->remains_ship = $model->quantity - $model->shipped ;
+            $model->save(); 
 
     }
+    public function calculateCost(object $event): void
+    {
+            if(!array_key_exists('sale_product_ids', $event->data) || 
+                !array_key_exists('cost', $event->data) 
+            ) {
+                throw new \Exception('LSaleProductProvider->calculateCost error');
+            }
+            
+            $cost = (float)$event->data['cost'];
+            $saleProductIds = $event->data['sale_product_ids'];
 
+            $saleProducts = SaleProduct::whereIn('id', $saleProductIds)->get()->toArray();
+            $data=[];
+            foreach($saleProducts as $item) {
+                $data[$item['id']] = $cost + (float)$item['cost'];
+            }
+
+            foreach($data as $id=>$total) {
+                SaleProduct::where('id', $id)->update(['total_cost' => $total]);
+            }
+        
+    }
 }

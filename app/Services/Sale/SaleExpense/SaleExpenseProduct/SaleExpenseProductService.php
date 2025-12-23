@@ -61,7 +61,7 @@ class SaleExpenseProductService
                     'count' => $count,
                 ],
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -69,7 +69,7 @@ class SaleExpenseProductService
     public static function create($data){
         try {
             return SaleExpenseProduct::create($data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -85,21 +85,21 @@ class SaleExpenseProductService
                 //->with([])
                 ->first();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
         try {
             return SaleExpenseProduct::where('id', $id)->first()->update(['deleted_at' => now()]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
             return SaleExpenseProduct::where('id', $id)->fitst()->update(['deleted_at' => null]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -108,7 +108,7 @@ class SaleExpenseProductService
             $result = SaleExpenseProduct::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -125,7 +125,7 @@ class SaleExpenseProductService
                     SaleExpenseProduct::create($item);
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -143,7 +143,7 @@ class SaleExpenseProductService
                     'sale_product_id' => $item
                 ]);  
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }

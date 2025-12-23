@@ -78,8 +78,8 @@ class SaleExpenseService
         try {
 
 
-            $summ = $data['quantity'] * $data['rate'];
-            $data['summ'] = $summ;
+            $summ = (float)$data['quantity'] * (float)$data['rate'];
+            $data['summ'] = (float)$summ;
 
             if(array_key_exists('summ', $data) &&
                 array_key_exists('quantity', $data) &&
@@ -232,8 +232,7 @@ class SaleExpenseService
             } else {
                 $cost = round(($summ * $quantity / $summPr) / $quantity, 2);
             }
-            return $cost;
-            // $saleExpense->update(['cost' => $cost]);
+            return (float)$cost;
 
         } catch (Exception $e) {
             return $e->getMessage();

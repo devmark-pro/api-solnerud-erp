@@ -5,6 +5,7 @@ use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Services\Directory\Nds\NdsService;
 use App\Models\WarehouseRemains\WarehouseRemains;
 use App\Services\Sale\SaleProduct\SaleProductPurchase\SaleProductPurchaseService;
+use App\Models\Purchase\PurchaseDeliveryAddress;
 
 use Illuminate\Support\Facades\Log;
 
@@ -85,7 +86,7 @@ class SaleProductService
                     'count' => $count,
                 ],
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -127,7 +128,7 @@ class SaleProductService
             }
             return $result;
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -171,34 +172,32 @@ class SaleProductService
             if(array_key_exists('quantity', $data)) {
                 $data['remains_ship'] = $data['quantity'];
             }
-
-            
-
-            $model = SaleProduct::where('id', $id)->first()->update($data);     
             
             if(array_key_exists('is_request_shipment', $data)) {
                 if($data['is_request_shipment']) {     
-                    self::calculateCost($id);
+                    $c = self::calculateCost($id);
+                    $data['cost'] = $c;
+                    $data['total_cost'] = $c;
                 }
             }
-
+            $model = SaleProduct::where('id', $id)->first()->update($data);
             return SaleProduct::where('id', $id)->first();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
     public static function delete($id){ 
         try {
             return SaleProduct::where('id', $id)->first()->update(['deleted_at' => now()]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
             return SaleProduct::where('id', $id)->first()->update(['deleted_at' => null]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -207,7 +206,7 @@ class SaleProductService
             $result = SaleProduct::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -233,12 +232,12 @@ class SaleProductService
             if($summCount != 0 && $costAvailability != 0) {
                 $cost = $costAvailability / $summCount; //
             }
-            $saleProduct->cost = $cost;
-            $saleProduct->save();
+            return (float)$cost;
         }
 
-        if($saleProduct['shipment_type']==="from_factory") {
-        
+        if($saleProduct['shipment_type'] === "from_factory") {
+            $purchaseDeliveryAddress = PurchaseDeliveryAddress::where('id', $saleProduct->purchase_address_id)->first();
+            return (float)$purchaseDeliveryAddress->cost;   
         }
     }
 }
