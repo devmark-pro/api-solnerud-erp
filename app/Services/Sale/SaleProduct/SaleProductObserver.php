@@ -17,12 +17,16 @@ class SaleProductObserver
         if($saleProduct->isDirty('is_request_shipment'))
         {   
             $isRequestShipment = $saleProduct->getAttribute('is_request_shipment');
-            $shipmentType = $saleProduct->getAttribute('shipment_type');
-
-            if($isRequestShipment && $shipmentType==='from_warehouse'){
+            
+            if($isRequestShipment){
+                $shipmentType = $saleProduct->getAttribute('shipment_type');
+                $saleProductId = $saleProduct->getAttribute('id');
+                $quantity = $saleProduct->getAttribute('quantity');
+                
                 $data = [
-                    'sale_product_id' => $saleProduct->getAttribute('id'),
-                    'quantity' => $saleProduct->getAttribute('quantity'),
+                    'sale_product_id' => $saleProductId,
+                    'quantity' => $quantity,
+                    'shipment_type' => $shipmentType
                 ];
                 ESalePruductShipmentRequest::dispatch($data);
             }

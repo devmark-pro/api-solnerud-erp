@@ -24,21 +24,20 @@ class LSaleProductProvider extends ServiceProvider
 
     public function calculateShipped(object $event): void
     {
+
         if(!array_key_exists('sale_product_id', $event->data) || 
-                !array_key_exists('quantity', $event->data) 
-            ) 
+            !array_key_exists('quantity', $event->data) 
+        ) 
             throw new \Exception('LSaleProductProvider->calculateShipped error');
 
         $saleProductId = $event->data['sale_product_id'];
         $quantity = $event->data['quantity'];
 
+        $model = SaleProduct::where('id', $saleProductId)->first();
 
-        SaleProduct::where('id', $saleProductId)
-                ->increment('shipped', $quantity);
-
-        SaleProduct::where('id', $saleProductId)
-                ->decrement('remains_ship', $quantity);
-               
+        $model->increment('shipped', $quantity);
+        $model->remains_ship = $model->quantity - $model->shipped ;
+        $model->save();       
 
     }
 

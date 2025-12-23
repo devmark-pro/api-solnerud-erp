@@ -101,13 +101,13 @@ class SaleProductService
                     unset($data['warehouse_remains_ids']);              
                 }
             }
-            if(array_key_exists('shipment_type', $data) &&
-                $data['shipment_type'] === "from_factory") {    
-                if(array_key_exists('purchase_ids', $data)) {
-                    $purchases = $data['purchase_ids'];
-                    unset($data['purchase_ids']);              
-                }
-            }
+            // if(array_key_exists('shipment_type', $data) &&
+            //     $data['shipment_type'] === "from_factory") {    
+            //     if(array_key_exists('purchase_ids', $data)) {
+            //         $purchases = $data['purchase_ids'];
+            //         unset($data['purchase_ids']);              
+            //     }
+            // }
 
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
@@ -172,13 +172,16 @@ class SaleProductService
                 $data['remains_ship'] = $data['quantity'];
             }
 
+            
+
+            $model = SaleProduct::where('id', $id)->first()->update($data);     
+            
             if(array_key_exists('is_request_shipment', $data)) {
                 if($data['is_request_shipment']) {     
                     self::calculateCost($id);
                 }
             }
 
-            SaleProduct::where('id', $id)->first()->update($data);            
             return SaleProduct::where('id', $id)->first();
 
         } catch (Exception $e) {
@@ -211,6 +214,7 @@ class SaleProductService
 
     private static function calculateCost($id) {
         $saleProduct = SaleProduct::where('id', $id)->first();
+
         if($saleProduct['shipment_type']==="from_warehouse") {
             $warehouseRemains = WarehouseRemains::select('cost','availability')
                 ->whereIn('id', $saleProduct['warehouse_remains_ids'])
@@ -220,14 +224,19 @@ class SaleProductService
             $cost = 0;
             $costAvailability = 0;
             $summCount = 0;
+            
             foreach($warehouseRemains as $item){
                 $costAvailability += $item['cost'] * $item['availability'];
                 $summCount += $item['availability'];
             }
-            if($summCount !== 0 && $costAvailability !== 0){
-                $cost = $costAvailability / $summCount;
+
+            if($summCount != 0 && $costAvailability != 0) {
+                $cost = $costAvailability / $summCount; //
             }
+            $saleProduct->cost = $cost;
+            $saleProduct->save();
         }
+
         if($saleProduct['shipment_type']==="from_factory") {
         
         }

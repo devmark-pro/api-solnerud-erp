@@ -34,19 +34,20 @@ class SaleExpense extends Model
         'executor_type',    // тип исполнителя
                         //  user - Сотрудник
                         //  counterparty - Контрагент
+
+        'cost',                
         'nds_rate',
         'is_nds_in_price',
         'executor_user_id',
         'executor_counterparty_id',
+        'nds_rate_id',
 
         'reimbursement_expenses',   // Возмещ. расходов
                                     //    'refunded',     // Возмещен
                                     //    'required',     // Требуется   
                                     //    'not_required'  // Не требуется  
         
-        'nds_rate',
-        'nds_rate_id',
-        'is_nds_in_price',    
+        
         'reimbursement_date',       // Дата возмещения расходов
         'sale_id',
         'deleted_at',

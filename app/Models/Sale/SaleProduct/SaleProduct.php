@@ -32,6 +32,11 @@ class SaleProduct extends Model
         'quantity',
         'availability',     // Доступно
         'cost',
+
+        'purchase_id',
+        'purchase_address_id',
+        'total_cost',
+        
         'price',
         'summ',     //'= Цена * Количество (тн)
         'summ_nds',
@@ -39,7 +44,7 @@ class SaleProduct extends Model
         'nds_rate_id',     
         'is_nds_in_price',
         'profit',   // прибыль '= Сумма - (Себестоимость * Количество (тн))
-        'address_id',   // Адрес из покупок
+        'address_id',   // Адрес
 
         'delivery_method_id', // способ доставки
         'delivery_address',  // Адрес доставки

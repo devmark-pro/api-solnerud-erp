@@ -27,16 +27,16 @@ class LSaleProvider extends ServiceProvider
             ESalePruductShipmentRequest::class,
             [$this, 'addReserve'],
         );
-
-        Event::listen(
-            EWarehouseRemainsReserveUpdated::class,
-            [$this, 'calculateActualQuantity'],
-        );
-
+        
         Event::listen(
             ESaleShipped::class,
             [$this, 'removeReserve'],
         );
+
+        // Event::listen(
+        //     EWarehouseRemainsReserveUpdated::class,
+        //     [$this, 'calculateActualQuantity'],
+        // );
         
     }
 
@@ -45,15 +45,22 @@ class LSaleProvider extends ServiceProvider
     {     
         try {
             if(!array_key_exists('quantity', $event->data) || 
-                !array_key_exists('sale_product_id', $event->data) 
+                !array_key_exists('sale_product_id', $event->data) ||
+                !array_key_exists('shipment_type', $event->data) 
             ) 
             throw new \Exception('LSaleProvider->addReserve error');
+            
 
+            $shipmentType = $event->data['shipment_type'];
+            
+            if($shipmentType !== 'from_warehouse') return;
+
+                        
             $quantity = $event->data['quantity'];
             $saleProductId = $event->data['sale_product_id'];
             
             $saleProductPurchase = SaleProductPurchase::where([
-                'deleted_at' => null,
+                "deleted_at" => null,
                 "sale_product_id" => $saleProductId,
             ])
             ->select('id', 'warehouse_remains_id')
@@ -88,13 +95,18 @@ class LSaleProvider extends ServiceProvider
             }
 
 
-            if(count($reserve)){
-                foreach($reserve as $reserveItem){
-                    WarehouseRemains::where('id', $reserveItem['id'])
-                        ->increment('reserve', $reserveItem['reserve']);
 
-                    WarehouseRemains::where('id', $reserveItem['id'])
-                        ->first()->decrement('availability', $reserveItem['reserve']);
+            if(count($reserve)){
+                foreach($reserve as $reserveItem) {
+                    $model = WarehouseRemains::where('id', $reserveItem['id'])->first();
+
+                    $model->increment('reserve', $reserveItem['reserve']);
+                    // $model->decrement('availability', $reserveItem['reserve']);
+                    $actualQuantity = $model->actual_quantity;
+                    $reserve = $model->reserve;
+                    $model->availability = $actualQuantity - $reserve;
+                    $model->save();
+                    
                 }
             }
     
@@ -109,10 +121,13 @@ class LSaleProvider extends ServiceProvider
     {     
         try {
             if(!array_key_exists('quantity', $event->data) || 
-                !array_key_exists('sale_product_id', $event->data) 
+                !array_key_exists('sale_product_id', $event->data) ||
+                !array_key_exists('shipment_type', $event->data) 
             ) 
-            throw new \Exception('LSaleProvider->addReserve error');
+            throw new \Exception('LSaleProvider->removeReserve error');
 
+            $shipmentType = $event->data['shipment_type'];
+            if($shipmentType !== 'from_warehouse') return;
             $quantity = $event->data['quantity'];
             $saleProductId = $event->data['sale_product_id'];
             
@@ -135,14 +150,16 @@ class LSaleProvider extends ServiceProvider
 
             $reserve = [];
             $reserveQuantity = $quantity;
+
+            // Вычисление наличия товара на складах
             foreach ($actualQuantity as $item){
                 if($reserveQuantity > $item['actual_quantity']){
                     $reserve[]=[
                         'id' => $item['id'],
                         'reserve' => $item['actual_quantity']
                     ];        
-                    $reserveQuantity=$reserveQuantity-$item['actual_quantity'];
-                }else{
+                    $reserveQuantity = $reserveQuantity-$item['actual_quantity'];
+                } else {
                     $reserve[]=[
                         'id' => $item['id'],
                         'reserve' => $reserveQuantity
@@ -152,13 +169,12 @@ class LSaleProvider extends ServiceProvider
             }
 
 
-            if(count($reserve)){
-                foreach($reserve as $reserveItem){
-                    WarehouseRemains::where('id', $reserveItem['id'])
-                        ->decrement('actual_quantity', $reserveItem['reserve']);
-
-                    WarehouseRemains::where('id', $reserveItem['id'])
-                        ->first()->decrement('reserve', $reserveItem['reserve']);
+            if(count($reserve)) {
+                foreach($reserve as $reserveItem) {
+                    $model = WarehouseRemains::where('id', $reserveItem['id'])->first();
+                    $model->decrement('actual_quantity', $reserveItem['reserve']);
+                    $model->decrement('reserve', $reserveItem['reserve']);
+                    $model->save();
                 }
             }
     
@@ -167,24 +183,20 @@ class LSaleProvider extends ServiceProvider
             throw new \Exception($e->getMessage());
         }
     }
-    public function calculateActualQuantity(object $event): void{
-            if(!array_key_exists('id', $event->data) || 
-                !array_key_exists('reserve', $event->data) 
-            ) 
-            throw new \Exception('LSaleProvider->calculateActualQuantity error');
+    // public function calculateActualQuantity(object $event): void{
+    //         if(!array_key_exists('id', $event->data) || 
+    //             !array_key_exists('reserve', $event->data) 
+    //         ) 
+    //         throw new \Exception('LSaleProvider->calculateActualQuantity error');
 
-            $id = $event->data['id'];
-            $reserve = $event->data['reserve'];
+    //         $id = $event->data['id'];
+    //         $reserve = $event->data['reserve'];
 
-            Log::channel('my')->info('444', [
-                'id' => $id,
-                'reserve' => $reserve,
-            ]);
+    //         
 
-
-            // WarehouseRemains::where('id', $id)
-            //     ->first()
+    //         // WarehouseRemains::where('id', $id)
+    //         //     ->first()
     
-    }
+    // }
         
 }

@@ -6,6 +6,7 @@ use App\Services\Sale\SaleExpense\SaleExpenseProduct\SaleExpenseProductService;
 use App\Services\Sale\SaleExpense\SaleExpenseDocument\SaleExpenseDocumentService;
 use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds;
+use App\Models\Sale\SaleProduct\SaleProduct;
 
 use Illuminate\Support\Facades\Log;
 
@@ -76,8 +77,29 @@ class SaleExpenseService
     public static function create($data){
         try {
 
+
+            $summ = $data['quantity'] * $data['rate'];
+            $data['summ'] = $summ;
+
+            if(array_key_exists('summ', $data) &&
+                array_key_exists('quantity', $data) &&
+                array_key_exists('sale_product_ids', $data) &&
+                array_key_exists('include_in_cost', $data)
+            ) {
+
+                $summ = $data['summ'];
+                $quantity = $data['quantity'];
+                $saleProductIds = $data['sale_product_ids'];
+                $includeInCost = $data['include_in_cost'];
+                
+                $cost = self::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
+                
+                $data['cost'] = $cost;
+            }
+
             $documents = [];
             $products = [];
+            
             if(array_key_exists('documents', $data)){
                 $documents = $data['documents'];
                 unset($data['documents']);              
@@ -85,12 +107,11 @@ class SaleExpenseService
 
             if(array_key_exists('sale_product_ids', $data)){
                 $products = $data['sale_product_ids'];
+                $saleProductIds = $data['sale_product_ids'];
                 unset($data['sale_product_ids']);   
             }
             
-            $summ = $data['quantity'] * $data['rate'];
-            $data['summ'] = $summ;
-                        
+            
             $ndsRate = null;
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
@@ -101,25 +122,24 @@ class SaleExpenseService
             $data['summ_nds'] = Nds::calculateNds($summ, $isNdsInPrice, $ndsRate);
             $data['nds_rate'] = $ndsRate;
          
-            $result =  SaleExpense::create($data);
+                
+            $model =  SaleExpense::create($data);
             if(count($documents)>0){
-                $resultDocuments = SaleExpenseDocumentService::updateOrCreateInArray($result['id'], $result['sale_id'], $documents);
-                $result['documents'] = $resultDocuments;
+                $resultDocuments = SaleExpenseDocumentService::updateOrCreateInArray($model['id'], $model['sale_id'], $documents);
+                $model['documents'] = $resultDocuments;
             }
             if(count($products)>0){    
-                $resultProducts = SaleExpenseProductService::deleteAndCreateArray($result['id'], $result['sale_id'], $products);
-                $result['products'] = $resultProducts;
+                $resultProducts = SaleExpenseProductService::deleteAndCreateArray($model['id'], $model['sale_id'], $products);
+                $model['products'] = $resultProducts;
             }
-            return $result;
+            return $model;
 
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id) { 
-        return SaleExpense::where(['id' => $id])
-            //->with([])
-            ->first();    
+        return SaleExpense::where(['id' => $id])->first();    
     }
     public static function update($id, $data){ 
         try {
@@ -145,19 +165,22 @@ class SaleExpenseService
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            // $ndsType = $data['nds_type'];
             $data['nds_rate'] = $ndsRate;
             $isNdsInPrice = $data['is_nds_in_price'];
             $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);
-
+            
+            $summ = $model->summ;
+            $quantity = $model->quantity;
+            $saleProductIds = $model->sale_product_ids;
+            $includeInCost = $model->include_in_cost;
+            
+            $cost = self::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
+            $data['cost'] = $cost;
             $model->update($data);
+
+            return SaleExpense::where(['id' => $id])->first();    
             
-            return SaleExpense::where(['id' => $id])->first();
-            
-            // SaleExpense::where('id', $id)->first()->update($data);
-            // return SaleExpense::where('id', $id)
-            //     //->with([])
-            //     ->first();
+            // return $model->get();
 
         } catch (Exception $e) {
             return $e->getMessage();
@@ -186,4 +209,36 @@ class SaleExpenseService
             return $e->getMessage();
         }
     }
+
+    private static function calculateCost($summ = 0, $quantity=0, $saleProductIds=[], $includeInCost=false){ 
+        try {
+            if(!$includeInCost) {
+                return 0;
+            }
+
+            $saleProducts = SaleProduct::select('id', 'shipped')
+                ->whereIn('id', $saleProductIds)->get()->toArray();
+
+            $summPr = 0;
+
+            foreach($saleProducts as $pr){
+                if(array_key_exists('shipped',$pr)){
+                    $summPr += $pr['shipped'];
+                }
+            }
+
+            if(!$summPr || !$quantity) {
+                $cost = 0;
+            } else {
+                $cost = round(($summ * $quantity / $summPr) / $quantity, 2);
+            }
+            return $cost;
+            // $saleExpense->update(['cost' => $cost]);
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }   
+
+    }
+
 }
