@@ -2,6 +2,7 @@
 
 namespace App\Services\WarehouseRemains\WarehouseRemains;
 use App\Models\WarehouseRemains\WarehouseRemains;
+use App\Models\Sale\SaleProduct\SaleProduct;
 
 class WarehouseRemainsService
 {
@@ -97,10 +98,10 @@ class WarehouseRemainsService
 
     public static function card($id, $type) {
         try {
-            // return $type;
             if($type!=='filters') {
                 return WarehouseRemains::where(['id' => $id])->first();
             }
+
             $data = WarehouseRemains::where(['nomenclature_id' => $id])
                 ->select('nomenclature_id',
                     \DB::raw('
@@ -113,7 +114,37 @@ class WarehouseRemainsService
                 ->groupBy('nomenclature_id')
                 ->first();
 
-        
+            $saleProduct = SaleProduct::where([
+                    'nomenclature_id' => $id,
+                    'shipment_type' => 'from_warehouse'
+                ])
+                ->select('nomenclature_id',
+                    \DB::raw('
+                        nomenclature_id as id,
+                        sum(summ) as shipped_summ, 
+                        sum(quantity) as shipped_quantity,
+                        count(*) as shipped_count
+                    '))
+                ->groupBy('nomenclature_id')
+                ->first();
+                
+            
+            $data['shipped_summ'] = 0;
+            $data['shipped_quantity'] = 0;
+            $data['shipped_count'] = 0;
+
+            if($saleProduct){
+                $saleProductArr = $saleProduct->toArray();
+                if(array_key_exists('shipped_summ', $saleProductArr)){
+                    $data['shipped_summ'] = (float)$saleProductArr['shipped_summ'];
+                }
+                if(array_key_exists('shipped_quantity', $saleProductArr)){
+                    $data['shipped_quantity'] = (float)$saleProductArr['shipped_quantity'];
+                }
+                if(array_key_exists('shipped_quantity', $saleProductArr)){
+                    $data['shipped_count'] = (float)$saleProductArr['shipped_count'];
+                }
+            }
             $warehouses =  WarehouseRemains::where(['nomenclature_id' => $id])
                 ->select('warehouse_id', 
                     \DB::raw('sum(availability) as availability'))
@@ -130,8 +161,8 @@ class WarehouseRemainsService
                 ->groupBy('packing_type_id')
                 ->get();
 
-                $data['warehouses']= $warehouses;
-                $data['packing_types'] = $packingTypes;
+            $data['warehouses']= $warehouses;
+            $data['packing_types'] = $packingTypes;
 
             return $data;
             

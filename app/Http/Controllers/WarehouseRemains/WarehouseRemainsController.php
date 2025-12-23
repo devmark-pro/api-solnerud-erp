@@ -40,19 +40,23 @@ class WarehouseRemainsController extends Controller
 
     public function card(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-                'id'=>'required',
-        ]);
-        if($validator->fails()){
-            $error = $validator->errors()->toArray();
-            return response()->json(['message'=>$error])->setStatusCode(417);     
+        try {
+            $validator = Validator::make($request->all(), [
+                    'id'=>'required',
+            ]);
+            if($validator->fails()){
+                $error = $validator->errors()->toArray();
+                return response()->json(['message'=>$error])->setStatusCode(417);     
+            }
+            $id = $request->input('id');
+            $type = $request->input('type');
+        
+            $data = WarehouseRemainsService::card($id, $type);
+            if(!$data) return response()->json(['message'=>'Not found'], 404);
+            return $data; 
+        } catch (Exception $e){
+            return $e->getMessage();
         }
-        $id = $request->input('id');
-        $type = $request->input('type');
-
-        $data = WarehouseRemainsService::card($id, $type);
-        if(!$data) return response()->json(['message'=>'Not found'], 404);
-        return $data; 
     }
 
     public function update(Request $request)
