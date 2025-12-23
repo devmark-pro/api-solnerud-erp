@@ -67,6 +67,15 @@ class SaleProductController extends Controller
             }
             $id = $request->input('id');
             $data = $request->input('data');
+            if(array_key_exists('is_request_shipment', $data)) {
+                $saleProduct = SaleProduct::where(['id' => $id])->first();
+                if($saleProduct['shipment_type'] === 'from_factory' && (
+                    !$saleProduct['purchase_id'] ||
+                    !$saleProduct['purchase_address_id'])
+                ) {
+                    throw new \ErrorException('Не указан Адрес доставки');
+                }
+            }
             $result = SaleProductService::update($id, $data);
             if(!$result) return response()->json(['message'=>'Not found'], 404);
             return $result;

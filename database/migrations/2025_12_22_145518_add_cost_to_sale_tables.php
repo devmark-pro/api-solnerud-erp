@@ -19,6 +19,10 @@ return new class extends Migration
         Schema::table('sale_expenses', function (Blueprint $table) {
             $table->decimal('cost', 14, 2)->default(0)->nullable();
         });
+        Schema::table('sale_products', function (Blueprint $table) {
+            $table->foreignId('delivery_method_id')->nullable()->change();
+        });
+     
     }
 
     /**
