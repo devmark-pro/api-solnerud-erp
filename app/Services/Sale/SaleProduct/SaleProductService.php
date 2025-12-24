@@ -67,15 +67,33 @@ class SaleProductService
                 ->limit($limit)
                 ->get();
                                         
-
+            $total = SaleProduct::where(['deleted_at' => null])
+                ->where($filter)
+                ->select('sale_id',
+                    \DB::raw('
+                        sale_id as id,
+                        sum(summ) as summ, 
+                        sum(quantity) as quantity,
+                        sum(summ_nds) as summ_nds,
+                        sum(shipped) as shipped,
+                        sum(remains_ship) as remains_ship,
+                        sum(profit) as profit,
+                        sum(shipment_summ) as shipment_summ,
+                        sum(shipment_summ_nds) as shipment_summ_nds
+                    '))
+                ->groupBy('sale_id')
+                ->first();
+            
             return [
                 'data_total' => [
-                    'summ' => SaleProduct::where(['deleted_at' => null])
-                        ->where($filter)->sum('summ'),
-                    'summ_nds' => SaleProduct::where(['deleted_at' => null])
-                        ->where($filter)->sum('summ_nds'),
-                    'quantity' => SaleProduct::where(['deleted_at' => null])
-                        ->where($filter)->sum('quantity'),
+                    'summ' => $total->summ,
+                    'summ_nds' => $total->summ_nds,
+                    'quantity' => $total->quantity,
+                    'shipped' => $total->shipped,
+                    'remains_ship' => $total->remains_ship,
+                    'profit' => $total->profit,
+                    'shipment_summ' => $total->shipment_summ,
+                    'shipment_summ_nds' => $total->shipment_summ_nds,
                 ],
                 'data' => $data,
                 'pagination' => [

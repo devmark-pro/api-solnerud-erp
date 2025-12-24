@@ -21,7 +21,10 @@ class Client extends Model
         'address',
         'created_at',
         'deleted_at',
+    ];
 
+    protected $with = [
+        'representatives'
     ];
 
     public function representatives(): HasMany

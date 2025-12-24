@@ -1,0 +1,16 @@
+<?php
+namespace App\Services\Sale\SaleExpense\SaleExpense\Events;
+
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class ESaleExpense
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+    public $data;
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+}

@@ -59,24 +59,25 @@ class SaleShipmentObserver
                 $saleShipment->updateQuietly();
                 
             }
+        }
 
-            if($saleShipment->isDirty('deleted_at'))
-            {
-                $deletedAt = $saleShipment->getAttribute('deleted_at');
-                if($deletedAt!==null) {
-                    $saleProductId = $saleShipment->getAttribute('sale_product_id');
-                    $shippedQuantity = $saleShipment->getAttribute('shipped_quantity');
-                    $data = [
-                        'sale_product_id' => $saleProductId,
-                        'quantity' => -$shippedQuantity,
-                        'shipment_type' => $shipmentType
-                    ];
-                    ESaleShipped::dispatch($data);
-                    $saleShipment->last_quantity = null;
-                    $saleShipment->updateQuietly();
-                }
+        if($saleShipment->isDirty('deleted_at'))
+        {
+            $deletedAt = $saleShipment->getAttribute('deleted_at');
+            if($deletedAt!==null) {
+                $saleProductId = $saleShipment->getAttribute('sale_product_id');
+                $shippedQuantity = $saleShipment->getAttribute('shipped_quantity');
+                $data = [
+                    'sale_product_id' => $saleProductId,
+                    'quantity' => -$shippedQuantity,
+                    'shipment_type' => $shipmentType
+                ];
+                ESaleShipped::dispatch($data);
+                $saleShipment->last_quantity = null;
+                $saleShipment->updateQuietly();
             }
         }
+        
     }
 
     public function deleted(SaleShipment $saleShipment): void
