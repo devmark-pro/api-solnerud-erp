@@ -113,8 +113,6 @@ class SaleProduct extends Model
         return $this->belongsTo(PurchaseDeliveryAddress::class);
     }
 
-    
-
     public function getPurchaseIdsAttribute(){
         if($this->shipment_type==="from_factory") {
             $saleProductPurchase = SaleProductPurchase::where([
