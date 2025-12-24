@@ -13,6 +13,7 @@ use App\Services\Sale\SaleShipment\Events\ESaleShipped;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpense;
 
+
 class LSaleProductProvider extends ServiceProvider
 {
   

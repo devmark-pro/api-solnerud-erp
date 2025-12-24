@@ -18,7 +18,7 @@ use App\Services\Sale\SaleShipment\Events\ESaleShipped;
 use Illuminate\Support\Facades\Log;
 
 
-class LSaleProvider extends ServiceProvider
+class LWarehouseSaleProvider extends ServiceProvider
 {
   
     public function boot(): void
@@ -48,7 +48,7 @@ class LSaleProvider extends ServiceProvider
                 !array_key_exists('sale_product_id', $event->data) ||
                 !array_key_exists('shipment_type', $event->data) 
             ) 
-            throw new \Exception('LSaleProvider->addReserve error');
+            throw new \Exception('LWarehouseSaleProvider->addReserve error');
             
 
             $shipmentType = $event->data['shipment_type'];
@@ -124,7 +124,7 @@ class LSaleProvider extends ServiceProvider
                 !array_key_exists('sale_product_id', $event->data) ||
                 !array_key_exists('shipment_type', $event->data) 
             ) 
-            throw new \Exception('LSaleProvider->removeReserve error');
+            throw new \Exception('LWarehouseSaleProvider->removeReserve error');
 
             $shipmentType = $event->data['shipment_type'];
             if($shipmentType !== 'from_warehouse') return;
@@ -183,20 +183,6 @@ class LSaleProvider extends ServiceProvider
             throw new \Exception($e->getMessage());
         }
     }
-    // public function calculateActualQuantity(object $event): void{
-    //         if(!array_key_exists('id', $event->data) || 
-    //             !array_key_exists('reserve', $event->data) 
-    //         ) 
-    //         throw new \Exception('LSaleProvider->calculateActualQuantity error');
-
-    //         $id = $event->data['id'];
-    //         $reserve = $event->data['reserve'];
-
-    //         
-
-    //         // WarehouseRemains::where('id', $id)
-    //         //     ->first()
-    
-    // }
+   
         
 }
