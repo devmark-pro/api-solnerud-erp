@@ -23,10 +23,12 @@ class PurchaseReceipt extends Model
         // Накладная от поставщика
         'invoice_supplier_number',
         'invoice_supplier_date',
+        'invoice_supplier_file',
 
         // Накладная наша
         'invoice_our_number',
         'invoice_our_date',
+        'invoice_our_file',
    
         'transport',        // Транспорт
         'address_id',       // Адрес доставки

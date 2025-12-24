@@ -42,7 +42,7 @@ class PurchaseReceiptService
                 $model->where($filter);
             }
             
-            $count = $model->where(['deleted_at' => null])->get()->count();
+            $count = (int)$model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
 
