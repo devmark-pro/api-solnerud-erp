@@ -84,16 +84,17 @@ class SaleProductService
                 ->groupBy('sale_id')
                 ->first();
             
+
             return [
                 'data_total' => [
-                    'summ' => $total->summ,
-                    'summ_nds' => $total->summ_nds,
-                    'quantity' => $total->quantity,
-                    'shipped' => $total->shipped,
-                    'remains_ship' => $total->remains_ship,
-                    'profit' => $total->profit,
-                    'shipment_summ' => $total->shipment_summ,
-                    'shipment_summ_nds' => $total->shipment_summ_nds,
+                    'summ' => $total ? $total->summ : 0,
+                    'summ_nds' => $total ? $total->summ_nds : 0,
+                    'quantity' => $total ? $total->quantity : 0,
+                    'shipped' => $total ? $total->shipped : 0,
+                    'remains_ship' => $total ? $total->remains_ship : 0,
+                    'profit' => $total ? $total->profit : 0,
+                    'shipment_summ' => $total ? $total->shipment_summ : 0,
+                    'shipment_summ_nds' => $total ? $total->shipment_summ_nds : 0,
                 ],
                 'data' => $data,
                 'pagination' => [

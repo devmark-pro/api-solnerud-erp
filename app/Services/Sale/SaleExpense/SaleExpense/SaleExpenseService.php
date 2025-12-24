@@ -58,7 +58,7 @@ class SaleExpenseService
                 ->limit($limit)
                 ->get();
                 
-                            
+      
             $total = SaleExpense::where(['deleted_at' => null])
                 ->where($filter)
                 ->select('sale_id',
@@ -73,9 +73,9 @@ class SaleExpenseService
 
             return [
                 'data_total' => [
-                    'summ' => $total->summ,
-                    'summ_nds' => $total->summ_nds,
-                    'quantity' => $total->quantity,
+                    'summ' => $total ? $total->summ : 0,
+                    'summ_nds' => $total ? $total->summ_nds : 0,
+                    'quantity' => $total ? $total->quantity : 0,
                 ],
                 'data' => $data,
                 'pagination' => [
