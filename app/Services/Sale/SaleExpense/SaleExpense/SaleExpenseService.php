@@ -28,7 +28,6 @@ class SaleExpenseService
             
             $offset = $limit * ($page-1);
             $model = SaleExpense::where(['deleted_at' => null]);
-               // ->with([])
             
             $total = $model->get()->count();
 
@@ -59,7 +58,25 @@ class SaleExpenseService
                 ->limit($limit)
                 ->get();
                 
+                            
+            $total = SaleExpense::where(['deleted_at' => null])
+                ->where($filter)
+                ->select('sale_id',
+                    \DB::raw('
+                        sale_id as id,
+                        sum(summ) as summ, 
+                        sum(quantity) as quantity,
+                        sum(summ_nds) as summ_nds
+                '))
+                ->groupBy('sale_id')
+                ->first();
+
             return [
+                'data_total' => [
+                    'summ' => $total->summ,
+                    'summ_nds' => $total->summ_nds,
+                    'quantity' => $total->quantity,
+                ],
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,

@@ -50,8 +50,14 @@ class SaleShipmentService
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
-                
+
+                                        
+            
             return [
+                'data_total' => [
+                    'shipped_quantity' => SaleShipment::where(['deleted_at' => null])
+                        ->where($filter)->sum('shipped_quantity'),  
+                ],
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
