@@ -3,6 +3,7 @@
 namespace App\Services\Sale\SaleProduct;
 use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Services\Sale\SaleProduct\Events\ESalePruductShipmentRequest;
+use App\Services\Sale\SaleProduct\Events\ESalePruductShippedUpdate;
 
 
 class SaleProductObserver
@@ -32,9 +33,21 @@ class SaleProductObserver
                     'shipment_type' => $shipmentType,
                     'sale_id' => $saleId
                 ];
+
                 ESalePruductShipmentRequest::dispatch($data);
             }
         }
+        // if($saleProduct->isDirty('shipped'))
+        // {
+        //     $saleProductId = $saleProduct->getAttribute('id');
+        //     $shipped = $saleProduct->getAttribute('shipped');
+
+        //         // throw new \Error($shipped);
+        //         $data = [
+        //             'sale_product_id' => $saleProductId,
+        //         ];
+        //         ESalePruductShippedUpdate::dispatch($data);
+        // }
     }
 
     public function deleted(SaleProduct $saleProduct): void

@@ -50,8 +50,8 @@ class SaleProduct extends Model
         'delivery_method_id', // способ доставки
         'delivery_address',  // Адрес доставки
         'delivery_date',    // Срок поставки (скрыто по умолчанию)
-        'shipped',           // A Отгружено  (скрыто по умолчанию)
-        'remains_ship',       // A Осталось  (скрыто по умолчанию)
+        'shipped',           // Отгружено  (скрыто по умолчанию)
+        'remains_ship',       // Осталось  (скрыто по умолчанию)
         'shipment_summ',   // Сумма отгрузки (скрыто по умолчанию)
         'shipment_summ_nds',   // Сумма ндс отгрузки (скрыто по умолчанию)
         'shipment_is_nds_in_price',

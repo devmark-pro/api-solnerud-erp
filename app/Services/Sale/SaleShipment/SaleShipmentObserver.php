@@ -48,14 +48,18 @@ class SaleShipmentObserver
                 $saleProductId = $saleShipment->getAttribute('sale_product_id');
                 $shippedQuantity = $saleShipment->getAttribute('shipped_quantity');
                 $lastQuantity = $saleShipment->getAttribute('last_quantity');
+                $saleShipment->last_quantity = $shippedQuantity;
+                
                 $quantity = $shippedQuantity - $lastQuantity;
+
                 $data = [
                     'sale_product_id' => $saleProductId,
                     'quantity' => $quantity,
                     'shipment_type' => $shipmentType
                 ];
+                
                 ESaleShipped::dispatch($data);
-                $saleShipment->last_quantity = $shippedQuantity;
+
                 $saleShipment->updateQuietly();
                 
             }

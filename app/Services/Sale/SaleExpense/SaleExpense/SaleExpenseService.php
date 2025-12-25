@@ -7,6 +7,8 @@ use App\Services\Sale\SaleExpense\SaleExpenseDocument\SaleExpenseDocumentService
 use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds;
 use App\Models\Sale\SaleProduct\SaleProduct;
+use App\Services\Sale\SaleExpense\SaleExpense\SaleExpenseHelpers;
+
 
 use Illuminate\Support\Facades\Log;
 
@@ -109,7 +111,7 @@ class SaleExpenseService
                 $saleProductIds = $data['sale_product_ids'];
                 $includeInCost = $data['include_in_cost'];
                 
-                $cost = self::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
+                $cost = SaleExpenseHelpers::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
                 
                 $data['cost'] = $cost;
             }
@@ -165,7 +167,6 @@ class SaleExpenseService
                 unset($data['documents']);              
                 SaleExpenseDocumentService::updateOrCreateInArray($id, $data['sale_id'], $documents);
             }
-
             if(array_key_exists('sale_product_ids', $data)) {
                 $products = $data['sale_product_ids'];
                 unset($data['sale_product_ids']);
@@ -191,8 +192,22 @@ class SaleExpenseService
             $saleProductIds = $model->sale_product_ids;
             $includeInCost = $model->include_in_cost;
             
-            $cost = self::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
+            if(array_key_exists('summ', $data)) {
+                $summ = $data['summ'];
+            }
+            if(array_key_exists('quantity', $data)) {
+                $quantity = $data['quantity'];
+            }
+            if(array_key_exists('sale_product_ids', $data)) {
+                $saleProductIds = $data['sale_product_ids'];
+            }
+            if(array_key_exists('include_in_cost', $data)) {
+                $includeInCost = $data['include_in_cost'];
+            }
+          
+            $cost = SaleExpenseHelpers::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
             $data['cost'] = $cost;
+
             $model->update($data);
 
             return SaleExpense::where(['id' => $id])->first();    
@@ -229,6 +244,7 @@ class SaleExpenseService
 
     private static function calculateCost($summ = 0, $quantity=0, $saleProductIds=[], $includeInCost=false){ 
         try {
+
             if(!$includeInCost) {
                 return 0;
             }
