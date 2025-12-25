@@ -21,7 +21,8 @@ class SaleExpenseObserver
     {
         if($saleExpense->isDirty('cost') || 
             $saleExpense->isDirty('quantity') ||
-            $saleExpense->isDirty('include_in_cost')
+            $saleExpense->isDirty('include_in_cost') ||
+            $saleExpense->isDirty('deleted_at') 
             ) {
                 $data = [
                     'cost' => $saleExpense->getAttribute('cost'),
