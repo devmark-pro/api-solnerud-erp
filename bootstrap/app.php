@@ -11,7 +11,11 @@ use Illuminate\Http\Middleware\HandleCors;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
-        api: [__DIR__.'/../routes/api/api.php', __DIR__.'/../routes/api/directory.php'],
+        api: [
+            __DIR__.'/../routes/api/api.php', 
+            __DIR__.'/../routes/api/directory.php',
+
+        ],
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -27,6 +31,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // run CORS before everything else
         $middleware->prepend(HandleCors::class);
+                // $middleware->statefulApi();
+
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->context(fn () => [
