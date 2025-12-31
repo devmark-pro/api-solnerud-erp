@@ -9,13 +9,14 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Directory\EmployeePositionDirectory;
 use App\Models\Directory\EmployeeStatusDirectory;
 use App\Models\Warehouse;
+use Laravel\Sanctum\HasApiTokens;
 
 
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: [
+            // __DIR__.'/../routes/api.php', 
             __DIR__.'/../routes/api/api.php', 
             __DIR__.'/../routes/api/directory.php',
 
@@ -31,11 +32,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // run CORS before everything else
         $middleware->prepend(HandleCors::class);
-                // $middleware->statefulApi();
 
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            '*'
+        // 'stripe/*',
+        // 'http://example.com/foo/bar',
+        // 'http://example.com/foo/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->context(fn () => [

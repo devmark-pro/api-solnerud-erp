@@ -40,13 +40,11 @@ use App\Http\Controllers\AuthController;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-// Route::group(['middleware' => ['web']], function () {
-    Route::post('/login', [AuthController::class, 'login']);//->middleware('guest');
-    Route::post('/logout', [AuthController::class, 'logout']);
-// });
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+});
     
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
 
     Route::prefix('counterparty')->group(function () {
         Route::post('/', [CounterpartyController::class, 'index'] );

@@ -17,17 +17,11 @@ class AuthController extends Controller
             'email' => 'required|email',  
             'password' => 'required',  
         ]);  
-
         
         if (Auth::attempt($credentials)) {  
-                        $request->session()->regenerate();
-  return redirect()->intended('dashboard');
-            // $user = Auth::user();  
-            // $token = $user->createToken('authToken')->accessToken;
-            // 
-            // $token = $user->createToken('authToken')->plainTextToken;  
-            // $request->session()->regenerate();
-            // return  response()->json(['token' => $token]);  
+            $user = Auth::user();  
+            $token = $user->createToken('authToken')->plainTextToken;  
+            return  response()->json(['token' => $token]);  
         }   
 
         return response()->json(['message' => 'Ошибка авторизации'], 401);  
