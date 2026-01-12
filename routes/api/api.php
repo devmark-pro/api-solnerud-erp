@@ -33,8 +33,9 @@ use App\Http\Controllers\Sale\SaleShipmentController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseDocumentController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseProductController;
-
+use App\Http\Controllers\Client\ClientWarehouseController;
 use App\Http\Controllers\AuthController;
+
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -329,6 +330,16 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [SaleExpenseProductController::class, 'destroy'] );
         Route::post('/recover', [SaleExpenseProductController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [SaleExpenseProductController::class, 'field'] );
+    });
+
+    Route::prefix('client_warehouse')->group(function () {
+        Route::post('/', [ClientWarehouseController::class,  'index']);
+        Route::post('/create', [ClientWarehouseController::class, 'create'] ); 
+        Route::post('/get', [ClientWarehouseController::class, 'card'] );
+        Route::post('/update', [ClientWarehouseController::class, 'update'] );
+        Route::post('/delete', [ClientWarehouseController::class, 'destroy'] );
+        Route::post('/recover', [ClientWarehouseController::class, 'recover'] );
+        Route::get('/field/{id}/{field}', [ClientWarehouseController::class, 'field'] );
     });
 });
 ?>
