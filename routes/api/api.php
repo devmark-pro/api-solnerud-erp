@@ -35,6 +35,7 @@ use App\Http\Controllers\Sale\SaleExpense\SaleExpenseDocumentController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseProductController;
 use App\Http\Controllers\Client\ClientWarehouseController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Counterparty\CounterpartyWarehouseController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -340,6 +341,16 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [ClientWarehouseController::class, 'destroy'] );
         Route::post('/recover', [ClientWarehouseController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [ClientWarehouseController::class, 'field'] );
+    });
+
+    Route::prefix('counterparty_warehouse')->group(function () {
+        Route::post('/', [CounterpartyWarehouseController::class,  'index']);
+        Route::post('/create', [CounterpartyWarehouseController::class, 'create'] ); 
+        Route::post('/get', [CounterpartyWarehouseController::class, 'card'] );
+        Route::post('/update', [CounterpartyWarehouseController::class, 'update'] );
+        Route::post('/delete', [CounterpartyWarehouseController::class, 'destroy'] );
+        Route::post('/recover', [CounterpartyWarehouseController::class, 'recover'] );
+        Route::get('/field/{id}/{field}', [CounterpartyWarehouseController::class, 'field'] );
     });
 });
 ?>
