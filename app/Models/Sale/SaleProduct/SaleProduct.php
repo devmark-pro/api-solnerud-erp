@@ -48,7 +48,8 @@ class SaleProduct extends Model
         'address_id',   // Адрес
 
         'delivery_method_id', // способ доставки
-        'delivery_address',  // Адрес доставки
+        // 'delivery_address',  //__ Адрес доставки
+        'client_warehouse_id',
         'delivery_date',    // Срок поставки (скрыто по умолчанию)
         'shipped',           // Отгружено  (скрыто по умолчанию)
         'remains_ship',       // Осталось  (скрыто по умолчанию)
@@ -56,7 +57,7 @@ class SaleProduct extends Model
         'shipment_summ_nds',   // Сумма ндс отгрузки (скрыто по умолчанию)
         'shipment_is_nds_in_price',
         'shipment_nds_rate',
-        'shipment_nds_rate_id',           
+        'shipment_nds_rate_id',
         'comment',
         'sale_id',
         'deleted_at',
