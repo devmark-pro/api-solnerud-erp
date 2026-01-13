@@ -39,6 +39,8 @@ class Purchase extends Model
         'price',            // цена за тонну
         'count_plan',       // количество план
                             // адрес отгрузки
+                            
+        'counterparty_warehouse_id',
         'nds_rate',
         'quantity',
         'count',

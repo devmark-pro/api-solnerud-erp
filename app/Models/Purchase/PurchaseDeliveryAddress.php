@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Warehouse;
 use App\Models\Purchase\Purchase;
+use App\Models\Client\ClientWarehouse;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
 use App\Models\Purchase\PurchaseExpense\PurchaseExpenseAddress;
 use App\Models\Purchase\PurchaseReceipt;
@@ -27,7 +28,8 @@ class PurchaseDeliveryAddress extends Model
         'actual_quantity', // фактическое количество
         'remaining_quantity', // осталось
         'cost',             // себестоимость
-        'warehouse_id',
+        'warehouse_id',     // наш склад
+        'client_warehouse_id', // Склад отгрузки клиента
         'purchase_id',
         'deleted_at',
     ];
@@ -35,7 +37,8 @@ class PurchaseDeliveryAddress extends Model
     
 
     protected $with = [
-        'warehouse'
+        'warehouse',
+        'clientWarehouse'
     ];
 
     public function purchase(): BelongsTo 
@@ -46,5 +49,11 @@ class PurchaseDeliveryAddress extends Model
     {
         return $this->belongsTo(Warehouse::class);
     }
+
+    public function clientWarehouse(): BelongsTo 
+    {
+        return $this->belongsTo(ClientWarehouse::class);
+    }
+    
 
 }
