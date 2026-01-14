@@ -15,8 +15,7 @@ use App\Models\Directory\DeliveryMethodDirectory;
 use App\Models\Sale\Sale;
 use App\Models\Sale\SaleProduct\SaleProductPurchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
-
-
+use App\Models\Client\ClientWarehouse;
 
 
 #[ObservedBy([SaleProductObserver::class])]
@@ -71,6 +70,7 @@ class SaleProduct extends Model
         'warehouse',
         'counterparty',
         'purchaseAddress',
+        'clientWarehouse',
     ];
     protected $appends = [ 
         'purchase_ids',
@@ -113,6 +113,12 @@ class SaleProduct extends Model
     {
         return $this->belongsTo(PurchaseDeliveryAddress::class);
     }
+
+    public function clientWarehouse(): BelongsTo 
+    {
+        return $this->belongsTo(ClientWarehouse::class);
+    }
+    
 
     public function getPurchaseIdsAttribute(){
         if($this->shipment_type==="from_factory") {
