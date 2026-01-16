@@ -15,6 +15,7 @@ use App\Services\Purchase\PurchaseDeliveryAddress\Events\EPurchaseDeliveryAddres
 use App\Services\Purchase\PurchaseDeliveryAddress\Events\PurchaseDeliveryAddressDeleteEvent;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePackingType;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdateNomenclature;
+use App\Services\Purchase\Purchase\Events\EPurchaseDelete;
 
 use Illuminate\Support\Facades\Log;
 
@@ -49,7 +50,11 @@ class LWarehouseRemainsProvider extends ServiceProvider
         Event::listen(
             EPurchaseUpdateNomenclature::class,
             [$this, 'purchaseUpdateNomenclature'],
-        );        
+        );
+        Event::listen(
+            EPurchaseDelete::class,
+            [$this, 'purchaseDelete'],
+        );
     }
     public function addWarehouseRemains(object $event): void
     {     
@@ -195,6 +200,21 @@ class LWarehouseRemainsProvider extends ServiceProvider
         }
     }
 
-        
-        
+    public function purchaseDelete(object $event): void
+    {
+        try {
+                        
+            if(!array_key_exists('purchase_id', $event->data)) 
+                throw new \Exception('LWarehouseRemainsProvider->purchaseDelete error'); 
+      
+            $purchaseId = $event->data['purchase_id'];  
+
+            WarehouseRemains::where([
+                'purchase_id' => $purchaseId
+            ])->update(['deleted_at' => now()]);
+
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

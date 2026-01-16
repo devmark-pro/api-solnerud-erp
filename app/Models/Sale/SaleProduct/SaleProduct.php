@@ -3,6 +3,7 @@
 namespace App\Models\Sale\SaleProduct;
 
 use App\Services\Sale\SaleProduct\SaleProductObserver;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Models\Nomenclature;
@@ -16,6 +17,7 @@ use App\Models\Sale\Sale;
 use App\Models\Sale\SaleProduct\SaleProductPurchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Client\ClientWarehouse;
+
 
 
 #[ObservedBy([SaleProductObserver::class])]
@@ -119,7 +121,6 @@ class SaleProduct extends Model
         return $this->belongsTo(ClientWarehouse::class);
     }
     
-
     public function getPurchaseIdsAttribute(){
         if($this->shipment_type==="from_factory") {
             $saleProductPurchase = SaleProductPurchase::where([

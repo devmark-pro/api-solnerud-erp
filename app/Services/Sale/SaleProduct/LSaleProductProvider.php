@@ -7,13 +7,16 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Models\Sale\SaleShipment;
-use Illuminate\Support\Facades\Log;
+use App\Models\Sale\SaleProduct\SaleProduct;
+use App\Models\Sale\SaleExpense\SaleExpenseProduct;
+
 use App\Services\Sale\SaleShipment\Events\ESaleShipped;
+use App\Models\Sale\SaleExpense\SaleExpense;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpense;
 
+use Illuminate\Support\Facades\Log;
 // use App\Services\Sale\SaleProduct\Events\ESalePruductUpdateQuantity;
 
 
@@ -75,10 +78,26 @@ class LSaleProductProvider extends ServiceProvider
         $cost = (float)$event->data['cost'];
         $saleProductIds = $event->data['sale_product_ids'];
 
-        $saleProducts = SaleProduct::whereIn('id', $saleProductIds)->get()->toArray();
-        $data=[];
+        
+        $saleExpenseProduct = SaleExpenseProduct::whereIn('sale_product_id',$saleProductIds)
+            ->select('sale_product_id','sale_expense_id')
+            ->get();
+
+        $saleExpense = [];
+        foreach($saleExpenseProduct as $item){
+            $saleExpense[$item['sale_product_id']][] = $item['sale_expense_id'];
+        }
+        // Себестоимость расходов
+        $costSumm = [];
+        foreach($saleExpense as $key => $item){
+            $costSumm[$key] = SaleExpense::whereIn('id', $item)->sum('cost');
+        }
+
+        $saleProducts = SaleProduct::select('id', 'cost')->whereIn('id', $saleProductIds)->get()->toArray();
+                
+        $data = [];        
         foreach($saleProducts as $item) {
-            $data[$item['id']] = $cost + (float)$item['cost'];
+            $data[$item['id']] = $costSumm[$item['id']] + (float)$item['cost'];
         }
 
         foreach($data as $id => $total) {

@@ -3,10 +3,10 @@
 namespace App\Services\Purchase\Purchase;
 use App\Models\Purchase\Purchase;
 use Illuminate\Support\Facades\Log;
+use App\Services\Purchase\Purchase\Events\EPurchaseDelete;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePrice;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdatePackingType;
 use App\Services\Purchase\Purchase\Events\EPurchaseUpdateNomenclature;
-
 
 class PurchaseObserver
 {
@@ -42,10 +42,13 @@ class PurchaseObserver
                 'packing_type_id' => $purchase->packing_type_id
             ]);
         }
-
-
-        
-
+        if( $purchase->isDirty('deleted_at'))
+        {
+            EPurchaseDelete::dispatch(
+            [
+                'purchase_id' => $purchase->id,
+            ]);
+        }
         
     }
 
