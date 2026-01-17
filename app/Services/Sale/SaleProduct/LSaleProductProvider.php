@@ -15,6 +15,11 @@ use App\Services\Sale\SaleShipment\Events\ESaleShipped;
 use App\Models\Sale\SaleExpense\SaleExpense;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpense;
+use App\Services\Sale\SaleShipment\Events\ESaleShippmentCreateUpdate;
+use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseCreateUpdate;
+
+
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 // use App\Services\Sale\SaleProduct\Events\ESalePruductUpdateQuantity;
@@ -32,6 +37,15 @@ class LSaleProductProvider extends ServiceProvider
         Event::listen(
             ESaleExpenseUpdateCost::class,
             [$this, 'calculateCost'],
+        );
+
+        Event::listen(
+            ESaleShippmentCreateUpdate::class,
+            [$this, 'saleShippmentCreateUpdate'],
+        );
+        Event::listen(
+            ESaleExpenseCreateUpdate::class,
+            [$this, 'saleShippmentCreateUpdate'],
         );
     }
 
@@ -80,6 +94,7 @@ class LSaleProductProvider extends ServiceProvider
 
         
         $saleExpenseProduct = SaleExpenseProduct::whereIn('sale_product_id',$saleProductIds)
+            ->where(['deleted_at'=>null])
             ->select('sale_product_id','sale_expense_id')
             ->get();
 
@@ -90,10 +105,14 @@ class LSaleProductProvider extends ServiceProvider
         // Себестоимость расходов
         $costSumm = [];
         foreach($saleExpense as $key => $item){
-            $costSumm[$key] = SaleExpense::whereIn('id', $item)->sum('cost');
+            $costSumm[$key] = SaleExpense::whereIn('id', $item)
+                ->where(['deleted_at'=>null])->sum('cost');
         }
 
-        $saleProducts = SaleProduct::select('id', 'cost')->whereIn('id', $saleProductIds)->get()->toArray();
+        $saleProducts = SaleProduct::select('id', 'cost')
+            ->whereIn('id', $saleProductIds)
+            ->where(['deleted_at' => null])
+            ->get()->toArray();
                 
         $data = [];        
         foreach($saleProducts as $item) {
@@ -105,5 +124,59 @@ class LSaleProductProvider extends ServiceProvider
         }
     }
     
+
+
+
+    public function saleShippmentCreateUpdate(object $event) {
+        if(!array_key_exists('sale_id', $event->data)) {
+            // return;
+            throw new \Exception('LSaleProductProvider->saleShippmentCreateUpdate error');
+        }
+        $saleId = $event->data['sale_id'];
+        
+        SaleProduct::where('sale_id', $saleId)->update(['is_updatable' => true]);
     
+
+        $saleShipmentProductIds = SaleShipment::where([
+                'sale_id' => $saleId, 
+                'deleted_at' => null
+        ])
+            ->select('sale_product_id')->pluck('sale_product_id')->toArray();
+            // ->update(['is_updatable' => false]);
+        
+        $saleExpensesProductIds = DB::table('sale_expenses')
+            ->join('sale_expense_products', 'sale_expenses.id', '=', 'sale_expense_products.sale_expense_id')
+            ->select('sale_expense_products.sale_product_id')
+            ->where([
+                'sale_expenses.deleted_at' => null,
+                'sale_expense_products.deleted_at' => null,
+            ])
+            ->pluck('sale_product_id')
+            ->toArray();
+
+        $saleProductIds = array_values(
+            array_unique(
+                array_merge($saleShipmentProductIds, $saleExpensesProductIds)
+            )
+        );
+        // throw new \Error(json_encode($saleProductIds));
+        SaleProduct::whereIn('id', $saleProductIds)
+            ->where(['sale_id'=> $saleId])
+            ->update(['is_updatable' => false]);
+    
+        // SaleProduct::where('id', $saleProductId)->first()->update(['is_updatable' => false]);
+    
+    
+    }
+
+
+
+    public function setIsRemovable(object $event) {
+        if(!array_key_exists('sale_product_id', $event->data)) {
+            throw new \Exception('LSaleProductProvider->setIsRemovable error');
+        }
+
+        $saleProductId = $event->data['sale_product_id'];
+
+    }
 }

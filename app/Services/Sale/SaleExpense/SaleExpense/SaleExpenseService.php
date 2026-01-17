@@ -75,9 +75,9 @@ class SaleExpenseService
 
             return [
                 'data_total' => [
-                    'summ' => $total ? $total->summ : 0,
-                    'summ_nds' => $total ? $total->summ_nds : 0,
-                    'quantity' => $total ? $total->quantity : 0,
+                    'summ' => $total ? round($total->summ, 2) : 0,
+                    'summ_nds' => $total ? round($total->summ_nds, 2) : 0,
+                    'quantity' => $total ? round($total->quantity, 2) : 0,
                 ],
                 'data' => $data,
                 'pagination' => [

@@ -51,12 +51,12 @@ class SaleShipmentService
                 ->limit($limit)
                 ->get();
 
-                                        
+            $totalShippedQuantity = SaleShipment::where(['deleted_at' => null])
+                        ->where($filter)->sum('shipped_quantity');                  
             
             return [
                 'data_total' => [
-                    'shipped_quantity' => SaleShipment::where(['deleted_at' => null])
-                        ->where($filter)->sum('shipped_quantity'),  
+                    'shipped_quantity' =>  round($totalShippedQuantity, 2)
                 ],
                 'data' => $data,
                 'pagination' => [

@@ -2,9 +2,9 @@
 
 namespace App\Services\Sale\SaleShipment;
 use App\Models\Sale\SaleShipment;
-use App\Services\Sale\SaleShipment\Events\ESaleShipped;
 use App\Models\Sale\SaleProduct\SaleProduct;
-use Illuminate\Support\Facades\Log;
+use App\Services\Sale\SaleShipment\Events\ESaleShipped;
+use App\Services\Sale\SaleShipment\Events\ESaleShippmentCreateUpdate;
 
 
 class SaleShipmentObserver
@@ -30,6 +30,11 @@ class SaleShipmentObserver
             ];
             ESaleShipped::dispatch($data);
         }
+        
+        $saleId = $saleShipment->getAttribute('sale_id');
+        ESaleShippmentCreateUpdate::dispatch([
+            'sale_id' => $saleId,
+        ]);
     }
 
     public function updated(SaleShipment $saleShipment): void
@@ -65,6 +70,14 @@ class SaleShipmentObserver
             }
         }
 
+        if($saleShipment->isDirty('sale_product_id'))
+        {
+            $saleId = $saleShipment->getAttribute('sale_id');
+            ESaleShippmentCreateUpdate::dispatch([
+                'sale_id' => $saleId,
+            ]);
+        }
+
         if($saleShipment->isDirty('deleted_at'))
         {
             $deletedAt = $saleShipment->getAttribute('deleted_at');
@@ -80,6 +93,12 @@ class SaleShipmentObserver
                 $saleShipment->last_quantity = null;
                 $saleShipment->updateQuietly();
             }
+            $saleProductId = $saleShipment->getAttribute('sale_product_id');
+
+            $saleId = $saleShipment->getAttribute('sale_id');
+            ESaleShippmentCreateUpdate::dispatch([
+                'sale_id' => $saleId,
+            ]);
         }
         
     }

@@ -20,6 +20,11 @@ class LSaleProvider extends ServiceProvider
             ESalePruductShipmentRequest::class,
             [$this, 'calculate'],
         );
+
+        Event::listen(
+            ESalePruductShipmentRequest::class,
+            [$this, 'isUpdatableFalse'],
+        );
         
     }
 
@@ -30,7 +35,7 @@ class LSaleProvider extends ServiceProvider
 
             
             
-            $saleId = $event->data['sale_id'];
+        $saleId = $event->data['sale_id'];
 
         $total = SaleProduct::where([
                 'deleted_at' => null, 
@@ -52,6 +57,16 @@ class LSaleProvider extends ServiceProvider
           'quantity' => $total->quantity,  
         ]);
     }
-    
-    
+
+    public function isUpdatableFalse(object $event): void
+    {
+        if(!array_key_exists('sale_id', $event->data)) 
+                throw new \Exception('LSaleProvider->isUpdatableFalse error');
+        
+        $saleId = $event->data['sale_id'];
+
+        Sale::where(['id' => $saleId])->first()->update([
+            'is_updatable' => false,  
+        ]);
+    }
 }

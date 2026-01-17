@@ -50,6 +50,7 @@ class Purchase extends Model
         'summ',
         'summ_nds',
         'comment', 
+        'is_updatable',
  
         'created_at',
         'deleted_at',

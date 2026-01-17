@@ -2,19 +2,30 @@
 
 namespace App\Services\Sale\SaleExpense\SaleExpense;
 use App\Models\Sale\SaleExpense\SaleExpense;
-use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpense;
+use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
+use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseCreateUpdate;
 
 
 class SaleExpenseObserver
 {    
     public function created(SaleExpense $saleExpense): void
     {
-       $data = [
-                'cost' => $saleExpense->getAttribute('cost'),
-                'sale_product_ids'=>$saleExpense->getAttribute('sale_product_ids')
-                ];
-        ESaleExpenseUpdateCost::dispatch($data);
+        $cost = $saleExpense->getAttribute('cost');
+        $saleProductIds = $saleExpense->getAttribute('sale_product_ids');
+                
+        ESaleExpenseUpdateCost::dispatch(
+            [
+                'cost' => $cost,
+                'sale_product_ids'=> $saleProductIds
+            ]
+        );
+
+        $saleId = $saleExpense->getAttribute('sale_id');
+
+        ESaleExpenseCreateUpdate::dispatch([
+            'sale_id' => $saleId
+        ]);
     }
 
     public function updated(SaleExpense $saleExpense): void
@@ -29,6 +40,13 @@ class SaleExpenseObserver
                     'sale_product_ids'=>$saleExpense->getAttribute('sale_product_ids')
                 ];
             ESaleExpenseUpdateCost::dispatch($data);
+        }
+
+        $saleId = $saleExpense->getAttribute('sale_id');
+        if($saleExpense->isDirty('deleted_at')) {
+            ESaleExpenseCreateUpdate::dispatch([
+                'sale_id' => $saleId
+            ]);
         }
     }
 

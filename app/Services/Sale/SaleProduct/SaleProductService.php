@@ -87,14 +87,14 @@ class SaleProductService
 
             return [
                 'data_total' => [
-                    'summ' => $total ? $total->summ : 0,
-                    'summ_nds' => $total ? $total->summ_nds : 0,
-                    'quantity' => $total ? $total->quantity : 0,
-                    'shipped' => $total ? $total->shipped : 0,
-                    'remains_ship' => $total ? $total->remains_ship : 0,
-                    'profit' => $total ? $total->profit : 0,
-                    'shipment_summ' => $total ? $total->shipment_summ : 0,
-                    'shipment_summ_nds' => $total ? $total->shipment_summ_nds : 0,
+                    'summ' => $total ? round($total->summ, 2) : 0,
+                    'summ_nds' => $total ? round($total->summ_nds, 2) : 0,
+                    'quantity' => $total ? round($total->quantity, 2) : 0,
+                    'shipped' => $total ? round($total->shipped, 2) : 0,
+                    'remains_ship' => $total ? round($total->remains_ship, 2) : 0,
+                    'profit' => $total ? round($total->profit, 2) : 0,
+                    'shipment_summ' => $total ? round($total->shipment_summ, 2) : 0,
+                    'shipment_summ_nds' => $total ? round($total->shipment_summ_nds, 2) : 0,
                 ],
                 'data' => $data,
                 'pagination' => [

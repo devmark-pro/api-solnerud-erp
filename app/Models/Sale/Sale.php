@@ -25,6 +25,7 @@ class Sale extends Model
         'quantity',     //Количество
         'client_id',    //Покупатель
         'comment',
+        'is_updatable',
         'created_at',
         'deleted_at',
     ];
