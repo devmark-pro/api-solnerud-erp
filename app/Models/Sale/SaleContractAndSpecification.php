@@ -23,6 +23,7 @@ class SaleContractAndSpecification extends Model
                         // nds_in_price - НДС включен в цену
                         // nds_not_in_price - НДС не включен в цену
         'file',
+        'date',
         'sale_id',
         'user_id',
         'deleted_at',
