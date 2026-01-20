@@ -71,10 +71,15 @@ class CounterpartyController extends Controller
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            if($validator->fails()){
-                $error = $validator->errors()->toArray();
+            $validatorData = Validator::make($requestData['data'], [
+                'inn'=>'required|unique:counterparties',
+            ]);
+
+            if($validatorData->fails()){
+                $error = $validatorData->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             }
+            
             $id = $request->input('id');
             $data = $request->input('data');
             $result = CounterpartyService::update($id, $data);
