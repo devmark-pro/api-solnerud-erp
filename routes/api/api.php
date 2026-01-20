@@ -36,9 +36,10 @@ use App\Http\Controllers\Sale\SaleExpense\SaleExpenseProductController;
 use App\Http\Controllers\Client\ClientWarehouseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Counterparty\CounterpartyWarehouseController;
+use App\Http\Controllers\ProfileController;
 
 
-// Route::get('/user', function (Request $request) {
+// Route::post('/profile', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
@@ -47,6 +48,15 @@ Route::group(['middleware' => ['web']], function () {
 });
     
 Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
+
+    Route::prefix('profile')->group(function () {
+        Route::post('/', [ProfileController::class, 'index']);
+        Route::post('/update', [ProfileController::class, 'update']);
+
+        // Route::post('/', function (Request $request) {
+        //     return $request->user();
+        // });
+    });
 
     Route::prefix('counterparty')->group(function () {
         Route::post('/', [CounterpartyController::class, 'index'] );
