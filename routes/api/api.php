@@ -38,7 +38,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Counterparty\CounterpartyWarehouseController;
 use App\Http\Controllers\ProfileController;
 
-
+use App\Http\Controllers\RoleController;
 
 // Route::post('/profile', function (Request $request) {
 //     return $request->user();
@@ -358,6 +358,16 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [CounterpartyWarehouseController::class, 'destroy'] );
         Route::post('/recover', [CounterpartyWarehouseController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [CounterpartyWarehouseController::class, 'field'] );
+    });
+
+    Route::prefix('role')->group(function () {
+        Route::post('/', [RoleController::class,  'index']);
+        Route::post('/create', [RoleController::class, 'create'] ); 
+        Route::post('/get', [RoleController::class, 'card'] );
+        Route::post('/update', [RoleController::class, 'update'] );
+        Route::post('/delete', [RoleController::class, 'destroy'] );
+        Route::post('/recover', [RoleController::class, 'recover'] );
+        Route::get('/field/{id}/{field}', [RoleController::class, 'field'] );
     });
 });
 ?>

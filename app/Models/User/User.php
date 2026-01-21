@@ -35,6 +35,7 @@ class User extends Authenticatable
         'employment_date',
         'employee_status_id',
         'city',
+        'role_id',
         'deleted_at',
     ];
 

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sale_products', function (Blueprint $table) {
-            $table->foreignId('client_warehouse_id')->nullable()->constrained();
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('role_id')->nullable()->constrained();
         });
     }
 
@@ -21,9 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (Schema::hasColumn('sale_products', 'client_warehouse_id')) {
-            Schema::table('sale_products', function (Blueprint $table) {
-                $table->dropColumn('client_warehouse_id');
+        if (Schema::hasColumn('users', 'role_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('role_id');
             });
         }
     }
