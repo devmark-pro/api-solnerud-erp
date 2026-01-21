@@ -85,6 +85,8 @@ class UserService
     public static function update($id, $data){ 
         try {
             if(array_key_exists('warehouse_id', $data)){
+                Warehouse::where('user_id', $id)
+                    ->update(['user_id' => null]);
                 Warehouse::where('id', $data['warehouse_id'])
                     ->update(['user_id' => $id]);
                 unset($data['warehouse_id']);

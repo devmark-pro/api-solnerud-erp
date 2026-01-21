@@ -39,25 +39,22 @@ use App\Http\Controllers\Counterparty\CounterpartyWarehouseController;
 use App\Http\Controllers\ProfileController;
 
 
+
 // Route::post('/profile', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+
 Route::group(['middleware' => ['web']], function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
+
+
     
 Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
 
-    Route::prefix('profile')->group(function () {
-        Route::post('/', [ProfileController::class, 'index']);
-        Route::post('/update', [ProfileController::class, 'update']);
-
-        // Route::post('/', function (Request $request) {
-        //     return $request->user();
-        // });
-    });
-
+    Route::post('/change-password',[AuthController::class, 'changePassword'] );
+    Route::post('profile/', [ProfileController::class, 'index']);
     Route::prefix('counterparty')->group(function () {
         Route::post('/', [CounterpartyController::class, 'index'] );
         Route::post('/create', [CounterpartyController::class, 'create'] ); 

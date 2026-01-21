@@ -41,6 +41,7 @@ class User extends Authenticatable
     protected $appends = [ 
         'is_password',     // Пароль задан 
         'warehouse',
+        'warehouse_id'
     ];
 
     protected $with = [
@@ -88,5 +89,11 @@ class User extends Authenticatable
     public function getWarehouseAttribute() 
     {
         return  Warehouse::where('user_id', $this->id)->first();
-    }   
+    }
+    public function getWarehouseIdAttribute() 
+    {
+        $warehouse = Warehouse::where('user_id', $this->id)->first();
+        if(!$warehouse) return null;
+        return $warehouse->id;
+    }
 }
