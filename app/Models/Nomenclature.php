@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
-  
 class Nomenclature extends Model
 {
     protected $fillable = [
@@ -13,4 +13,5 @@ class Nomenclature extends Model
         'system_number',
         'deleted_at',
     ];
+
 }

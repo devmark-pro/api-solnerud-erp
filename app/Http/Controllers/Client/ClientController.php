@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Client\Client\ClientService;
+use Illuminate\Support\Facades\Gate;
 
 
 class ClientController extends Controller
@@ -13,6 +14,9 @@ class ClientController extends Controller
 
     public function index(Request $request)
     {
+        if (!Gate::allows('client_r')) {
+            abort(403, "Не достаточно прав");
+        }
         $requestAll = $request->all();
         return ClientService::index($requestAll);
     }
@@ -20,6 +24,9 @@ class ClientController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('client_c')) {
+                abort(403, "Не достаточно прав");
+            }
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'name'=>'required',
@@ -42,6 +49,9 @@ class ClientController extends Controller
     public function card(Request $request)
     {
         try {
+            if (!Gate::allows('client_r')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
@@ -63,6 +73,9 @@ class ClientController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('client_u')) {
+                abort(403, "Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -95,6 +108,9 @@ class ClientController extends Controller
     public function destroy(Request $request)
     {
         try {
+            if (!Gate::allows('client_d')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
@@ -115,6 +131,9 @@ class ClientController extends Controller
     public function recover(Request $request)
     {   
         try {
+            if (!Gate::allows('client_d')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);

@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 use App\Services\Directory\StatusSale\StatusSaleService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 
 class StatusSaleController extends Controller
 {
 public function index(Request $request)
     {
+        if (!Gate::allows('directory_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 100;
         return StatusSaleService::index($page, $limit);
@@ -20,6 +24,9 @@ public function index(Request $request)
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('directory_c')) {
+                abort(403,"Не достаточно прав");
+            }
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
                 'name'=>'required|unique:directory_status_sales',
@@ -43,6 +50,9 @@ public function index(Request $request)
     {
 
         try {
+            if (!Gate::allows('directory_r')) {
+                abort(403,"Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
@@ -64,6 +74,9 @@ public function index(Request $request)
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('directory_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -95,6 +108,9 @@ public function index(Request $request)
     public function destroy(Request $request)
     {
         try {
+            if (!Gate::allows('directory_d')) {
+                abort(403,"Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
@@ -115,6 +131,9 @@ public function index(Request $request)
     public function recover(Request $request)
     {   
         try {
+            if (!Gate::allows('directory_d')) {
+                abort(403,"Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);

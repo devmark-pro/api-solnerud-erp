@@ -6,13 +6,16 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\User\User\UserService;
-
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
 
     public function index(Request $request)
     {
+        if (!Gate::allows('user_r')) {
+            abort(403, "Не достаточно прав");
+        }
         $requestAll = $request->all();
         return UserService::index($requestAll);
     }
@@ -20,6 +23,9 @@ class UserController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('user_c')) {
+                abort(403, "Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
@@ -40,9 +46,12 @@ class UserController extends Controller
         }
     }
 
-     public function card(Request $request)
+    public function card(Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        if (!Gate::allows('user_r')) {
+                abort(403, "Не достаточно прав");
+        }
+        $validator = Validator::make($request->all(), [
                 'id'=>'required',
         ]);
         if($validator->fails()){
@@ -58,6 +67,9 @@ class UserController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('user_u')) {
+                abort(403, "Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -84,6 +96,9 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('user_d')) {
+                abort(403, "Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -99,6 +114,9 @@ class UserController extends Controller
 
     public function recover(string $id)
     {
+        if (!Gate::allows('user_d')) {
+                abort(403, "Не достаточно прав");
+        }
         $data = UserService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;

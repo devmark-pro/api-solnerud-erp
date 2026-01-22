@@ -10,7 +10,9 @@ use App\Models\Directory\EmployeePositionDirectory;
 use App\Models\Directory\EmployeeStatusDirectory;
 use App\Models\Warehouse;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
 
+    
 
 
 class User extends Authenticatable
@@ -46,8 +48,10 @@ class User extends Authenticatable
     ];
 
     protected $with = [
+        'role',
         'employeePosition'
     ];
+   
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -82,7 +86,10 @@ class User extends Authenticatable
         return $this->belongsTo(EmployeeStatusDirectory::class)
             ->select(['id', 'name']);
     }
-    
+    public function role():BelongsTo 
+    {
+        return $this->belongsTo(Role::class);
+    }
     public function getIsPasswordAttribute() 
     {
         return !!$this->password;

@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\PurchaseExpenseAddressService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseExpenseAddressController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $requestAll = $request->all();
         return PurchaseExpenseAddressService::index($requestAll);
     }
@@ -18,6 +22,9 @@ class PurchaseExpenseAddressController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'address_id'=>'required',
@@ -37,6 +44,9 @@ class PurchaseExpenseAddressController extends Controller
 
     public function card(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
         ]);
@@ -53,6 +63,9 @@ class PurchaseExpenseAddressController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -75,6 +88,9 @@ class PurchaseExpenseAddressController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -90,6 +106,9 @@ class PurchaseExpenseAddressController extends Controller
 
     public function recover(Request $request)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);

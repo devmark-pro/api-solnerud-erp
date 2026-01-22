@@ -66,7 +66,8 @@ class NomenclatureService
     }
     public static function update($id, $data){ 
         try {
-            Nomenclature::where('id', $id)->update($data);
+            // throw new \Error('111');
+            Nomenclature::where('id', $id)->first()->update($data);
             return Nomenclature::where('id', $id)->first();
         } catch (Exception $e) {
             return $e->getMessage();

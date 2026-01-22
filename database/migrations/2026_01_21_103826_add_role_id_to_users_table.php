@@ -20,7 +20,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
+    {   
         if (Schema::hasColumn('users', 'role_id')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->dropColumn('role_id');

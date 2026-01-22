@@ -9,6 +9,7 @@ use App\Services\Purchase\PurchaseInvoice\PurchaseInvoiceService;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Purchase\PurchaseInvoice;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -17,6 +18,9 @@ class PurchaseInvoiceController extends Controller
 
     public function index(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $requestAll = $request->all();
         return PurchaseInvoiceService::index($requestAll);
     }
@@ -24,6 +28,9 @@ class PurchaseInvoiceController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'number'=>'required|unique:purchase_invoices',
@@ -43,6 +50,9 @@ class PurchaseInvoiceController extends Controller
 
     public function card(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
         ]);
@@ -59,6 +69,9 @@ class PurchaseInvoiceController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -81,6 +94,9 @@ class PurchaseInvoiceController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -96,6 +112,9 @@ class PurchaseInvoiceController extends Controller
 
     public function recover(Request $request)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -111,6 +130,9 @@ class PurchaseInvoiceController extends Controller
     
     public function field($id, $field)
     {   
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         if(!(new PurchaseInvoice())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}
         $data = PurchaseInvoiceService::field($id, $field);

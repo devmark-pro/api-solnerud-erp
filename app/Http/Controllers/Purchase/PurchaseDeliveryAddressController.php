@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Purchase\PurchaseDeliveryAddress\PurchaseDeliveryAddressService;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseDeliveryAddressController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $requestAll = $request->all();
         return PurchaseDeliveryAddressService::index($requestAll);
     }
@@ -18,6 +22,9 @@ class PurchaseDeliveryAddressController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'purchase_id' => 'required',
@@ -35,6 +42,9 @@ class PurchaseDeliveryAddressController extends Controller
 
     public function card(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
         ]);
@@ -51,6 +61,9 @@ class PurchaseDeliveryAddressController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -73,6 +86,9 @@ class PurchaseDeliveryAddressController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('purchase_d')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -88,6 +104,9 @@ class PurchaseDeliveryAddressController extends Controller
 
     public function recover(Request $request)
     {
+        if (!Gate::allows('purchase_d')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);

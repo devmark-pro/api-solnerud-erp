@@ -5,12 +5,16 @@ use App\Http\Controllers\Controller;
 use App\Services\Purchase\PurchaseDocument\PurchaseDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseDocumentController extends Controller
 {
 
     public function index(Request $request)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 10;
         return PurchaseDocumentService::index($page, $limit);
@@ -19,6 +23,9 @@ class PurchaseDocumentController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('purchase_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'name'=>'required',
@@ -26,7 +33,7 @@ class PurchaseDocumentController extends Controller
  
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
-               return response()->json(['message'=>$error])->setStatusCode(417); 
+                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
 
@@ -36,8 +43,11 @@ class PurchaseDocumentController extends Controller
         }
     }
 
-     public function card(string $id)
+    public function card(string $id)
     {
+        if (!Gate::allows('purchase_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $data = PurchaseDocumentService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data; 
@@ -45,6 +55,9 @@ class PurchaseDocumentController extends Controller
 
     public function update(Request $request, string $id)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $data = $request->all();
         $result = PurchaseDocumentService::update($id, $data);
         if(!$result) return response()->json(['message'=>'Not found'], 404);
@@ -53,6 +66,9 @@ class PurchaseDocumentController extends Controller
 
     public function destroy(string $id)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $data = PurchaseDocumentService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;
@@ -60,6 +76,9 @@ class PurchaseDocumentController extends Controller
 
     public function recover(string $id)
     {
+        if (!Gate::allows('purchase_u')) {
+            abort(403,"Не достаточно прав");
+        }
         $data = PurchaseDocumentService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
         return $data;

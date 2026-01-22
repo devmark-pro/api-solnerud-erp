@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Nomenclature\NomenclatureService;
+use Illuminate\Support\Facades\Gate;
 
 
 class NomenclatureController extends Controller
@@ -20,6 +21,9 @@ class NomenclatureController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('nomenclature_c')) {
+                abort(403, "Не достаточно прав");
+            }
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'system_number'=>'required|unique:nomenclatures',
@@ -29,7 +33,6 @@ class NomenclatureController extends Controller
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
-            
             }
 
             return NomenclatureService::create($requestData);
@@ -41,20 +44,23 @@ class NomenclatureController extends Controller
     public function card(Request $request)
     {
         try {
+            if (!Gate::allows('nomenclature_r')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
-            if($validator->fails()){
+            if($validator->fails()) {
                 $error = $validator->errors()->toArray();
                return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
             $id = $request->input('id');
             $data = NomenclatureService::card($id);
-            if(!$data) return response()->json(['message'=>'Not found'], 404);
+            if(!$data) return response()->json(['message' => 'Not found'], 404);
             return $data; 
 
-        } catch (Exception $e){
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
@@ -62,6 +68,10 @@ class NomenclatureController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('nomenclature_u')) {
+                abort(403,"Не достаточно прав");
+            }
+
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -70,7 +80,6 @@ class NomenclatureController extends Controller
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
-            
             }
             if($validator->fails()){
                 $error = $validator->errors()->toArray();
@@ -89,6 +98,9 @@ class NomenclatureController extends Controller
     public function destroy(Request $request)
     {
         try {
+            if (!Gate::allows('nomenclature_d')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);
@@ -109,6 +121,9 @@ class NomenclatureController extends Controller
     public function recover(Request $request)
     {   
         try {
+            if (!Gate::allows('nomenclature_d')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
             ]);

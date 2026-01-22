@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
+class AutoRegisterServiceProvider extends ServiceProvider
 {
 
     /**

@@ -7,12 +7,16 @@ use App\Models\Sale\Sale\Sale;
 use App\Services\Sale\Sale\SaleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 
 class SaleController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Gate::allows('sale_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $requestAll = $request->all();
         return SaleService::index($requestAll);
     }
@@ -20,6 +24,9 @@ class SaleController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('sale_c')) {
+                abort(403,"Не достаточно прав");
+            }
             $data = $request->all();
             // $validator = Validator::make($data, [
             //     'name'=>'required',
@@ -38,6 +45,9 @@ class SaleController extends Controller
 
     public function card(Request $request)
     {
+        if (!Gate::allows('sale_r')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
         ]);
@@ -54,6 +64,9 @@ class SaleController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('sale_u')) {
+                abort(403,"Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -76,6 +89,9 @@ class SaleController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('sale_d')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -91,6 +107,9 @@ class SaleController extends Controller
 
     public function recover(Request $request)
     {
+        if (!Gate::allows('sale_d')) {
+            abort(403,"Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -104,7 +123,10 @@ class SaleController extends Controller
         return $data;
     }
     public function field($id, $field)
-    {   
+    {
+        if (!Gate::allows('sale_r')) {
+            abort(403,"Не достаточно прав");
+        }   
         if(!(new Sale())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}
         $data = SaleService::field($id, $field);
