@@ -13,9 +13,9 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        if (!Gate::allows('role_r')) {
-            abort(403, "Не достаточно прав");
-        }
+        // if (!Gate::allows('role_r')) {
+        //     abort(403, "Не достаточно прав");
+        // }
         $requestAll = $request->all();
         return RoleService::index($requestAll);
     }

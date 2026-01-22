@@ -14,12 +14,18 @@ class NomenclatureController extends Controller
 
     public function index(Request $request)
     {
+        // if (!Gate::allows('nomenclature_r')) {
+        //     abort(403, "Не достаточно прав");
+        // }
         $requestAll = $request->all();
         return NomenclatureService::index($requestAll);
     }
 
     public function create(Request $request)
     {
+        if (!Gate::allows('nomenclature_c')) {
+                abort(403, "Не достаточно прав");
+            }
         try {
             if (!Gate::allows('nomenclature_c')) {
                 abort(403, "Не достаточно прав");

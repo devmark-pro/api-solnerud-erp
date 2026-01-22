@@ -14,9 +14,9 @@ class ClientController extends Controller
 
     public function index(Request $request)
     {
-        if (!Gate::allows('client_r')) {
-            abort(403, "Не достаточно прав");
-        }
+        // if (!Gate::allows('client_r')) {
+        //     abort(403, "Не достаточно прав");
+        // }
         $requestAll = $request->all();
         return ClientService::index($requestAll);
     }

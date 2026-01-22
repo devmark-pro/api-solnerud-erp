@@ -13,9 +13,9 @@ class StatusSaleController extends Controller
 {
 public function index(Request $request)
     {
-        if (!Gate::allows('directory_r')) {
-            abort(403,"Не достаточно прав");
-        }
+        // if (!Gate::allows('directory_r')) {
+        //     abort(403,"Не достаточно прав");
+        // }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 100;
         return StatusSaleService::index($page, $limit);

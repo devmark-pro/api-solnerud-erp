@@ -14,9 +14,9 @@ class PurchaseController extends Controller
 
     public function index(Request $request)
     {
-        if (!Gate::allows('purchase_r')) {
-            abort(403,"Не достаточно прав");
-        } 
+        // if (!Gate::allows('purchase_r')) {
+        //     abort(403,"Не достаточно прав");
+        // } 
         $requestAll = $request->all();
         return PurchaseService::index($requestAll);
     }

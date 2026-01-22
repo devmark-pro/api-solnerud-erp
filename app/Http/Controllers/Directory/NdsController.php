@@ -12,9 +12,9 @@ class NdsController extends Controller
 {
     public function index(Request $request)
     {
-        if (!Gate::allows('directory_r')) {
-            abort(403,"Не достаточно прав");
-        }
+        // if (!Gate::allows('directory_r')) {
+        //     abort(403,"Не достаточно прав");
+        // }
         $requestAll = $request->all();
         return NdsService::index($requestAll);
     }

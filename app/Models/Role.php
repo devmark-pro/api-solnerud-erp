@@ -57,6 +57,11 @@ class Role extends Model
         'role_r',
         'role_u',
         'role_d',
+
+        'directory_c',
+        'directory_r',
+        'directory_u',
+        'directory_d',
          
         'user_id',   
         'deleted_at',

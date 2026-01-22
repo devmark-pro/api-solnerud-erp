@@ -12,9 +12,9 @@ class PurchaseDocumentController extends Controller
 
     public function index(Request $request)
     {
-        if (!Gate::allows('purchase_r')) {
-            abort(403,"Не достаточно прав");
-        }
+        // if (!Gate::allows('purchase_r')) {
+        //     abort(403,"Не достаточно прав");
+        // }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 10;
         return PurchaseDocumentService::index($page, $limit);

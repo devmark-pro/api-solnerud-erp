@@ -14,9 +14,9 @@ class SaleController extends Controller
 {
     public function index(Request $request)
     {
-        if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
-        }
+        // if (!Gate::allows('sale_r')) {
+        //     abort(403,"Не достаточно прав");
+        // }
         $requestAll = $request->all();
         return SaleService::index($requestAll);
     }
