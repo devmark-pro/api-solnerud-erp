@@ -111,6 +111,7 @@ class WarehouseRemainsService
                         sum(reserve) as reserve,
                         sum(cost) as cost
                     '))
+                ->where(['deleted_at'=> null])
                 ->groupBy('nomenclature_id')
                 ->first();
 
