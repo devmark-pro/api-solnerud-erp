@@ -111,8 +111,14 @@ class SaleExpenseService
                 $saleProductIds = $data['sale_product_ids'];
                 $includeInCost = $data['include_in_cost'];
                 
-                $cost = SaleExpenseHelpers::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
-                
+                $cost = SaleExpenseHelpers::calculateCost(
+                    $summ, 
+                    $quantity, 
+                    $saleProductIds, 
+                    $includeInCost,
+                    $formula
+                );
+                $data['cost_formula'] = $formula;
                 $data['cost'] = $cost;
             }
 
@@ -205,8 +211,16 @@ class SaleExpenseService
                 $includeInCost = $data['include_in_cost'];
             }
           
-            $cost = SaleExpenseHelpers::calculateCost($summ, $quantity, $saleProductIds, $includeInCost);
+            $cost = SaleExpenseHelpers::calculateCost(
+                $summ, 
+                $quantity, 
+                $saleProductIds, 
+                $includeInCost,
+                $formula,
+            );
+            
             $data['cost'] = $cost;
+            $data['cost_formula'] = $formula;
 
             $model->update($data);
 

@@ -61,6 +61,8 @@ class SaleProduct extends Model
         'shipment_nds_rate_id',
         'comment',
         'sale_id',
+        'cost_formula',
+        'profit_formula',
         'is_updatable',
         'deleted_at',
         'purchases'

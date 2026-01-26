@@ -61,7 +61,7 @@ class LSaleExpenseProvider extends ServiceProvider
             }
             $saleExpenseProducts[$saleExpenseProduct['sale_expense_id']][] = $saleExpenseProduct['sale_product_id'];
         }
-
+        // throw new \Error(json_encode($saleExpenseIds));
         if(count($saleExpenseIds) < 1) return;
 
         $saleExpenses = SaleExpense::select('id', 'summ', 'quantity', 'include_in_cost')
@@ -80,10 +80,15 @@ class LSaleExpenseProvider extends ServiceProvider
                 $expenses['summ'], 
                 $expenses['quantity'], 
                 $saleExpenseProducts[$expenses['id']], 
-                $expenses['include_in_cost']
+                $expenses['include_in_cost'],
+                $formula,
             );
+            
             SaleExpense::where(['id'=>$expenses['id']])
-                ->first()->update(['cost'=>$cost]);
+                ->first()->update([
+                    'cost' => $cost,
+                    'cost_formula' => $formula
+                ]);
 
         }
     }

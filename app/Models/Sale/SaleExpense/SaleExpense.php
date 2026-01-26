@@ -49,6 +49,8 @@ class SaleExpense extends Model
         
         
         'reimbursement_date',       // Дата возмещения расходов
+        'cost',
+        'cost_formula',
         'sale_id',
         'deleted_at',
     ];

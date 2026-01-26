@@ -62,7 +62,6 @@ class SaleShipmentObserver
                     'quantity' => $quantity,
                     'shipment_type' => $shipmentType
                 ];
-                
                 ESaleShipped::dispatch($data);
 
                 $saleShipment->updateQuietly();

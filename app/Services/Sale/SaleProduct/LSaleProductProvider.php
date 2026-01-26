@@ -56,12 +56,31 @@ class LSaleProductProvider extends ServiceProvider
 
         $saleProductId = $event->data['sale_product_id'];
 
-        $totalShipped = SaleShipment::where(
+        $totalShipped = 0;
+        // $totalShipped = SaleShipment::where(
+        //     [   
+        //         'deleted_at' => null,
+        //         'sale_product_id'=>$saleProductId
+        //     ])->sum('shipped_quantity');
+        
+
+        $saleShipment = SaleShipment::where(
             [   
                 'deleted_at' => null,
                 'sale_product_id'=>$saleProductId
-            ])->sum('shipped_quantity');
+            ])
+            ->select('id', 'shipped_quantity')
+            ->get()
+            ->toArray();
         
+        $totalShippedStr = "";
+        foreach($saleShipment as $saleShipmentItem) {
+
+            $totalShipped += $saleShipmentItem['shipped_quantity'];
+            $totalShippedStr .= "+Отгрузка.".$saleShipmentItem['id'];
+        }
+
+        // throw new \Error($totalShipped);
 
         $model = SaleProduct::where('id', $saleProductId)->first();
 
@@ -69,9 +88,19 @@ class LSaleProductProvider extends ServiceProvider
 
         $model->remains_ship = (float)$model->quantity - (float)$model->shipped ;
 
+        // $remainsShip="Продукты".$model->id.".ОсталосьОтгрузить = Продукты".$model->id."Количество - Продукты".$model->id."Отгруженно";
+
         $model->shipment_summ = (float)$model->shipped * (float)$model->price;
+        
+        
         $model->shipment_summ_nds = (float)$model->shipped * (float)$model->summ_nds;
         
+        $profitStr = "Продукт".$model->id.".Сумма - (Продукт.".$model->id.
+            ".ОбщаяСебестоимость * Продукт".$model->id.".Количество)";
+        
+        $profitNum = $model->summ." - (".$model->total_cost." * ".$model->quantity.")";
+        
+        $model->profit_formula = $profitStr."</br>".$profitNum;
         
         $model->profit = (float)$model->summ - (
             (float)$model->total_cost * (float)$model->quantity);
@@ -93,34 +122,82 @@ class LSaleProductProvider extends ServiceProvider
         $saleProductIds = $event->data['sale_product_ids'];
 
         
-        $saleExpenseProduct = SaleExpenseProduct::whereIn('sale_product_id',$saleProductIds)
+        $saleExpenseProduct = SaleExpenseProduct::whereIn('sale_product_id', $saleProductIds)
             ->where(['deleted_at'=>null])
             ->select('sale_product_id','sale_expense_id')
             ->get();
 
         $saleExpense = [];
+        ///
+            $saleExpenseStr = "";
+        //
         foreach($saleExpenseProduct as $item){
+
             $saleExpense[$item['sale_product_id']][] = $item['sale_expense_id'];
+
         }
+
+
         // Себестоимость расходов
-        $costSumm = [];
-        foreach($saleExpense as $key => $item){
-            $costSumm[$key] = SaleExpense::whereIn('id', $item)
-                ->where(['deleted_at'=>null])->sum('cost');
+        // $costSumm = [];
+        // foreach($saleExpense as $key => $item){
+            
+        //     $costSumm[$key] = SaleExpense::whereIn('id', $item)
+        //         ->where(['deleted_at'=>null])->sum('cost');
+
+        // }
+        /// 
+            $costSummStr = [];
+            $costSummNum = [];
+        //
+        foreach($saleExpense as $key => $item) {
+            
+            $saleExpenseIds = SaleExpense::select('id', 'cost')
+                ->whereIn('id', $item)
+                ->where(['deleted_at'=>null])->get()->toArray();
+        
+            $costSumm[$key] = 0;
+            ///
+                $costSummStr[$key] = "";
+                $costSummNum[$key] = "";
+            //
+            foreach($saleExpenseIds as  $item) {
+                // if($key!==16){
+                // throw new \Error(json_encode($saleExpenseIds));
+                // }
+                $costSumm[$key] += $item['cost'];
+                ///
+                    $costSummStr[$key] .= "+ Расходы".$item['id'].".Себестоимость";
+                    $costSummNum[$key] .= " +".$item['cost'];
+                //
+            }
         }
 
         $saleProducts = SaleProduct::select('id', 'cost')
             ->whereIn('id', $saleProductIds)
             ->where(['deleted_at' => null])
             ->get()->toArray();
-                
-        $data = [];        
+        
+        
+        $data = [];
         foreach($saleProducts as $item) {
             $data[$item['id']] = $costSumm[$item['id']] + (float)$item['cost'];
+            ///
+                $dataStr[$item['id']] = 
+                    $costSummStr[$item['id']]." + Продукт".$item['id'].".Себестоимость" ;
+                $dataNum[$item['id']] = 
+                    $costSummNum[$item['id']]." + ".$item['cost']."" ;
+            
+            //
         }
 
+
         foreach($data as $id => $total) {
-            SaleProduct::where('id', $id)->update(['total_cost' => $total]);
+            // throw new \Error($dataStr[$id]);
+            SaleProduct::where('id', $id)->update([
+                'total_cost' => $total,
+                'total_cost_formula' => $dataStr[$id]."<br>".$dataNum[$id]
+            ]);
         }
     }
     

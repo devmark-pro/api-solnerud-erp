@@ -194,8 +194,9 @@ class SaleProductService
             
             if(array_key_exists('is_request_shipment', $data)) {
                 if($data['is_request_shipment']) {     
-                    $c = self::calculateCost($id);
+                    $c = self::calculateCost($id, $forumla);
                     $data['cost'] = $c;
+                    $data['cost_formula'] = $forumla;
                     $data['total_cost'] = $c;
                 }
             }
@@ -230,27 +231,45 @@ class SaleProductService
         }
     }
 
-    private static function calculateCost($id) {
+    private static function calculateCost($id, &$forumla) {
         $saleProduct = SaleProduct::where('id', $id)->first();
 
         if($saleProduct['shipment_type']==="from_warehouse") {
-            $warehouseRemains = WarehouseRemains::select('cost','availability')
+            $warehouseRemains = WarehouseRemains::select('id', 'cost', 'availability')
                 ->whereIn('id', $saleProduct['warehouse_remains_ids'])
+                ->where(['deleted_at' => null])
                 ->get()
                 ->toArray();
 
             $cost = 0;
             $costAvailability = 0;
             $summCount = 0;
-            
+            ///
+                $costAvailabilityStr = "";
+                $summCountStr = "";
+                $costAvailabilityNum = "";
+                $summCountNum = "";
+            //
             foreach($warehouseRemains as $item){
                 $costAvailability += $item['cost'] * $item['availability'];
                 $summCount += $item['availability'];
-            }
+                ///
+                    $costAvailabilityStr.="+ОстакиСклада".$item['id'].".Себестоимость * ".
+                        "ОстакиСклада".$item['id'].".Доступно";
 
-            if($summCount != 0 && $costAvailability != 0) {
-                $cost = $costAvailability / $summCount; //
+                    $summCountStr.= "+ОстакиСклада".$item['id'].".Доступно";
+
+                    $costAvailabilityNum.= " +".$item['cost']." * ".$item['availability'];
+                    $summCountNum.=" +".$item['availability'];
+                //
             }
+            
+            if($summCount != 0 && $costAvailability != 0) {
+                $cost = $costAvailability / $summCount; 
+            }
+        
+            $forumla = $costAvailabilityStr." / ".$summCountStr."</br>". $costAvailabilityNum." / ".$summCountNum;
+            
             return (float)$cost;
         }
 
