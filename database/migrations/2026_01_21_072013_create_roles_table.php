@@ -59,12 +59,12 @@ return new class extends Migration
             $table->boolean('user_d')->default(false); 
 
             $table->boolean('role_c')->default(false); 
-            $table->boolean('role_r')->default(true); 
+            $table->boolean('role_r')->default(false); 
             $table->boolean('role_u')->default(false); 
             $table->boolean('role_d')->default(false);
 
             $table->boolean('directory_c')->default(false); 
-            $table->boolean('directory_r')->default(true); 
+            $table->boolean('directory_r')->default(false); 
             $table->boolean('directory_u')->default(false); 
             $table->boolean('directory_d')->default(false);
 

@@ -30,6 +30,7 @@ class UserController extends Controller
             $validator = Validator::make($data, [
                 'name'=>'required',
                 'surname'=>'required',
+                'role_id'=>'required',
                 'employee_position_id'=>'required',
                 'employee_status_id'=>'required',
             ]);

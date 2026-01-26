@@ -30,7 +30,7 @@ class ClientController extends Controller
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'name'=>'required',
-                'inn'=>'required|unique:clients',
+                'inn'=>'required',
 
             ]);
  
@@ -88,13 +88,13 @@ class ClientController extends Controller
                 return response()->json(['message'=>$error])->setStatusCode(417); 
             
             }
-            $validatorData = Validator::make($requestData['data'], [
-                'inn'=>'required|unique:clients',
-            ]);
-            if($validatorData->fails()){
-                $error = $validatorData->errors()->toArray();
-                return response()->json(['message'=>$error])->setStatusCode(417); 
-            }
+            // $validatorData = Validator::make($requestData['data'], [
+            //     'inn'=>'required|unique:clients',
+            // ]);
+            // if($validatorData->fails()){
+            //     $error = $validatorData->errors()->toArray();
+            //     return response()->json(['message'=>$error])->setStatusCode(417); 
+            // }
             $id = $request->input('id');
             $data = $request->input('data');
             $result = ClientService::update($id, $data);
