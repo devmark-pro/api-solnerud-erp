@@ -274,7 +274,10 @@ class SaleProductService
         }
 
         if($saleProduct['shipment_type'] === "from_factory") {
+
             $purchaseDeliveryAddress = PurchaseDeliveryAddress::where('id', $saleProduct->purchase_address_id)->first();
+            $forumla = "Покупка".$purchaseDeliveryAddress['purchase_id'].
+                ".АдресДоставки".$purchaseDeliveryAddress['id'].".Себестоимость<br>".$purchaseDeliveryAddress['cost'];            
             return (float)$purchaseDeliveryAddress->cost;   
         }
     }
