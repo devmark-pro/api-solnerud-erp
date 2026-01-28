@@ -39,6 +39,9 @@ use App\Http\Controllers\Counterparty\CounterpartyWarehouseController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Expense\ExpenseController;
+use App\Http\Controllers\Expense\ExpenseDocumentController;
+
 
 // Route::post('/profile', function (Request $request) {
 //     return $request->user();
@@ -368,6 +371,26 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [RoleController::class, 'destroy'] );
         Route::post('/recover', [RoleController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [RoleController::class, 'field'] );
+    });
+
+    Route::prefix('expense')->group(function () {
+        Route::post('/', [ExpenseController::class,  'index']);
+        Route::post('/create', [ExpenseController::class, 'create'] ); 
+        Route::post('/get', [ExpenseController::class, 'card'] );
+        Route::post('/update', [ExpenseController::class, 'update'] );
+        Route::post('/delete', [ExpenseController::class, 'destroy'] );
+        Route::post('/recover', [ExpenseController::class, 'recover'] );
+        Route::get('/field/{id}/{field}', [ExpenseController::class, 'field'] );
+    });
+
+    Route::prefix('expense_document')->group(function () {
+        Route::post('/', [ExpenseDocumentController::class,  'index']);
+        Route::post('/create', [ExpenseDocumentController::class, 'create'] ); 
+        Route::post('/get', [ExpenseDocumentController::class, 'card'] );
+        Route::post('/update', [ExpenseDocumentController::class, 'update'] );
+        Route::post('/delete', [ExpenseDocumentController::class, 'destroy'] );
+        Route::post('/recover', [ExpenseDocumentController::class, 'recover'] );
+        Route::get('/field/{id}/{field}', [ExpenseDocumentController::class, 'field'] );
     });
 });
 ?>

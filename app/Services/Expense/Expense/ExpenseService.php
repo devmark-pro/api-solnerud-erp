@@ -1,22 +1,17 @@
 <?php
 
-namespace App\Services\Purchase\PurchaseExpense;
-use App\Models\Purchase\PurchaseExpense\PurchaseExpense;
-use App\Models\Purchase\PurchaseExpense\PurchaseExpenseDocument;
-use App\Services\Purchase\PurchaseExpense\PurchaseExpenseDocument\PurchaseExpenseDocumentService;
-use App\Services\Purchase\PurchaseExpense\PurchaseExpenseAddress\PurchaseExpenseAddressService;
+namespace App\Services\Expense\Expense;
+use App\Models\Expense\Expense;
+use App\Services\Expense\ExpenseDocument\ExpenseDocumentService;
 use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds;
 
-use Illuminate\Support\Facades\Log;
-
-
-class PurchaseExpenseService
+class ExpenseService
 {
      public static function index($requestAll) {
         try {
             $page = 1;
-            $limit = 100;
+            $limit = 10;
             $filter=[];
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
@@ -27,9 +22,8 @@ class PurchaseExpenseService
             }
             
             $offset = $limit * ($page-1);
-            $model = PurchaseExpense::where(['deleted_at' => null])
-                // ->with('addresses')
-                ;
+            $model = Expense::where(['deleted_at' => null]);
+               // ->with([])
             
             $total = $model->get()->count();
 
@@ -39,7 +33,7 @@ class PurchaseExpenseService
 
                 $find = $requestAll['find']; 
                 $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
+                    ->orWhere('name', 'LIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 
@@ -62,14 +56,6 @@ class PurchaseExpenseService
                 
             return [
                 'data' => $data,
-                'data_total' => [
-                    'summ' => PurchaseExpense::where($filter)
-                        ->where(['deleted_at' => null])
-                        ->sum('summ'),
-                    'summ_nds' => PurchaseExpense::where($filter)
-                        ->where(['deleted_at' => null])
-                        ->sum('summ_nds'),    
-                ],
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -86,31 +72,10 @@ class PurchaseExpenseService
     public static function create($data){
         try {
             $documents = [];
-            $addresses = [];
             if(array_key_exists('documents', $data)){
                 $documents = $data['documents'];
                 unset($data['documents']);              
             }
-
-            // if(array_key_exists('addresses', $data)){
-            //     $addresses = $data['addresses'];
-            //     unset($data['addresses']);   
-            // }
-
-            if(array_key_exists('purchase_address_ids', $data)){
-                $addresses = $data['purchase_address_ids'];
-                unset($data['purchase_address_ids']);              
-            }
-
-
-            // if(array_key_exists('purchase_address_ids', $data)) {
-            //     $addresses = $data['purchase_address_ids'];
-            //     unset($data['purchase_address_ids']);
-            //     SaleExpenseProductService::deleteAndCreateArray(
-            //         $id, $data['purchase_id'], $list
-            //     );         
-            // }
-            
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
                         
@@ -125,39 +90,31 @@ class PurchaseExpenseService
             $data['summ_nds'] = Nds::calculateNds($summ, $isNdsInPrice, $ndsRate);
             $data['nds_rate'] = $ndsRate;
          
-            $result =  PurchaseExpense::create($data);
+            $result =  Expense::create($data);
             if(count($documents)>0){
-                $resultDocuments = PurchaseExpenseDocumentService::updateOrCreateInArray($result['id'], $result['purchase_id'], $documents);
+                $resultDocuments = ExpenseDocumentService::updateOrCreateInArray($result['id'], $documents);
                 $result['documents'] = $resultDocuments;
             }
-            if(count($addresses)>0){    
-                $resultAddresses = PurchaseExpenseAddressService::deleteAndCreateArray($result['id'], $result['purchase_id'], $addresses);
-                $result['addresses'] = $resultAddresses;
-            }
             return $result;
+
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function card($id){ 
-        return PurchaseExpense::where(['id' => $id]);
+        return Expense::where(['id' => $id])
+            //->with([])
+            ->first();    
     }
     public static function update($id, $data){ 
         try {
             if(array_key_exists('documents', $data)){
                 $documents = $data['documents'];
                 unset($data['documents']);              
-                PurchaseExpenseDocumentService::updateOrCreateInArray($id, $data['purchase_id'], $documents);
+                ExpenseDocumentService::updateOrCreateInArray($id, $documents);
             }
 
-            if(array_key_exists('purchase_address_ids', $data)) {
-                $list = $data['purchase_address_ids'];
-                unset($data['purchase_address_ids']);
-                PurchaseExpenseAddressService::deleteAndCreateArray(
-                    $id, $data['purchase_id'], $list
-                );         
-            }
-            $model = PurchaseExpense::where(['id' => $id])->first();
+            $model = Expense::where(['id' => $id])->first();
 
             $summ = $data['quantity'] * $data['rate'];
             $model->summ = $summ;
@@ -174,7 +131,12 @@ class PurchaseExpenseService
             
 
             // PurchaseExpense::where(['id' => $id])->first()->update($data);
-            return PurchaseExpense::where(['id' => $id])->first();
+            return Expense::where(['id' => $id])->first();
+
+            // Expense::where('id', $id)->first()->update($data);
+            // return Expense::where('id', $id)
+            //     //->with([])
+            //     ->first();
 
         } catch (Exception $e) {
             return $e->getMessage();
@@ -182,39 +144,21 @@ class PurchaseExpenseService
     }
     public static function delete($id){ 
         try {
-            return PurchaseExpense::where('id', $id)
-                ->first()
-                ->update(['deleted_at' => now()]);
+            return Expense::where('id', $id)->update(['deleted_at' => now()]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public static function recover($id){ 
         try {
-            return PurchaseExpense::where('id', $id)
-                ->first()
-                ->update(['deleted_at' => null]);
+            return Expense::where('id', $id)->update(['deleted_at' => null]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-
-    private function updateDocuments($id, $documents){
-
-        // purchase_expense_id:
-
-        $doc = $documents[0];
-        $doc['purchase_expense_id'] =1;
-        $doc['user_id'] =57;
-        $doc['purchase_id'] = $id;
-    
-
-        PurchaseExpenseDocument::create($doc);
-    }
-
     public static function field($id, $field){ 
         try {
-            $result = PurchaseExpense::where('id', $id)->select($field)->first();
+            $result = Expense::where('id', $id)->select($field)->first();
             if(!$result ) return;
             return $result[$field];
         } catch (Exception $e) {
