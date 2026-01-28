@@ -27,9 +27,7 @@ class PurchaseExpenseService
             }
             
             $offset = $limit * ($page-1);
-            $model = PurchaseExpense::where(['deleted_at' => null])
-                // ->with('addresses')
-                ;
+            $model = PurchaseExpense::where(['deleted_at' => null]);
             
             $total = $model->get()->count();
 

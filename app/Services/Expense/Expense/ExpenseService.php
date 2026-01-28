@@ -13,6 +13,8 @@ class ExpenseService
             $page = 1;
             $limit = 10;
             $filter=[];
+
+
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -23,29 +25,30 @@ class ExpenseService
             
             $offset = $limit * ($page-1);
             $model = Expense::where(['deleted_at' => null]);
-               // ->with([])
-            
             $total = $model->get()->count();
 
-            if(array_key_exists('find', $requestAll) 
-                && (is_string($requestAll['find']))
-            ) {
+            // if(array_key_exists('find', $requestAll) 
+            //     && (is_string($requestAll['find']))
+            // ) {
 
-                $find = $requestAll['find']; 
-                $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'LIKE', "%$find%");
-            }
+            //     $find = $requestAll['find']; 
+            //     $model->where('id', 'LIKE', "%$find%")
+            //         ->orWhere('name', 'ILIKE', "%$find%");
+               
+            // }
 
-            if(array_key_exists('filter', $requestAll) 
-               && (is_array($requestAll['filter']))
-            ) 
-            {
-                $filter = $requestAll['filter']; 
-                $model->where($filter);
-            }
-            
+            $model = self::find($model, $requestAll);
+
+            // if(array_key_exists('filter', $requestAll) 
+            //    && (is_array($requestAll['filter']))
+            // ) 
+            // {
+            //     $filter = $requestAll['filter']; 
+            //     $model->where($filter);
+            // }
+
+            $model = self::filter($model, $requestAll);
             $count = $model->where(['deleted_at' => null])->get()->count();
-
             $pagesCount = ceil($count/$limit);
 
             $data = $model
@@ -53,7 +56,7 @@ class ExpenseService
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
-                
+
             return [
                 'data' => $data,
                 'pagination' => [
@@ -103,7 +106,6 @@ class ExpenseService
     }
     public static function card($id){ 
         return Expense::where(['id' => $id])
-            //->with([])
             ->first();    
     }
     public static function update($id, $data){ 
@@ -164,5 +166,35 @@ class ExpenseService
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    private static function find($model, $requestAll){
+        if(array_key_exists('find', $requestAll) 
+            && (is_string($requestAll['find']))
+        ) {
+            $find = $requestAll['find']; 
+            $model->where('id', 'LIKE', "%$find%")
+                 ->orWhere('name', 'ILIKE', "%$find%");       
+        }
+        return $model;
+    }
+    private static function filter($model, $requestAll){
+        if(array_key_exists('filter', $requestAll) 
+            && (is_array($requestAll['filter']))
+        ) 
+        {
+            $filter = $requestAll['filter'];
+            if(array_key_exists('service_date_from', $filter)) {
+                $model->whereDate('service_date_from', '>=', $filter['service_date_from']);
+                unset($filter['service_date_from']);
+            }
+
+            if(array_key_exists('service_date_to', $filter)) {
+                $model->whereDate('service_date_to', '<=', $filter['service_date_to']);
+                unset($filter['service_date_to']);
+            }
+            $model->where($filter);
+        }
+        return $model;
     }
 }
