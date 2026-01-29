@@ -14,7 +14,6 @@ class ExpenseService
             $limit = 10;
             $filter=[];
 
-
             if((array_key_exists('pagination', $requestAll)
                 && (array_key_exists('page', $requestAll['pagination']))
                 && (array_key_exists('limit', $requestAll['pagination']))    
@@ -27,28 +26,11 @@ class ExpenseService
             $model = Expense::where(['deleted_at' => null]);
             $total = $model->get()->count();
 
-            // if(array_key_exists('find', $requestAll) 
-            //     && (is_string($requestAll['find']))
-            // ) {
-
-            //     $find = $requestAll['find']; 
-            //     $model->where('id', 'LIKE', "%$find%")
-            //         ->orWhere('name', 'ILIKE', "%$find%");
-               
-            // }
-
             $model = self::find($model, $requestAll);
-
-            // if(array_key_exists('filter', $requestAll) 
-            //    && (is_array($requestAll['filter']))
-            // ) 
-            // {
-            //     $filter = $requestAll['filter']; 
-            //     $model->where($filter);
-            // }
-
             $model = self::filter($model, $requestAll);
+
             $count = $model->where(['deleted_at' => null])->get()->count();
+
             $pagesCount = ceil($count/$limit);
 
             $data = $model
@@ -57,7 +39,20 @@ class ExpenseService
                 ->limit($limit)
                 ->get();
 
+            $total = Expense::where(['deleted_at' => null])
+                ->where($filter)
+                ->select('type_flow_id',
+                    \DB::raw('
+                        type_flow_id,
+                        sum(summ) as summ
+                    '))
+                ->groupBy('type_flow_id')
+                ->get();
+
+            // throw new \Error($total);
+            
             return [
+                'data_total' => $total,
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
