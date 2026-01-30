@@ -29,6 +29,8 @@ class ExpenseService
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
 
+            $modelTotal = clone $model;
+
             $count = $model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
@@ -39,8 +41,7 @@ class ExpenseService
                 ->limit($limit)
                 ->get();
 
-            $total = Expense::where(['deleted_at' => null])
-                ->where($filter)
+            $total = $modelTotal
                 ->select('type_flow_id',
                     \DB::raw('
                         type_flow_id,
@@ -49,7 +50,6 @@ class ExpenseService
                 ->groupBy('type_flow_id')
                 ->get();
 
-            // throw new \Error($total);
             
             return [
                 'data_total' => $total,
@@ -173,6 +173,8 @@ class ExpenseService
         }
         return $model;
     }
+
+    
     private static function filter($model, $requestAll){
         if(array_key_exists('filter', $requestAll) 
             && (is_array($requestAll['filter']))
@@ -192,8 +194,8 @@ class ExpenseService
             foreach($filter as $key => $item){
                 if(is_array($item) && count($item)) {
                     $model->whereIn($key, $item);
-                    unset($filter[$key]);
                 }
+                unset($filter[$key]);
             }
             $model->where($filter);
         }
