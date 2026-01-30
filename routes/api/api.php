@@ -41,6 +41,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Expense\ExpenseController;
 use App\Http\Controllers\Expense\ExpenseDocumentController;
+use App\Http\Controllers\Report\SaleReportController;
+use App\Http\Controllers\Report\WarehouseRemainReportController;
 
 
 // Route::post('/profile', function (Request $request) {
@@ -391,6 +393,12 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [ExpenseDocumentController::class, 'destroy'] );
         Route::post('/recover', [ExpenseDocumentController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [ExpenseDocumentController::class, 'field'] );
+    });
+    Route::prefix('report')->group(function () {
+        Route::post('/sale_report', [SaleReportController::class,  'index']);
+        Route::post('/warehouse_remains_report', [WarehouseRemainReportController::class,  'index']);
+
+        
     });
 });
 ?>

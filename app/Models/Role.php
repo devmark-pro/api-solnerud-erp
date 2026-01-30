@@ -63,6 +63,8 @@ class Role extends Model
         'expense_u',
         'expense_d',
 
+        'report_r',
+
         'directory_c',
         'directory_r',
         'directory_u',

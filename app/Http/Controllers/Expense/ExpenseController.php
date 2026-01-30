@@ -14,7 +14,9 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        
+        if (!Gate::allows('expense_r')) {
+            abort(403, "Не достаточно прав");
+        }
         $requestAll = $request->all();
         return ExpenseService::index($requestAll);
     }

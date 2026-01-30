@@ -188,6 +188,13 @@ class ExpenseService
                 $model->whereDate('service_date_to', '<=', $filter['service_date_to']);
                 unset($filter['service_date_to']);
             }
+
+            foreach($filter as $key => $item){
+                if(is_array($item) && count($item)) {
+                    $model->whereIn($key, $item);
+                    unset($filter[$key]);
+                }
+            }
             $model->where($filter);
         }
         return $model;
