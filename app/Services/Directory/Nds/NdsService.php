@@ -105,6 +105,6 @@ class NdsService
     }
     public  static function getRateById($id) {
         if(!$id) return 0;
-        return NdsDirectory::where('id', $id)->first()->rate;
+        return NdsDirectory::where('id', $id)->first()->rate || 0;
     }
 }

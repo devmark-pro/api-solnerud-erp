@@ -33,7 +33,8 @@ class PurchaseInvoiceController extends Controller
             }
             $data = $request->all();
             $validator = Validator::make($data, [
-                'number'=>'required|unique:purchase_invoices',
+                // 'number'=>'required|unique:purchase_invoices',
+                'number'=>'required',
                 'purchase_id' => 'required',
             ]);
  

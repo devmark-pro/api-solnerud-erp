@@ -37,16 +37,6 @@ class SaleReportService
                 ->limit($limit)
                 ->get();
 
-            // $total = Sale::where(['deleted_at' => null])
-            //     ->where($filter)
-            //     ->select('type_flow_id',
-            //         \DB::raw('
-            //             type_flow_id,
-            //             sum(summ) as summ
-            //         '))
-            //     ->groupBy('type_flow_id')
-            //     ->get();
-            
             return [
                 // 'data_total' => $total,
                 'data' => $data,

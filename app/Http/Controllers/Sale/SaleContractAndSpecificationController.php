@@ -29,7 +29,8 @@ class SaleContractAndSpecificationController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'number'=>'required|unique:sale_invoices',
+                'number'=>'required',
+                // 'number'=>'required|unique:sale_invoices',
                 'sale_id' => 'required',
             ]);
  
