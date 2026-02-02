@@ -22,14 +22,9 @@ class CounterpartyService
 
             $total = $model->get()->count();
 
-            if(array_key_exists('find', $requestAll) 
-                && (is_string($requestAll['find']))
-            ) {
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
 
-                $find = $requestAll['find']; 
-                $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
-            }
             $count = $model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
@@ -39,8 +34,18 @@ class CounterpartyService
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
-                
-        return [
+               
+            $dataTotal = Counterparty::select('counterparty_type_id',
+                    \DB::raw('
+                        count(*) as count
+                    '))
+                ->where(['deleted_at' => null])
+                ->with(['counterpartyType'])
+                ->groupBy('counterparty_type_id')
+                ->get();    
+
+            return [
+                'data_total'=> $dataTotal,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -63,7 +68,7 @@ class CounterpartyService
             return $e->getMessage();
         }
     }
-     public static function card($id){ 
+    public static function card($id){ 
         return Counterparty::where(['id' => $id])
             ->with(['counterpartyType', 'representatives'])
             ->first();    
@@ -87,5 +92,36 @@ class CounterpartyService
         $model = Counterparty::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
+    }
+    
+    private static function find($model, $requestAll){
+        if(array_key_exists('find', $requestAll) 
+            && (is_string($requestAll['find']))
+        ) {
+            $find = $requestAll['find']; 
+            $model->where('id', 'LIKE', "%$find%")
+                ->orWhere('name', 'ILIKE', "%$find%");
+
+        }
+        return $model;
+    }
+
+    private static function filter($model, $requestAll){
+        if(array_key_exists('filter', $requestAll) 
+            && (is_array($requestAll['filter']))
+        ) 
+        {
+            $filter = $requestAll['filter'];
+            foreach($filter as $key=>$item){
+                if(is_array($item)) {
+                    if(count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                    unset($filter[$key]);
+                }
+            }
+            $model->where($filter);
+        }
+        return $model;
     }
 }

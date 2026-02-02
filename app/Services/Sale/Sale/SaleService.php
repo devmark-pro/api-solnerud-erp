@@ -27,23 +27,16 @@ class SaleService
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
 
-            // if(array_key_exists('find', $requestAll) 
-            //     && (is_string($requestAll['find']))
-            // ) {
+         
+            $dataTotal = Sale::select('status_sale_id',
+                    \DB::raw('
+                        count(*) as count
+                    '))
+                ->where(['deleted_at' => null])
+                ->with(['statusSale'])
+                ->groupBy('status_sale_id')
+                ->get();
 
-            //     $find = $requestAll['find']; 
-            //     $model->where('id', 'LIKE', "%$find%");
-            //         // ->orWhere('name', 'LIKE', "%$find%");
-            // }
-
-            // if(array_key_exists('filter', $requestAll) 
-            //    && (is_array($requestAll['filter']))
-            // ) 
-            // {
-            //     $filter = $requestAll['filter']; 
-            //     $model->where($filter);
-            // }
-            
             $count = $model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
@@ -55,6 +48,7 @@ class SaleService
                 ->get();
                 
             return [
+                'data_total' =>$dataTotal,
                 'data' => $data,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
@@ -130,11 +124,25 @@ class SaleService
         ) 
         {
             $filter = $requestAll['filter'];
-            foreach($filter as $key=>$item){
-                if(is_array($item) && count($item)) {
-                    $model->whereIn($key, $item);
+
+            foreach($filter as $key => $item){
+                if(is_array($item)) {
+                    $isDate = false;
+                    if(array_key_exists('from', $item)){
+                        $model->whereDate($key, '>=', $item['from']);
+                        $isDate = true;
+                    }
+                    if(array_key_exists('to', $item)){
+                        $model->whereDate($key, '<=', $item['to']);
+                        $isDate = true;
+                    }   
+
+                    if(!$isDate && count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                    unset($filter[$key]);
                 }
-                unset($filter[$key]);
+
             }
             $model->where($filter);
         }

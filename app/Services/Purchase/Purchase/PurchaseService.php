@@ -38,34 +38,37 @@ class PurchaseService
             
             $total = $model->get()->count();
 
-            if(array_key_exists('find', $requestAll) 
-                && (is_string($requestAll['find']))
-            ) {
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
 
-                $find = $requestAll['find']; 
-                $model->where('id', 'LIKE', "%$find%");
-                    // ->orWhere('name', 'ILIKE', "%$find%");
-            }
+            // if(array_key_exists('find', $requestAll) 
+            //     && (is_string($requestAll['find']))
+            // ) {
 
-              if(array_key_exists('filter', $requestAll) 
-               && (is_array($requestAll['filter']))
-            ) 
-            {
-                $filter = $requestAll['filter']; 
-                if(array_key_exists('whereIn', $filter)) {
-                    $whereIn = $filter['whereIn'];
-                    if(array_key_exists('key', $whereIn) && 
-                        array_key_exists('data', $whereIn)) {
-                        $key = $whereIn['key'];
-                        $data = $whereIn['data'];
-                        if(array_key_exists('whereIn', $filter)) {
-                            $model->whereIn($key, $data);
-                        }
-                    }
-                    unset($filter['whereIn']);
-                }
-                $model->where($filter);
-            }
+            //     $find = $requestAll['find']; 
+            //     $model->where('id', 'LIKE', "%$find%");
+            //         // ->orWhere('name', 'ILIKE', "%$find%");
+            // }
+
+            //   if(array_key_exists('filter', $requestAll) 
+            //    && (is_array($requestAll['filter']))
+            // ) 
+            // {
+            //     $filter = $requestAll['filter']; 
+            //     if(array_key_exists('whereIn', $filter)) {
+            //         $whereIn = $filter['whereIn'];
+            //         if(array_key_exists('key', $whereIn) && 
+            //             array_key_exists('data', $whereIn)) {
+            //             $key = $whereIn['key'];
+            //             $data = $whereIn['data'];
+            //             if(array_key_exists('whereIn', $filter)) {
+            //                 $model->whereIn($key, $data);
+            //             }
+            //         }
+            //         unset($filter['whereIn']);
+            //     }
+            //     $model->where($filter);
+            // }
             
             $count = $model->where(['deleted_at' => null])->get()->count();
 
@@ -77,8 +80,18 @@ class PurchaseService
                 ->limit($limit)
                 ->get();
 
+            $dataTotal = Purchase::select('delivery_method_id',
+                    \DB::raw('
+                        count(*) as count
+                    '))
+                ->where(['deleted_at' => null])
+                ->with(['deliveryMethod'])
+                ->groupBy('delivery_method_id')
+                ->get();
+
             
             return [
+                'data_total' => $dataTotal,
                 'pagination' => [
                     'pagesCount' => $pagesCount,
                     'page' => $page,
@@ -175,5 +188,55 @@ class PurchaseService
         } catch (Exception $e) {
             return $e->getMessage();
         }
-     }
+    }
+     private static function find($model, $requestAll){
+        if(array_key_exists('find', $requestAll) 
+            && (is_string($requestAll['find']))
+        ) {
+            $find = $requestAll['find']; 
+            $model->where('id', 'LIKE', "%$find%");       
+        }
+        return $model;
+    }
+    private static function filter($model, $requestAll){
+        if(array_key_exists('filter', $requestAll) 
+            && (is_array($requestAll['filter']))
+        ) 
+        {
+            $filter = $requestAll['filter'];
+
+            if(array_key_exists('whereIn', $filter)) {
+                $whereIn = $filter['whereIn'];
+                if(array_key_exists('key', $whereIn) && 
+                    array_key_exists('data', $whereIn)) {
+                    $key = $whereIn['key'];
+                    $data = $whereIn['data'];
+                    if(array_key_exists('whereIn', $filter)) {
+                        $model->whereIn($key, $data);
+                    }
+                }
+                unset($filter['whereIn']);
+            }
+            foreach($filter as $key => $item){
+                if(is_array($item)) {
+                    $isDate = false;
+                    if(array_key_exists('from', $item)){
+                        $model->whereDate($key, '>=', $item['from']);
+                        $isDate = true;
+                    }
+                    if(array_key_exists('to', $item)){
+                        $model->whereDate($key, '<=', $item['to']);
+                        $isDate = true;
+                    }   
+
+                    if(!$isDate && count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                    unset($filter[$key]);
+                }
+            }
+            $model->where($filter);
+        }
+        return $model;
+    }
 }

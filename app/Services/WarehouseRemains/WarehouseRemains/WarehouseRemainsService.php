@@ -25,35 +25,11 @@ class WarehouseRemainsService
             
             $total = $model->get()->count();
 
-            if(array_key_exists('find', $requestAll) 
-                && (is_string($requestAll['find']))
-            ) {
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
 
-                $find = $requestAll['find']; 
-                $model->whereHas('nomenclature', function ($query) use ($find) {
-                        $query->where('name', 'ILIKE', "%$find%");
-                    })->orWhere('id', 'LIKE', "%$find%");
-            }
-           
-            if(array_key_exists('filter', $requestAll) 
-               && (is_array($requestAll['filter']))
-            ) 
-            {
-                $filter = $requestAll['filter']; 
-                if(array_key_exists('whereIn', $filter)) {
-                    $whereIn = $filter['whereIn'];
-                    if(array_key_exists('key', $whereIn) && 
-                        array_key_exists('data', $whereIn)) {
-                        $key = $whereIn['key'];
-                        $data = $whereIn['data'];
-                        if(array_key_exists('whereIn', $filter)) {
-                            $model->whereIn($key, $data);
-                        }
-                    }
-                    unset($filter['whereIn']);
-                }
-                $model->where($filter);
-            }
+
+            $totalModel = clone $model;
             
             $count = $model->where(['deleted_at' => null])->get()->count();
 
@@ -65,7 +41,8 @@ class WarehouseRemainsService
                 ->limit($limit)
                 ->get();
 
-            $dataTotal = WarehouseRemains::where($filter)->where(['deleted_at' => null]);
+            $dataTotal = $totalModel->where($filter)->where(['deleted_at' => null]);
+            
             return [
 
                 'data' => $data,
@@ -203,5 +180,46 @@ class WarehouseRemainsService
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+    private static function find($model, $requestAll){
+        if(array_key_exists('find', $requestAll) 
+            && (is_string($requestAll['find']))
+        ) {
+            $find = $requestAll['find']; 
+            $model->where('id', 'LIKE', "%$find%")
+                 ->orWhere('name', 'ILIKE', "%$find%");       
+        }
+        return $model;
+    }
+
+    
+    private static function filter($model, $requestAll){
+        if(array_key_exists('filter', $requestAll) 
+            && (is_array($requestAll['filter']))
+        )
+        {
+            $filter = $requestAll['filter'];
+            foreach($filter as $key => $item){
+                if(is_array($item) && count($item)) {
+                    $model->whereIn($key, $item);
+                }
+                unset($filter[$key]);
+            }
+
+            if(array_key_exists('whereIn', $filter)) {
+                $whereIn = $filter['whereIn'];
+                if(array_key_exists('key', $whereIn) && 
+                    array_key_exists('data', $whereIn)) {
+                    $key = $whereIn['key'];
+                    $data = $whereIn['data'];
+                    if(array_key_exists('whereIn', $filter)) {
+                        $model->whereIn($key, $data);
+                    }
+                }
+                unset($filter['whereIn']);
+            }
+            $model->where($filter);
+        }
+        return $model;
     }
 }

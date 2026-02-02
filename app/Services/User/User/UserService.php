@@ -127,10 +127,12 @@ class UserService
         {
             $filter = $requestAll['filter'];
             foreach($filter as $key=>$item){
-                if(is_array($item) && count($item)) {
-                    $model->whereIn($key, $item);
+                if(is_array($item)) {
+                    if(count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                    unset($filter[$key]);
                 }
-                unset($filter[$key]);
             }
             $model->where($filter);
         }
