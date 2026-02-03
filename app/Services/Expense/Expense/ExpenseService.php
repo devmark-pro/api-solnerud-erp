@@ -124,15 +124,7 @@ class ExpenseService
             $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);
 
             $model->update($data);
-            
-
-            // PurchaseExpense::where(['id' => $id])->first()->update($data);
             return Expense::where(['id' => $id])->first();
-
-            // Expense::where('id', $id)->first()->update($data);
-            // return Expense::where('id', $id)
-            //     //->with([])
-            //     ->first();
 
         } catch (Exception $e) {
             return $e->getMessage();

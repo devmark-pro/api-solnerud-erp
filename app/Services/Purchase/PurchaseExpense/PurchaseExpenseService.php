@@ -90,24 +90,10 @@ class PurchaseExpenseService
                 unset($data['documents']);              
             }
 
-            // if(array_key_exists('addresses', $data)){
-            //     $addresses = $data['addresses'];
-            //     unset($data['addresses']);   
-            // }
-
             if(array_key_exists('purchase_address_ids', $data)){
                 $addresses = $data['purchase_address_ids'];
                 unset($data['purchase_address_ids']);              
             }
-
-
-            // if(array_key_exists('purchase_address_ids', $data)) {
-            //     $addresses = $data['purchase_address_ids'];
-            //     unset($data['purchase_address_ids']);
-            //     SaleExpenseProductService::deleteAndCreateArray(
-            //         $id, $data['purchase_id'], $list
-            //     );         
-            // }
             
             $summ = $data['quantity'] * $data['rate'];
             $data['summ'] = $summ;
@@ -163,7 +149,6 @@ class PurchaseExpenseService
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
             }
-            // $ndsType = $data['nds_type'];
             $data['nds_rate'] = $ndsRate;
             $isNdsInPrice = $data['is_nds_in_price'];
             $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);

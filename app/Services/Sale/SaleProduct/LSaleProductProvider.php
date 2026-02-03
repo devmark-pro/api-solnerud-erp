@@ -131,7 +131,7 @@ class LSaleProductProvider extends ServiceProvider
         ///
             $saleExpenseStr = "";
         //
-        foreach($saleExpenseProduct as $item){
+        foreach($saleExpenseProduct as $item) {
 
             $saleExpense[$item['sale_product_id']][] = $item['sale_expense_id'];
 
