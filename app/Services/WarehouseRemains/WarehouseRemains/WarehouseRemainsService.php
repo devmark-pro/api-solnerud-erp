@@ -199,12 +199,6 @@ class WarehouseRemainsService
         )
         {
             $filter = $requestAll['filter'];
-            foreach($filter as $key => $item){
-                if(is_array($item) && count($item)) {
-                    $model->whereIn($key, $item);
-                }
-                unset($filter[$key]);
-            }
 
             if(array_key_exists('whereIn', $filter)) {
                 $whereIn = $filter['whereIn'];
@@ -218,8 +212,18 @@ class WarehouseRemainsService
                 }
                 unset($filter['whereIn']);
             }
+            foreach($filter as $key => $item){
+                if(is_array($item)) {
+                    if(count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                unset($filter[$key]);
+                }
+            }
+
             $model->where($filter);
         }
         return $model;
     }
+
 }

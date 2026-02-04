@@ -21,7 +21,10 @@ use App\Http\Controllers\Purchase\PurchaseExpense\PurchaseExpenseAddressControll
 use App\Http\Controllers\Purchase\PurchaseDocumentController;
 use App\Http\Controllers\Counterparty\CounterpartyRepresentativeController;
 use App\Http\Controllers\WarehouseRemains\WarehouseRemainsController;
-
+use App\Http\Controllers\WarehouseRemains\WarehouseRemainsNomenclatureController;
+use App\Http\Controllers\WarehouseRemains\WarehouseRemainsPackingTypeController;
+use App\Http\Controllers\WarehouseRemains\WarehouseRemainsWarehouseController;
+use App\Http\Controllers\WarehouseRemains\WarehouseRemainsPurchaseController;
 
 use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\Sale\SaleInvoiceController;
@@ -231,16 +234,36 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
 
     Route::prefix('warehouse_remains')->group(function () {
         Route::post('/', [WarehouseRemainsController::class,  'index']);
-        Route::post('/create', [WarehouseRemainsController::class, 'create'] ); 
+        // Route::post('/create', [WarehouseRemainsController::class, 'create'] ); 
         Route::post('/get', [WarehouseRemainsController::class, 'card'] );
-        Route::post('/update', [WarehouseRemainsController::class, 'update'] );
-        Route::post('/delete', [WarehouseRemainsController::class, 'destroy'] );
-        Route::post('/recover', [WarehouseRemainsController::class, 'recover'] );
-        Route::get('/field/{id}/{field}', [WarehouseRemainsController::class, 'field'] );
+        // Route::post('/update', [WarehouseRemainsController::class, 'update'] );
+        // Route::post('/delete', [WarehouseRemainsController::class, 'destroy'] );
+        // Route::post('/recover', [WarehouseRemainsController::class, 'recover'] );
+        // Route::get('/field/{id}/{field}', [WarehouseRemainsController::class, 'field'] );
     });
 
+    Route::prefix('warehouse_remains_nomenclature')->group(function () {
+        Route::post('/', [WarehouseRemainsNomenclatureController::class,  'index']);
+        Route::post('/get', [WarehouseRemainsNomenclatureController::class, 'card'] );
+    });
 
+    Route::prefix('warehouse_remains_packing_type')->group(function () {
+        Route::post('/', [WarehouseRemainsPackingTypeController::class,  'index']);
+        Route::post('/get', [WarehouseRemainsPackingTypeController::class, 'card'] );
+    });
 
+    Route::prefix('warehouse_remains_warehouse')->group(function () {
+        Route::post('/', [WarehouseRemainsWarehouseController::class,  'index']);
+        Route::post('/get', [WarehouseRemainsWarehouseController::class, 'card'] );
+
+    });
+
+    Route::prefix('warehouse_remains_purchase')->group(function () {
+        Route::post('/', [WarehouseRemainsPurchaseController::class,  'index']);
+        Route::post('/get', [WarehouseRemainsPurchaseController::class, 'card'] );    
+    });
+
+    
 
     Route::prefix('sale')->group(function () {
         Route::post('/', [SaleController::class,  'index']);

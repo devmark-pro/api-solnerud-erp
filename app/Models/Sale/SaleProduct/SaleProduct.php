@@ -137,6 +137,21 @@ class SaleProduct extends Model
             }, $saleProductPurchase);
             return $result;
         }
+        if($this->shipment_type==="from_warehouse") {
+            $saleProductPurchase = SaleProductPurchase::where([
+                'deleted_at' => null,
+                "sale_id" => $this->sale_id,
+				"sale_product_id" => $this->id,
+            ])
+            ->select('id', 'warehouse_remains_id')
+            ->get()->toArray();
+
+            $result = array_map(function($item) {
+                return $item['warehouse_remains']['id'];
+            }, $saleProductPurchase);
+            return $result;
+        }
+        return null;
 
         return null;
     }

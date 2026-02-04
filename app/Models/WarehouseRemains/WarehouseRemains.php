@@ -28,6 +28,7 @@ class WarehouseRemains extends Model
         'purchase_delivery_address_id',
         'deleted_at',
     ];
+    
     protected $with= [
         'nomenclature',
         'packingType',

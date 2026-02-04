@@ -7,12 +7,16 @@ use App\Models\WarehouseRemains\WarehouseRemains\WarehouseRemains;
 use App\Services\WarehouseRemains\WarehouseRemains\WarehouseRemainsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 
 class WarehouseRemainsController extends Controller
 {
     public function index(Request $request)
     {
+        if (!Gate::allows('warehouse_remains_r')) {
+            abort(403, "Не достаточно прав");
+        }
         $requestAll = $request->all();
         return WarehouseRemainsService::index($requestAll);
     }
@@ -20,6 +24,9 @@ class WarehouseRemainsController extends Controller
     public function create(Request $request)
     {
         try {
+            if (!Gate::allows('warehouse_remains_c')) {
+                abort(403, "Не достаточно прав");
+            }
             $data = $request->all();
             $validator = Validator::make($data, [
                 'nomenclature_id'=>'required',
@@ -41,6 +48,9 @@ class WarehouseRemainsController extends Controller
     public function card(Request $request)
     {
         try {
+            if (!Gate::allows('warehouse_remains_r')) {
+                abort(403, "Не достаточно прав");
+            }
             $validator = Validator::make($request->all(), [
                     'id'=>'required',
             ]);
@@ -62,6 +72,9 @@ class WarehouseRemainsController extends Controller
     public function update(Request $request)
     {
         try {
+            if (!Gate::allows('warehouse_remains_u')) {
+                abort(403, "Не достаточно прав");
+            }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
                 'id'=>'required',
@@ -84,6 +97,9 @@ class WarehouseRemainsController extends Controller
 
     public function destroy(Request $request)
     {
+        if (!Gate::allows('warehouse_remains_d')) {
+            abort(403, "Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);
@@ -99,6 +115,9 @@ class WarehouseRemainsController extends Controller
 
     public function recover(Request $request)
     {
+        if (!Gate::allows('warehouse_remains_d')) {
+            abort(403, "Не достаточно прав");
+        }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
         ]);

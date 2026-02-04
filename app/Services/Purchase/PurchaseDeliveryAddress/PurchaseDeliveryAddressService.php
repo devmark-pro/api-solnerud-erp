@@ -29,8 +29,7 @@ class PurchaseDeliveryAddressService
             ) {
 
                 $find = $requestAll['find']; 
-                $model->where('id', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
+                $model->where('id', 'LIKE', "%$find%");
             }
 
             if(array_key_exists('filter', $requestAll) 

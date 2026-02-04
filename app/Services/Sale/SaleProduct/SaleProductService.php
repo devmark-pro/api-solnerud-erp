@@ -116,9 +116,9 @@ class SaleProductService
 
             if(array_key_exists('shipment_type', $data)
                 && $data['shipment_type'] === "from_warehouse"){
-                if(array_key_exists('warehouse_remains_ids', $data)){
-                    $purchases = $data['warehouse_remains_ids'];
-                    unset($data['warehouse_remains_ids']);              
+                if(array_key_exists('purchase_ids', $data)){
+                    $purchases = $data['purchase_ids'];
+                    unset($data['purchase_ids']);              
                 }
             }
             // if(array_key_exists('shipment_type', $data) &&
@@ -158,9 +158,9 @@ class SaleProductService
         try {
              if(array_key_exists('shipment_type', $data)
                 && $data['shipment_type'] === "from_warehouse") {
-                if(array_key_exists('warehouse_remains_ids', $data)) {
-                    $purchases = $data['warehouse_remains_ids'];
-                    unset($data['warehouse_remains_ids']);     
+                if(array_key_exists('purchase_ids', $data)) {
+                    $purchases = $data['purchase_ids'];
+                    unset($data['purchase_ids']);     
                     SaleProductPurchaseService::deleteAndCreateArray(
                         $id, 
                         $data['sale_id'], 

@@ -20,15 +20,20 @@ class NomenclatureService
             $model = Nomenclature::where(['deleted_at' => null]);
             $total = $model->get()->count();
 
-            if(array_key_exists('find', $requestAll) 
-                && (is_string($requestAll['find']))
-            ) {
+            // if(array_key_exists('find', $requestAll) 
+            //     && (is_string($requestAll['find']))
+            // ) {
 
-                $find = $requestAll['find']; 
-                $model
-                    ->where('system_number', 'LIKE', "%$find%")
-                    ->orWhere('name', 'ILIKE', "%$find%");
-            }
+            //     $find = $requestAll['find']; 
+            //     $model
+            //         ->where('system_number', 'LIKE', "%$find%")
+            //         ->orWhere('name', 'ILIKE', "%$find%");
+            // }
+
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
+
+
             $count = $model->where(['deleted_at' => null])->get()->count();
 
             $pagesCount = ceil($count/$limit);
@@ -82,5 +87,45 @@ class NomenclatureService
         $model = Nomenclature::find($id);
         if(!$model) return null; 
         return $model->update(['deleted_at' => null]);
+    }
+    private static function find($model, $requestAll){
+        if(array_key_exists('find', $requestAll) 
+            && (is_string($requestAll['find']))
+        ) {
+            $find = $requestAll['find']; 
+            $model->where('id', 'LIKE', "%$find%")
+                ->orWhere('name', 'ILIKE', "%$find%");       
+        }
+        return $model;
+    }
+    private static function filter($model, $requestAll){
+        if(array_key_exists('filter', $requestAll) 
+            && (is_array($requestAll['filter']))
+        ) 
+        {
+            $filter = $requestAll['filter'];
+
+            foreach($filter as $key => $item){
+                if(is_array($item)) {
+                    $isDate = false;
+                    if(array_key_exists('from', $item)){
+                        $model->whereDate($key, '>=', $item['from']);
+                        $isDate = true;
+                    }
+                    if(array_key_exists('to', $item)){
+                        $model->whereDate($key, '<=', $item['to']);
+                        $isDate = true;
+                    }   
+
+                    if(!$isDate && count($item)) {
+                        $model->whereIn($key, $item);
+                    }
+                    unset($filter[$key]);
+                }
+
+            }
+            $model->where($filter);
+        }
+        return $model;
     }
 }
