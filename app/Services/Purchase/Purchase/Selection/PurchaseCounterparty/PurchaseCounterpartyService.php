@@ -56,9 +56,12 @@ class PurchaseCounterpartyService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('counterparties.id', 'LIKE', "%$find%")
-                ->orWhere('counterparties.name', 'ILIKE', "%$find%");       
+           
+            $model->where(function ($query) use ($find) {
+                $query->where('counterparties.id', 'LIKE', "%$find%")
+                    ->orWhere('counterparties.name', 'ILIKE', "%$find%");
+            }); 
+                
         }
         return $model;
     }

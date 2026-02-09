@@ -52,9 +52,13 @@ class WarehouseRemainsPackingTypeService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('directory_packing_types.id', 'LIKE', "%$find%")
-                ->orWhere('directory_packing_types.name', 'ILIKE', "%$find%");       
+            
+            $model->where(function ($query) use ($find) {
+                $query
+                    ->where('directory_packing_types.id', 'LIKE', "%$find%")
+                    ->orWhere('directory_packing_types.name', 'ILIKE', "%$find%");
+            });
+
         }
         return $model;
     }

@@ -54,9 +54,12 @@ class PurchaseDeliveryMethodService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('directory_delivery_methods.id', 'LIKE', "%$find%")
-                ->orWhere('directory_delivery_methods.name', 'ILIKE', "%$find%");       
+            $model->where(function ($query) use ($find) {
+                $query
+                    ->where('directory_delivery_methods.id', 'LIKE', "%$find%")
+                    ->orWhere('directory_delivery_methods.name', 'ILIKE', "%$find%");    
+            });        
+            
         }
         return $model;
     }

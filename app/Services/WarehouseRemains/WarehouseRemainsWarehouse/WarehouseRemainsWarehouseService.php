@@ -46,9 +46,12 @@ class WarehouseRemainsWarehouseService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('directory_warehouses.id', 'LIKE', "%$find%")
-                ->orWhere('directory_warehouses.name', 'ILIKE', "%$find%");       
+                
+            $model->where(function ($query) use ($find) {
+                $query
+                    ->where('directory_warehouses.id', 'LIKE', "%$find%")
+                    ->orWhere('directory_warehouses.name', 'ILIKE', "%$find%"); 
+                });
         }
         return $model;
     }
@@ -88,7 +91,7 @@ class WarehouseRemainsWarehouseService
     }
      
         
-    public static function card($id) {
+    public static function card($id, $requestAll) {
         try{
             $model = self::model();
             $model = self::filter($model, $requestAll);

@@ -57,9 +57,13 @@ class WarehouseRemainsPurchaseService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('purchases.id', 'LIKE', "%$find%")
-                ->orWhere('purchases.name', 'ILIKE', "%$find%");       
+                   
+            $model->where(function ($query) use ($find) {
+                $query
+                    ->where('purchases.id', 'LIKE', "%$find%")
+                    ->orWhere('purchases.name', 'ILIKE', "%$find%");    
+            });
+
         }
         return $model;
     }

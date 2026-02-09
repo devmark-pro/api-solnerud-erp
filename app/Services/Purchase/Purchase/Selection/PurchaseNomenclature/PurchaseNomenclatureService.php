@@ -54,9 +54,10 @@ class PurchaseNomenclatureService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('nomenclatures.id', 'LIKE', "%$find%")
+            $model->where(function ($query) use ($find) {
+                $query->where('nomenclatures.id', 'LIKE', "%$find%")
                 ->orWhere('nomenclatures.name', 'ILIKE', "%$find%");       
+            });
         }
         return $model;
     }

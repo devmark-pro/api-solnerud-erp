@@ -57,9 +57,12 @@ class PurchaseCounterpartyWarehouseService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model
-                ->where('counterparty_warehouses.id', 'LIKE', "%$find%")
-                ->orWhere('counterparty_warehouses.name', 'ILIKE', "%$find%");       
+          
+            $model->where(function ($query) use ($find) {
+                $query
+                    ->where('counterparty_warehouses.id', 'LIKE', "%$find%")
+                    ->orWhere('counterparty_warehouses.name', 'ILIKE', "%$find%"); 
+            });      
         }
         return $model;
     }
@@ -76,7 +79,7 @@ class PurchaseCounterpartyWarehouseService
                     if(count($item)) {
                         $model->whereIn('purchases.'.$key, $item);
                     }
-                }else {
+                } else {
                     $filter['purchases.'.$key] = $item;
                 }
                 unset($filter[$key]);
