@@ -30,8 +30,8 @@ class PurchaseClientWarehouseService
 
         try {
             $limit = 30;
-            $model = self::model();
-            // $model = self::find($model, $requestAll);
+            $model = self::model()->where('purchase_delivery_addresses.actual_quantity', '>', 0);
+            $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
             $data = $model->limit($limit)->get();
 
@@ -62,8 +62,8 @@ class PurchaseClientWarehouseService
         ) {
             $find = $requestAll['find']; 
             $model->where(function ($query) use ($find) {
-                $query->where('purchase_delivery_addresses.id', 'LIKE', "%$find%")
-                ->orWhere('purchase_delivery_addresses.name', 'ILIKE', "%$find%");
+                $query->where('client_warehouses.id', 'LIKE', "%$find%")
+                ->orWhere('client_warehouses.name', 'ILIKE', "%$find%");
             });
         }
         return $model;
