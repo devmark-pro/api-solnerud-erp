@@ -1,42 +1,35 @@
 <?php
 
-namespace App\Services\WarehouseRemains\WarehouseRemainsPackingType;
-use App\Models\WarehouseRemains\WarehouseRemains;
-use App\Models\Sale\SaleProduct\SaleProduct;
+namespace App\Services\Purchase\Purchase\Selection\PurchasePackingType;
+use App\Models\Purchase\Purchase;
 
-
-// Тип фасовки имеющийся на складах
-class WarehouseRemainsPackingTypeService
+class PurchasePackingTypeService
 {
-    
-    private static function model() {
-        return WarehouseRemains::join('directory_packing_types', 
-            'directory_packing_types.id', '=', 
-            'warehouse_remains.packing_type_id')
+
+    private static function model(){
+        return Purchase::join('directory_packing_types', 
+                'directory_packing_types.id', '=', 
+                'purchases.packing_type_id')
+            ->with('packingType')
             ->select('packing_type_id',
                 \DB::raw('
                     packing_type_id as id,    
-                    sum(actual_quantity) as actual_quantity, 
-                    sum(availability) as availability,
-                    sum(reserve) as reserve   
+                    sum(count) as availability   
                 '))
-            ->groupBy('packing_type_id');
+            ->groupBy('packing_type_id');   
     }
     
-    
     public static function index($requestAll) {
+
         try {
             
             $limit = 30;
-            $filter = [];
+           
             $model = self::model();
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
 
-           $data = $model
-                ->limit($limit)
-                ->where('availability', '>', 0)
-                ->get();
+            $data = $model->limit($limit)->get();
 
             return [
                 'data' => $data,
@@ -46,7 +39,16 @@ class WarehouseRemainsPackingTypeService
             return $e->getMessage();
         }
     }
-    
+
+    public static function card($id, $requestAll) { 
+
+        $model = self::model();
+        $model = self::filter($model, $requestAll);
+        return $model
+            ->where('packing_type_id', $id)
+            ->first();
+    }
+
     private static function find($model, $requestAll) {
         if(array_key_exists('find', $requestAll) 
             && (is_string($requestAll['find']))
@@ -59,7 +61,6 @@ class WarehouseRemainsPackingTypeService
         return $model;
     }
 
-    
     private static function filter($model, $requestAll){
         if(array_key_exists('filter', $requestAll) 
             && (is_array($requestAll['filter']))
@@ -79,17 +80,6 @@ class WarehouseRemainsPackingTypeService
             $model->where($filter);
         }
         return $model;
-    }
-     
-    public static function card($id, $requestAll) {
-        try {
-            $model = self::model();
-            $model = self::filter($model, $requestAll);
-        
-            return $model->where('packing_type_id', $id)->first();
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
     }
    
 }

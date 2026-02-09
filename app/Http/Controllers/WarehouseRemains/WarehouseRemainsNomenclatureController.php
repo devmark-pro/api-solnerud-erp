@@ -29,7 +29,9 @@ class WarehouseRemainsNomenclatureController extends Controller
             
             }
             $id = $request->input('id');
-            $data = WarehouseRemainsNomenclatureService::card($id);
+            $requestAll = $request->all();
+            unset($requestAll['id']);
+            $data = WarehouseRemainsNomenclatureService::card($id, $requestAll);
             if(!$data) return response()->json(['message' => 'Not found'], 404);
             return $data; 
 

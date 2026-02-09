@@ -22,12 +22,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('roles', function (Blueprint $table) {
-            if (Schema::hasColumn('roles', 'report_r')) {
+        if (Schema::hasColumn('roles', 'report_r')) {
             Schema::table('roles', function (Blueprint $table) {
                 $table->dropColumn('report_r');
             });
         }
-        });
     }
 };

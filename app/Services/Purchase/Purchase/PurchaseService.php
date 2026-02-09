@@ -40,35 +40,6 @@ class PurchaseService
 
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
-
-            // if(array_key_exists('find', $requestAll) 
-            //     && (is_string($requestAll['find']))
-            // ) {
-
-            //     $find = $requestAll['find']; 
-            //     $model->where('id', 'LIKE', "%$find%");
-            //         // ->orWhere('name', 'ILIKE', "%$find%");
-            // }
-
-            //   if(array_key_exists('filter', $requestAll) 
-            //    && (is_array($requestAll['filter']))
-            // ) 
-            // {
-            //     $filter = $requestAll['filter']; 
-            //     if(array_key_exists('whereIn', $filter)) {
-            //         $whereIn = $filter['whereIn'];
-            //         if(array_key_exists('key', $whereIn) && 
-            //             array_key_exists('data', $whereIn)) {
-            //             $key = $whereIn['key'];
-            //             $data = $whereIn['data'];
-            //             if(array_key_exists('whereIn', $filter)) {
-            //                 $model->whereIn($key, $data);
-            //             }
-            //         }
-            //         unset($filter['whereIn']);
-            //     }
-            //     $model->where($filter);
-            // }
             
             $count = $model->where(['deleted_at' => null])->get()->count();
 

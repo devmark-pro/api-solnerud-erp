@@ -17,7 +17,7 @@ use App\Models\Sale\Sale;
 use App\Models\Sale\SaleProduct\SaleProductPurchase;
 use App\Models\Purchase\PurchaseDeliveryAddress;
 use App\Models\Client\ClientWarehouse;
-
+use App\Models\Counterparty\CounterpartyWarehouse;
 
 
 #[ObservedBy([SaleProductObserver::class])]
@@ -59,6 +59,7 @@ class SaleProduct extends Model
         'shipment_is_nds_in_price',
         'shipment_nds_rate',
         'shipment_nds_rate_id',
+        'counterparty_warehouse_id',
         'comment',
         'sale_id',
         'cost_formula',
@@ -76,6 +77,7 @@ class SaleProduct extends Model
         'counterparty',
         'purchaseAddress',
         'clientWarehouse',
+        'counterpartyWarehouse'
     ];
     protected $appends = [ 
         'purchase_ids',
@@ -119,6 +121,10 @@ class SaleProduct extends Model
         return $this->belongsTo(PurchaseDeliveryAddress::class);
     }
 
+    public function counterpartyWarehouse(): BelongsTo 
+    {
+        return $this->belongsTo(CounterpartyWarehouse::class);
+    }
     public function clientWarehouse(): BelongsTo 
     {
         return $this->belongsTo(ClientWarehouse::class);

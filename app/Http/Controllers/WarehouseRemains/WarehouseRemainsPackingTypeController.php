@@ -30,7 +30,9 @@ class WarehouseRemainsPackingTypeController extends Controller
             
             }
             $id = $request->input('id');
-            $data = WarehouseRemainsPackingTypeService::card($id);
+            $requestAll = $request->all();
+            unset($requestAll['id']);
+            $data = WarehouseRemainsPackingTypeService::card($id, $requestAll);
             if(!$data) return response()->json(['message' => 'Not found'], 404);
             return $data; 
 

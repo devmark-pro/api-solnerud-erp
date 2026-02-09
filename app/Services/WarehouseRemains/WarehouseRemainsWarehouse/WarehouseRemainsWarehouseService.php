@@ -7,28 +7,29 @@ use App\Models\WarehouseRemains\WarehouseRemains;
 // Тип фасовки имеющийся на складах
 class WarehouseRemainsWarehouseService
 {
-     public static function index($requestAll) {
-        try {
-            
-            $limit = 30;
-            $filter = [];
-
-            $model = WarehouseRemains::join('directory_warehouses', 
+    private static function model(){
+        return WarehouseRemains::join('directory_warehouses', 
                 'directory_warehouses.id', '=', 
-                'warehouse_remains.warehouse_id');
-
-            $model = self::find($model, $requestAll);
-            $model = self::filter($model, $requestAll);
-
-            $data = $model->select('warehouse_id',
+                'warehouse_remains.warehouse_id')
+                ->select('warehouse_id',
                     \DB::raw('
                         warehouse_id as id,    
                         sum(actual_quantity) as actual_quantity, 
                         sum(availability) as availability,
                         sum(reserve) as reserve   
                     '))
-                ->groupBy('warehouse_id')
-                ->where('availability', '>', 0)
+                ->groupBy('warehouse_id');
+    }
+    public static function index($requestAll) {
+        try {
+            
+            $limit = 30;
+            $filter = [];
+            $model = self::model();
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
+
+            $data = $model ->where('availability', '>', 0)
                 ->limit($limit)
                 ->get();
 
@@ -87,19 +88,13 @@ class WarehouseRemainsWarehouseService
     }
      
         
-    public static function card($id) { 
-        return WarehouseRemains::join('directory_warehouses', 
-            'directory_warehouses.id', '=', 
-            'warehouse_remains.warehouse_id')
-            ->select('warehouse_id',
-                \DB::raw('
-                    warehouse_id as id,    
-                    sum(actual_quantity) as actual_quantity, 
-                    sum(availability) as availability,
-                    sum(reserve) as reserve   
-                '))
-            ->groupBy('warehouse_id')
-            ->where('warehouse_id', $id)   
-            ->first();
+    public static function card($id) {
+        try{
+            $model = self::model();
+            $model = self::filter($model, $requestAll);
+            return $model->where('warehouse_id', $id)->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

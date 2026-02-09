@@ -7,33 +7,32 @@ use App\Models\WarehouseRemains\WarehouseRemains;
 // Тип фасовки имеющийся на складах
 class WarehouseRemainsPurchaseService
 {
-     public static function index($requestAll) {
-        try {
-            
-            $limit = 30;
-            $filter = [];
 
-            $model = WarehouseRemains::join(
+    private static function model(){
+        return  WarehouseRemains::join(
                 'purchases', 
                 'purchases.id', '=', 
                 'warehouse_remains.purchase_id'
-            );
-
-            $model = self::find($model, $requestAll);
-            $model = self::filter($model, $requestAll);
-
-            $data = $model->select('purchase_id',
+            )->select('purchase_id',
                     \DB::raw('
                         purchase_id as id,    
                         sum(actual_quantity) as actual_quantity, 
                         sum(availability) as availability,
                         sum(reserve) as reserve   
                     '))
-                ->groupBy('purchase_id')
-                ->where('availability', '>', 0)
-                ->limit($limit)
+            ->groupBy('purchase_id')
+            ->where('availability', '>', 0);
+    }
+    public static function index($requestAll) {
+        try {
+            
+            $limit = 30;
+            $model = self::model();
+            $model = self::find($model, $requestAll);
+            $model = self::filter($model, $requestAll);
+            
+            $data = $model->limit($limit)
                 ->get();
-
             return [
                 'data' => $data,
             ];
@@ -42,7 +41,18 @@ class WarehouseRemainsPurchaseService
             return $e->getMessage();
         }
     }
-     private static function find($model, $requestAll) {
+
+    public static function card($id, $requestAll) {
+        try {
+            $model = self::model();
+            $model = self::filter($model, $requestAll);
+            return $model->where('purchase_id', $id)->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    private static function find($model, $requestAll) {
         if(array_key_exists('find', $requestAll) 
             && (is_string($requestAll['find']))
         ) {

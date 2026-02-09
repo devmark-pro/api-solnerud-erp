@@ -20,6 +20,7 @@ use App\Models\Purchase\PurchaseDocument;
 use App\Models\Purchase\PurchaseReceipt;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Services\Purchase\Purchase\PurchaseObserver;
+use App\Models\Counterparty\CounterpartyWarehouse;
 
 
 // Покупки
@@ -93,6 +94,10 @@ class Purchase extends Model
     public function deliveryAddress(): HasMany
     {
         return $this->hasMany(PurchaseDeliveryAddress::class)->where('deleted_at', null);
+    }
+    public function counterpartyWarehouse(): BelongsTo
+    {
+        return $this->belongsTo(CounterpartyWarehouse::class);//->where('deleted_at', null);
     }
     public function invoice(): HasMany
     {

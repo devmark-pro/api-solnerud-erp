@@ -28,10 +28,12 @@ class WarehouseRemainsWarehouseController extends Controller
             if($validator->fails()) {
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
-            
             }
+
             $id = $request->input('id');
-            $data = WarehouseRemainsWarehouseService::card($id);
+            $requestAll = $request->all();
+            unset($requestAll['id']);
+            $data = WarehouseRemainsWarehouseService::card($id, $requestAll);   
             if(!$data) return response()->json(['message' => 'Not found'], 404);
             return $data; 
 

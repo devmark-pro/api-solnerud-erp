@@ -1,25 +1,21 @@
 <?php
-
-namespace App\Http\Controllers\WarehouseRemains;
+namespace App\Http\Controllers\Purchase\Selection;
 
 use App\Http\Controllers\Controller;
-use App\Services\WarehouseRemains\WarehouseRemainsPurchase\WarehouseRemainsPurchaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Gate;
+use App\Services\Purchase\Purchase\Selection\PurchasePackingType\PurchasePackingTypeService;
 
 
-
-
-class WarehouseRemainsPurchaseController extends Controller
+class PurchasePackingTypeController extends Controller
 {
     public function index(Request $request)
     {
         $requestAll = $request->all();
-        return WarehouseRemainsPurchaseService::index($requestAll);
+        return PurchasePackingTypeService::index($requestAll);
     }
 
-       public function card(Request $request)
+    public function card(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -28,12 +24,12 @@ class WarehouseRemainsPurchaseController extends Controller
             if($validator->fails()) {
                 $error = $validator->errors()->toArray();
                 return response()->json(['message'=>$error])->setStatusCode(417); 
+            
             }
-
             $id = $request->input('id');
             $requestAll = $request->all();
             unset($requestAll['id']);
-            $data = WarehouseRemainsPurchaseService::card($id, $requestAll);   
+            $data = PurchasePackingTypeService::card($id, $requestAll);
             if(!$data) return response()->json(['message' => 'Not found'], 404);
             return $data; 
 
@@ -41,4 +37,5 @@ class WarehouseRemainsPurchaseController extends Controller
             return $e->getMessage();
         }
     }
+
 }

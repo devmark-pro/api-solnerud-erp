@@ -85,12 +85,28 @@ class WarehouseRemainsService
                         nomenclature_id as id,
                         sum(actual_quantity) as actual_quantity, 
                         sum(availability) as availability,
-                        sum(reserve) as reserve,
-                        sum(cost) as cost
+                        sum(reserve) as reserve
                     '))
-                ->where(['deleted_at'=> null])
+                ->where(['deleted_at' => null])
                 ->groupBy('nomenclature_id')
                 ->first();
+            
+            $calculationCostArr = WarehouseRemains::where(['nomenclature_id' => $id])
+                ->select('availability', 'cost')
+                ->where(['deleted_at'=> null])
+                ->get()->toArray();
+            
+            $summCost = 0;
+            $summAvail = 0;
+
+            foreach ($calculationCostArr as $costItem){
+                $summCost += $costItem['availability'] * $costItem['cost'];
+                $summAvail += $costItem['availability'];
+            }
+            
+            $cost = $summCost / $summAvail;
+
+            $data['cost'] = $cost;
 
             $saleProduct = SaleProduct::where([
                     'nomenclature_id' => $id,
@@ -131,11 +147,7 @@ class WarehouseRemainsService
 
 
             $packingTypes =  WarehouseRemains::where(['nomenclature_id' => $id])
-                ->select('packing_type_id', 
-                    \DB::raw('
-                        sum(availability) as availability
-                    ')
-                    )
+                ->select('packing_type_id', \DB::raw('sum(availability) as availability'))
                 ->groupBy('packing_type_id')
                 ->get();
 
