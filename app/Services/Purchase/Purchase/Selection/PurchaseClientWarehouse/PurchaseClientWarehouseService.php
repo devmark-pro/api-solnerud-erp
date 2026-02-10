@@ -30,7 +30,8 @@ class PurchaseClientWarehouseService
 
         try {
             $limit = 30;
-            $model = self::model()->where('purchase_delivery_addresses.actual_quantity', '>', 0);
+            $model = self::model()
+                ->where('purchase_delivery_addresses.actual_quantity', '>', 0);
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
             $data = $model->limit($limit)->get();
