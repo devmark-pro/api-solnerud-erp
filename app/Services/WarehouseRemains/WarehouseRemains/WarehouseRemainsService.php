@@ -6,7 +6,15 @@ use App\Models\Sale\SaleProduct\SaleProduct;
 
 class WarehouseRemainsService
 {
-     public static function index($requestAll) {
+
+    private static function model() {
+        return WarehouseRemains::join('nomenclatures', 
+            'nomenclatures.id', '=', 
+            'warehouse_remains.nomenclature_id')
+        ->where(['warehouse_remains.deleted_at' => null]);
+    }
+
+    public static function index($requestAll) {
         try {
             $page = 1;
             $limit = 10;
@@ -20,8 +28,10 @@ class WarehouseRemainsService
             }
             
             $offset = $limit * ($page-1);
-            $model = WarehouseRemains::where(['deleted_at' => null]);
+            // $model = WarehouseRemains::where(['deleted_at' => null]);
                // ->with([])
+            $model = self::model();
+
             
             $total = $model->get()->count();
 
@@ -31,17 +41,21 @@ class WarehouseRemainsService
 
             $totalModel = clone $model;
             
-            $count = $model->where(['deleted_at' => null])->get()->count();
+            $count = $model->where([
+                'warehouse_remains.deleted_at' => null
+                ])->get()->count();
 
             $pagesCount = ceil($count/$limit);
 
             $data = $model
-                ->orderBy('created_at', 'desc')
+                ->orderBy('warehouse_remains.created_at', 'desc')
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
 
-            $dataTotal = $totalModel->where($filter)->where(['deleted_at' => null]);
+            $dataTotal = $totalModel
+                ->where($filter)
+                ->where(['warehouse_remains.deleted_at' => null]);
             
             return [
 
@@ -198,12 +212,18 @@ class WarehouseRemainsService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model->where('id', 'LIKE', "%$find%")
-                 ->orWhere('name', 'ILIKE', "%$find%");       
+
+              $model->where(function ($query) use ($find) {
+                $query
+                    ->where('warehouse_remains.id', 'LIKE', "%$find%")
+                    ->orWhere('nomenclatures.name', 'ILIKE', "%$find%");    
+            });    
         }
         return $model;
     }
 
+
+    
     
     private static function filter($model, $requestAll){
         if(array_key_exists('filter', $requestAll) 
