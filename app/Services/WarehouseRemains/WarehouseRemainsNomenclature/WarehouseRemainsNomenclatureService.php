@@ -54,7 +54,7 @@ class WarehouseRemainsNomenclatureService
                 $query
                     ->where('nomenclatures.id', 'LIKE', "%$find%")
                     ->orWhere('nomenclatures.name', 'ILIKE', "%$find%");    
-          });  
+            });  
         }
         return $model;
     }

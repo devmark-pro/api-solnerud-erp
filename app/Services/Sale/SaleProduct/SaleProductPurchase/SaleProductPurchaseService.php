@@ -126,6 +126,7 @@ class SaleProductPurchaseService
             if($shipmentType==='from_warehouse'){
                 $key =  'warehouse_remains_id';
             }
+
             SaleProductPurchase::where([
                 'sale_id' => $saleId,
                 'sale_product_id' => $saleProductId
@@ -138,7 +139,7 @@ class SaleProductPurchaseService
                     'sale_id' => $saleId,
                     'sale_product_id' => $saleProductId,
                     'shipment_type' => $shipmentType,
-                    $key => $item
+                    'purchase_id' => $item
                 ]);
             }
         } catch (Exception $e) {

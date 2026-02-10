@@ -139,7 +139,7 @@ class SaleProductService
             }
 
             $result = SaleProduct::create($data);
-            if(count($purchases) > 0){
+            if(count($purchases) > 0) {
                 $resultPurchases = SaleProductPurchaseService::deleteAndCreateArray(
                     $result['id'], $result['sale_id'], $data['shipment_type'], $purchases);
 
