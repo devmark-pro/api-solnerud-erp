@@ -11,7 +11,8 @@ class WarehouseRemainsService
         return WarehouseRemains::join('nomenclatures', 
             'nomenclatures.id', '=', 
             'warehouse_remains.nomenclature_id')
-        ->where(['warehouse_remains.deleted_at' => null]);
+        ->where(['warehouse_remains.deleted_at' => null])
+        ->select('*', 'warehouse_remains.id as id');
     }
 
     public static function index($requestAll) {

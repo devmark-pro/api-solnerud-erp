@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\WarehouseRemains\WarehouseRemains;
 use App\Models\Purchase\Purchase;
+use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Models\Sale\SaleProduct\SaleProductPurchase;
 use App\Services\Sale\SaleProduct\Events\ESalePruductShipmentRequest;
 use App\Services\WarehouseRemains\WarehouseRemains\Events\EWarehouseRemainsReserveUpdated;
@@ -46,7 +47,9 @@ class LWarehouseSaleProvider extends ServiceProvider
         try {
             if(!array_key_exists('quantity', $event->data) || 
                 !array_key_exists('sale_product_id', $event->data) ||
-                !array_key_exists('shipment_type', $event->data) 
+                !array_key_exists('shipment_type', $event->data) ||
+                !array_key_exists('purchase_ids', $event->data) ||    
+                !array_key_exists('warehouse_id', $event->data)      
             ) 
             throw new \Exception('LWarehouseSaleProvider->addReserve error');
             
@@ -58,34 +61,32 @@ class LWarehouseSaleProvider extends ServiceProvider
                         
             $quantity = $event->data['quantity'];
             $saleProductId = $event->data['sale_product_id'];
-            
-            $saleProductPurchase = SaleProductPurchase::where([
-                "deleted_at" => null,
-                "sale_product_id" => $saleProductId,
-            ])
-            ->select('id', 'warehouse_remains_id')
-            ->get()->toArray();
- 
-            $actualQuantity = array_map(function($item){
-                return [
-                    'id' => $item['warehouse_remains']['id'],
-                    'actual_quantity'=>$item['warehouse_remains']['actual_quantity']
-                ];
-            }, $saleProductPurchase); 
+            $purchaseIds = $event->data['purchase_ids'];
+            $warehouseId = $event->data['warehouse_id'];
+
+            // Получить актуальное количество нужного товара по складам
+            $actualQuantity = WarehouseRemains::whereIn('purchase_id', $purchaseIds)
+                ->where([
+                    'warehouse_id' => $warehouseId,
+                    'deleted_at' => null
+                ])
+                ->select('id', 'availability')
+                ->orderBy('availability', 'asc')
+                ->get()
+                ->toArray();
 
 
-            array_multisort(array_column($actualQuantity, 'actual_quantity'), SORT_ASC, $actualQuantity);
-
+            // Вычисление резервов
             $reserve = [];
             $reserveQuantity = $quantity;
             foreach ($actualQuantity as $item){
-                if($reserveQuantity > $item['actual_quantity']){
+                if($reserveQuantity > $item['availability']){
                     $reserve[]=[
                         'id' => $item['id'],
-                        'reserve' => $item['actual_quantity']
+                        'reserve' => $item['availability']
                     ];        
-                    $reserveQuantity=$reserveQuantity-$item['actual_quantity'];
-                }else{
+                    $reserveQuantity = $reserveQuantity - $item['availability'];
+                } else {
                     $reserve[]=[
                         'id' => $item['id'],
                         'reserve' => $reserveQuantity
@@ -93,24 +94,17 @@ class LWarehouseSaleProvider extends ServiceProvider
                     break;
                 }
             }
-
-
-
+            // Начисление резервов на склад
             if(count($reserve)){
                 foreach($reserve as $reserveItem) {
                     $model = WarehouseRemains::where('id', $reserveItem['id'])->first();
-
                     $model->increment('reserve', $reserveItem['reserve']);
-                    // $model->decrement('availability', $reserveItem['reserve']);
                     $actualQuantity = $model->actual_quantity;
                     $reserve = $model->reserve;
                     $model->availability = $actualQuantity - $reserve;
                     $model->save();
-                    
                 }
             }
-    
-
         } catch (Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -131,34 +125,47 @@ class LWarehouseSaleProvider extends ServiceProvider
             $quantity = $event->data['quantity'];
             $saleProductId = $event->data['sale_product_id'];
             
-            $saleProductPurchase = SaleProductPurchase::where([
+
+            $warehouseId = SaleProduct::where([
+                'deleted_at' => null,
+                "id" => $saleProductId,
+            ])
+                ->select('id', 'warehouse_id')
+                ->first()->warehouse_id;
+
+            // throw new \Error($warehouseId);
+
+            $purchaseIds = SaleProductPurchase::where([
                 'deleted_at' => null,
                 "sale_product_id" => $saleProductId,
             ])
-            ->select('id', 'warehouse_remains_id')
-            ->get()->toArray();
- 
-            $actualQuantity = array_map(function($item){
-                return [
-                    'id' => $item['warehouse_remains']['id'],
-                    'actual_quantity'=>$item['warehouse_remains']['actual_quantity']
-                ];
-            }, $saleProductPurchase); 
+                ->select('id', 'purchase_id')
+                ->get()
+                ->pluck('purchase_id');
 
 
-            array_multisort(array_column($actualQuantity, 'actual_quantity'), SORT_ASC, $actualQuantity);
+            $reserveList = WarehouseRemains::whereIn('purchase_id', $purchaseIds)
+                ->where([
+                    'warehouse_id' => $warehouseId,
+                    'deleted_at' => null
+                ])
+                ->select('id', 'reserve')
+                ->orderBy('reserve', 'asc')
+                ->get()
+                ->toArray();
+
 
             $reserve = [];
             $reserveQuantity = $quantity;
 
             // Вычисление наличия товара на складах
-            foreach ($actualQuantity as $item){
-                if($reserveQuantity > $item['actual_quantity']){
+            foreach ($reserveList as $item){
+                if($reserveQuantity > $item['reserve']){
                     $reserve[]=[
                         'id' => $item['id'],
-                        'reserve' => $item['actual_quantity']
+                        'reserve' => $item['reserve']
                     ];        
-                    $reserveQuantity = $reserveQuantity-$item['actual_quantity'];
+                    $reserveQuantity = $reserveQuantity-$item['reserve'];
                 } else {
                     $reserve[]=[
                         'id' => $item['id'],
@@ -167,8 +174,6 @@ class LWarehouseSaleProvider extends ServiceProvider
                     break;
                 }
             }
-
-
             if(count($reserve)) {
                 foreach($reserve as $reserveItem) {
                     $model = WarehouseRemains::where('id', $reserveItem['id'])->first();
@@ -177,8 +182,6 @@ class LWarehouseSaleProvider extends ServiceProvider
                     $model->save();
                 }
             }
-    
-
         } catch (Exception $e) {
             throw new \Exception($e->getMessage());
         }
