@@ -2,28 +2,31 @@
 
 namespace App\Services\Purchase\Purchase\Selection\PurchaseClientWarehouse;
 use App\Models\Purchase\Purchase;
+use App\Models\Client\ClientWarehouse;
 
 class PurchaseClientWarehouseService
 {
     private static function model() {
         
-        return Purchase::join(
+        return Purchase::leftJoin(
                 'purchase_delivery_addresses', 
                 'purchase_delivery_addresses.purchase_id', '=', 
                 'purchases.id')
-            ->join(
-                'client_warehouses', 
-                'purchase_delivery_addresses.client_warehouse_id', '=', 
-                'client_warehouses.id'
-            )->select(
-                'client_warehouses.id',
-                'client_warehouses.name',
+            ->select(
+                'purchase_delivery_addresses.id',
                 \DB::raw('
                     sum(purchase_delivery_addresses.actual_quantity) as availability   
                 ')
-            )->groupBy('client_warehouses.id');
-       
-
+            )
+            ->addSelect(['name' => 
+                ClientWarehouse::select('name') 
+                    ->whereColumn(
+                        'purchase_delivery_addresses.client_warehouse_id', 
+                        'client_warehouses.id'
+                        ) 
+                    ->limit(1)
+                ])
+            ->groupBy('purchase_delivery_addresses.id');
     }
 
     public static function index($requestAll) {

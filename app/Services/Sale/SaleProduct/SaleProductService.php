@@ -234,12 +234,20 @@ class SaleProductService
     private static function calculateCost($id, &$forumla) {
         $saleProduct = SaleProduct::where('id', $id)->first();
 
+        // throw new \Error(json_encode($saleProduct));
+
         if($saleProduct['shipment_type']==="from_warehouse") {
+            
             $warehouseRemains = WarehouseRemains::select('id', 'cost', 'availability')
-                ->whereIn('id', $saleProduct['warehouse_remains_ids'])
-                ->where(['deleted_at' => null])
+                ->whereIn('purchase_id', $saleProduct['purchase_ids'])
+                ->where([ 
+                    'warehouse_id' => $saleProduct['warehouse_id'],
+                    'deleted_at' => null,
+                    ])
                 ->get()
                 ->toArray();
+
+            
 
             $cost = 0;
             $costAvailability = 0;

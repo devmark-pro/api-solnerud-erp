@@ -81,8 +81,8 @@ class SaleProduct extends Model
     ];
     protected $appends = [ 
         'purchase_ids',
-        'warehouse_remains_ids',
-        'warehouse_remains_purchase_ids',
+        // 'warehouse_remains_ids',
+        // 'warehouse_remains_purchase_ids',
     ];
 
     public function nomenclature():BelongsTo 
@@ -160,39 +160,39 @@ class SaleProduct extends Model
         return null;
     }
     
-    public function getWarehouseRemainsIdsAttribute() {
-        if($this->shipment_type==="from_warehouse") {
-            $saleProductPurchase = SaleProductPurchase::where([
-                'deleted_at' => null,
-                "sale_id" => $this->sale_id,
-				"sale_product_id" => $this->id,
-            ])
-            ->select('id', 'purchase_id')
-            ->get()->toArray();
+    // public function getWarehouseRemainsIdsAttribute() {
+    //     if($this->shipment_type==="from_warehouse") {
+    //         $saleProductPurchase = SaleProductPurchase::where([
+    //             'deleted_at' => null,
+    //             "sale_id" => $this->sale_id,
+	// 			"sale_product_id" => $this->id,
+    //         ])
+    //         ->select('id', 'purchase_id')
+    //         ->get()->toArray();
 
-            $result = array_map(function($item) {
-                return $item['purchase_id'];
-            }, $saleProductPurchase);
-            return $result;
-        }
-        return null;
-    }
+    //         $result = array_map(function($item) {
+    //             return $item['purchase_id'];
+    //         }, $saleProductPurchase);
+    //         return $result;
+    //     }
+    //     return null;
+    // }
 
-    public function getWarehouseRemainsPurchaseIdsAttribute(){
-        if($this->shipment_type==="from_warehouse") {
-            $saleProductPurchase = SaleProductPurchase::where([
-                'deleted_at' => null,
-                "sale_id" => $this->sale_id,
-				"sale_product_id" => $this->id,
-            ])
-            ->select('id', 'purchase_id')
-            ->get()->toArray();
+    // public function getWarehouseRemainsPurchaseIdsAttribute(){
+    //     if($this->shipment_type==="from_warehouse") {
+    //         $saleProductPurchase = SaleProductPurchase::where([
+    //             'deleted_at' => null,
+    //             "sale_id" => $this->sale_id,
+	// 			"sale_product_id" => $this->id,
+    //         ])
+    //         ->select('id', 'purchase_id')
+    //         ->get()->toArray();
 
-            $result = array_map(function($item) {
-                return $item['purchase_id'];
-            }, $saleProductPurchase);
-            return $result;
-        }
-        return null;
-    }
+    //         $result = array_map(function($item) {
+    //             return $item['purchase_id'];
+    //         }, $saleProductPurchase);
+    //         return $result;
+    //     }
+    //     return null;
+    // }
 }

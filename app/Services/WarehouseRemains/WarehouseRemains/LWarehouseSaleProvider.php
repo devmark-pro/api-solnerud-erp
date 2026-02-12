@@ -133,8 +133,6 @@ class LWarehouseSaleProvider extends ServiceProvider
                 ->select('id', 'warehouse_id')
                 ->first()->warehouse_id;
 
-            // throw new \Error($warehouseId);
-
             $purchaseIds = SaleProductPurchase::where([
                 'deleted_at' => null,
                 "sale_product_id" => $saleProductId,

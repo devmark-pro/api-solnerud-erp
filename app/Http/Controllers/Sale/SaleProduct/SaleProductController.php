@@ -82,9 +82,10 @@ class SaleProductController extends Controller
             $data = $request->input('data');
             if(array_key_exists('is_request_shipment', $data)) {
                 $saleProduct = SaleProduct::where(['id' => $id])->first();
+                // throw new \Error(json_encode($saleProduct));
                 if($saleProduct['shipment_type'] === 'from_factory' && (
                     !$saleProduct['purchase_id'] ||
-                    !$saleProduct['purchase_address_id'])
+                    !$saleProduct['client_warehouse_id'])
                 ) {
                     throw new \ErrorException('Не указан Адрес доставки');
                 }

@@ -49,6 +49,7 @@ class LSaleProductProvider extends ServiceProvider
         );
     }
 
+    // Вычисление общей себестоимости
     public function calculateShipped(object $event): void
     {
         if(!array_key_exists('sale_product_id', $event->data)) 
@@ -106,7 +107,6 @@ class LSaleProductProvider extends ServiceProvider
             (float)$model->total_cost * (float)$model->quantity);
         $model->save(); 
 
-
     }
 
 
@@ -132,20 +132,10 @@ class LSaleProductProvider extends ServiceProvider
             $saleExpenseStr = "";
         //
         foreach($saleExpenseProduct as $item) {
-
             $saleExpense[$item['sale_product_id']][] = $item['sale_expense_id'];
-
         }
 
 
-        // Себестоимость расходов
-        // $costSumm = [];
-        // foreach($saleExpense as $key => $item){
-            
-        //     $costSumm[$key] = SaleExpense::whereIn('id', $item)
-        //         ->where(['deleted_at'=>null])->sum('cost');
-
-        // }
         /// 
             $costSummStr = [];
             $costSummNum = [];
@@ -154,14 +144,14 @@ class LSaleProductProvider extends ServiceProvider
             
             $saleExpenseIds = SaleExpense::select('id', 'cost')
                 ->whereIn('id', $item)
-                ->where(['deleted_at'=>null])->get()->toArray();
+                ->where(['deleted_at' => null])->get()->toArray();
         
             $costSumm[$key] = 0;
             ///
                 $costSummStr[$key] = "";
                 $costSummNum[$key] = "";
             //
-            foreach($saleExpenseIds as  $item) {
+            foreach($saleExpenseIds as $item) {
                 // if($key!==16){
                 // throw new \Error(json_encode($saleExpenseIds));
                 // }
@@ -248,12 +238,12 @@ class LSaleProductProvider extends ServiceProvider
 
 
 
-    public function setIsRemovable(object $event) {
-        if(!array_key_exists('sale_product_id', $event->data)) {
-            throw new \Exception('LSaleProductProvider->setIsRemovable error');
-        }
+    // public function setIsRemovable(object $event) {
+    //     if(!array_key_exists('sale_product_id', $event->data)) {
+    //         throw new \Exception('LSaleProductProvider->setIsRemovable error');
+    //     }
 
-        $saleProductId = $event->data['sale_product_id'];
+    //     $saleProductId = $event->data['sale_product_id'];
 
-    }
+    // }
 }

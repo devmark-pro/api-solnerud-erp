@@ -20,7 +20,7 @@ class PurchaseService
             
             $offset = $limit * ($page-1);
             $model = Purchase::where(['deleted_at' => null])
-                 ->with([
+                ->with([
                 'statusPurchase', 
                 // 'purchaseType', 
                 'counterparty', 
