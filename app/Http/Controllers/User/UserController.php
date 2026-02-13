@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('user_r')) {
-        //     abort(403, "Не достаточно прав");
+        //     abort(403, "Недостаточно прав");
         // }
         $requestAll = $request->all();
         return UserService::index($requestAll);
@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         try {
             if (!Gate::allows('user_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -50,7 +50,7 @@ class UserController extends Controller
     public function card(Request $request)
     {
         if (!Gate::allows('user_r')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         try {
             if (!Gate::allows('user_u')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -98,7 +98,7 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('user_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -116,7 +116,7 @@ class UserController extends Controller
     public function recover(string $id)
     {
         if (!Gate::allows('user_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
         }
         $data = UserService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);

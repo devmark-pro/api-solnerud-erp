@@ -15,7 +15,7 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('client_r')) {
-        //     abort(403, "Не достаточно прав");
+        //     abort(403, "Недостаточно прав");
         // }
         $requestAll = $request->all();
         return ClientService::index($requestAll);
@@ -25,7 +25,7 @@ class ClientController extends Controller
     {
         try {
             if (!Gate::allows('client_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
@@ -50,7 +50,7 @@ class ClientController extends Controller
     {
         try {
             if (!Gate::allows('client_r')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -74,7 +74,7 @@ class ClientController extends Controller
     {
         try {
             if (!Gate::allows('client_u')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -109,7 +109,7 @@ class ClientController extends Controller
     {
         try {
             if (!Gate::allows('client_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -132,7 +132,7 @@ class ClientController extends Controller
     {   
         try {
             if (!Gate::allows('client_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',

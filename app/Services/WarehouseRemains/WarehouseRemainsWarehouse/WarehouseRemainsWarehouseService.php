@@ -18,6 +18,7 @@ class WarehouseRemainsWarehouseService
                         sum(availability) as availability,
                         sum(reserve) as reserve   
                     '))
+                ->where('availability', '>', 0)
                 ->groupBy('warehouse_id');
     }
     public static function index($requestAll) {
@@ -29,7 +30,7 @@ class WarehouseRemainsWarehouseService
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
 
-            $data = $model ->where('availability', '>', 0)
+            $data = $model
                 ->limit($limit)
                 ->get();
 

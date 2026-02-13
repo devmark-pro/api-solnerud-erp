@@ -123,7 +123,9 @@ class LSaleProductProvider extends ServiceProvider
 
         
         $saleExpenseProduct = SaleExpenseProduct::whereIn('sale_product_id', $saleProductIds)
-            ->where(['deleted_at'=>null])
+            ->where([
+                'deleted_at' => null,
+            ])
             ->select('sale_product_id','sale_expense_id')
             ->get();
 
@@ -144,7 +146,10 @@ class LSaleProductProvider extends ServiceProvider
             
             $saleExpenseIds = SaleExpense::select('id', 'cost')
                 ->whereIn('id', $item)
-                ->where(['deleted_at' => null])->get()->toArray();
+                ->where([
+                    'deleted_at' => null,
+                    'include_in_cost' => true
+                ])->get()->toArray();
         
             $costSumm[$key] = 0;
             ///
@@ -193,7 +198,7 @@ class LSaleProductProvider extends ServiceProvider
     
 
 
-
+    // При создании и обновлении Расхода в Продажах
     public function saleShippmentCreateUpdate(object $event) {
         if(!array_key_exists('sale_id', $event->data)) {
             // return;
@@ -212,7 +217,8 @@ class LSaleProductProvider extends ServiceProvider
             // ->update(['is_updatable' => false]);
         
         $saleExpensesProductIds = DB::table('sale_expenses')
-            ->join('sale_expense_products', 'sale_expenses.id', '=', 'sale_expense_products.sale_expense_id')
+            ->join('sale_expense_products', 'sale_expenses.id', '=', 
+                'sale_expense_products.sale_expense_id')
             ->select('sale_expense_products.sale_product_id')
             ->where([
                 'sale_expenses.deleted_at' => null,

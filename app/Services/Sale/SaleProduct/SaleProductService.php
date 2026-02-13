@@ -114,13 +114,11 @@ class SaleProductService
         try {
             $purchases = [];
 
-            if(array_key_exists('shipment_type', $data)
-                && $data['shipment_type'] === "from_warehouse"){
-                if(array_key_exists('purchase_ids', $data)){
-                    $purchases = $data['purchase_ids'];
-                    unset($data['purchase_ids']);              
-                }
+            if(array_key_exists('purchase_ids', $data)){
+                $purchases = $data['purchase_ids'];
+                unset($data['purchase_ids']);              
             }
+            
             // if(array_key_exists('shipment_type', $data) &&
             //     $data['shipment_type'] === "from_factory") {    
             //     if(array_key_exists('purchase_ids', $data)) {
@@ -156,32 +154,44 @@ class SaleProductService
     }
     public static function update($id, $data){ 
         try {
-             if(array_key_exists('shipment_type', $data)
-                && $data['shipment_type'] === "from_warehouse") {
-                if(array_key_exists('purchase_ids', $data)) {
-                    $purchases = $data['purchase_ids'];
-                    unset($data['purchase_ids']);     
-                    SaleProductPurchaseService::deleteAndCreateArray(
-                        $id, 
-                        $data['sale_id'], 
-                        $data['shipment_type'], 
-                        $purchases
-                    );
-                }
+            // if(array_key_exists('shipment_type', $data)
+            //     && $data['shipment_type'] === "from_warehouse") {
+            //     if(array_key_exists('purchase_ids', $data)) {
+            //         $purchases = $data['purchase_ids'];
+            //         unset($data['purchase_ids']);     
+            //         SaleProductPurchaseService::deleteAndCreateArray(
+            //             $id, 
+            //             $data['sale_id'], 
+            //             $data['shipment_type'], 
+            //             $purchases
+            //         );
+            //     }
+            // }
+            // if(array_key_exists('shipment_type', $data) &&
+            //     $data['shipment_type'] === "from_factory") {    
+            //     if(array_key_exists('purchase_ids', $data)) {
+            //         $purchases = $data['purchase_ids'];
+            //         unset($data['purchase_ids']);
+            //         SaleProductPurchaseService::deleteAndCreateArray(
+            //             $id, 
+            //             $data['sale_id'], 
+            //             $data['shipment_type'], 
+            //             $purchases
+            //         );         
+            //     }
+            // }
+
+            if(array_key_exists('purchase_ids', $data)) {
+                $purchases = $data['purchase_ids'];
+                unset($data['purchase_ids']);
+                SaleProductPurchaseService::deleteAndCreateArray(
+                    $id, 
+                    $data['sale_id'], 
+                    $data['shipment_type'], 
+                    $purchases
+                );         
             }
-            if(array_key_exists('shipment_type', $data) &&
-                $data['shipment_type'] === "from_factory") {    
-                if(array_key_exists('purchase_ids', $data)) {
-                    $purchases = $data['purchase_ids'];
-                    unset($data['purchase_ids']);
-                    SaleProductPurchaseService::deleteAndCreateArray(
-                        $id, 
-                        $data['sale_id'], 
-                        $data['shipment_type'], 
-                        $purchases
-                    );         
-                }
-            }
+            
 
             if(array_key_exists('nds_rate_id', $data) && $data['nds_rate_id']){
                 $ndsRate = NdsService::getRateById($data['nds_rate_id']);
@@ -258,7 +268,7 @@ class SaleProductService
                 $costAvailabilityNum = "";
                 $summCountNum = "";
             //
-            foreach($warehouseRemains as $item){
+            foreach($warehouseRemains as $item) {
                 $costAvailability += $item['cost'] * $item['availability'];
                 $summCount += $item['availability'];
                 ///
@@ -276,7 +286,7 @@ class SaleProductService
                 $cost = $costAvailability / $summCount; 
             }
         
-            $forumla = $costAvailabilityStr." / ".$summCountStr."</br>". $costAvailabilityNum." / ".$summCountNum;
+            $forumla = $costAvailabilityStr." / (".$summCountStr.")</br>". $costAvailabilityNum." / (".$summCountNum.")";
             
             return (float)$cost;
         }

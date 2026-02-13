@@ -15,7 +15,7 @@ class WarehouseRemainsController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('warehouse_remains_r')) {
-            abort(403, "Не достаточно прав");
+            abort(403, "Недостаточно прав");
         }
         $requestAll = $request->all();
         return WarehouseRemainsService::index($requestAll);
@@ -25,7 +25,7 @@ class WarehouseRemainsController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_remains_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -49,7 +49,7 @@ class WarehouseRemainsController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_remains_r')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                     'id'=>'required',
@@ -73,7 +73,7 @@ class WarehouseRemainsController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_remains_u')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -98,7 +98,7 @@ class WarehouseRemainsController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('warehouse_remains_d')) {
-            abort(403, "Не достаточно прав");
+            abort(403, "Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -116,7 +116,7 @@ class WarehouseRemainsController extends Controller
     public function recover(Request $request)
     {
         if (!Gate::allows('warehouse_remains_d')) {
-            abort(403, "Не достаточно прав");
+            abort(403, "Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',

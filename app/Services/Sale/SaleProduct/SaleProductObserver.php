@@ -32,8 +32,9 @@ class SaleProductObserver
                     'warehouse_id' => $warehouseId,
                     'deleted_at' => null
                 ])->sum('availability');
+
             if($quantity > $availability) {
-                throw new \Error("Не достаточно товара на складе. Доступно $availability тн.");
+                throw new \Error("Недостаточно товара на складе. Доступно $availability тн.");
             }
         }
     }
@@ -51,6 +52,7 @@ class SaleProductObserver
                 $quantity = $saleProduct->getAttribute('quantity');
                 $saleId = $saleProduct->getAttribute('sale_id');
                 $purchaseIds = $saleProduct->getAttribute('purchase_ids');
+                $purchaseId = $saleProduct->getAttribute('purchase_id');
                 $warehouseId = $saleProduct->getAttribute('warehouse_id');
 
                 $data = [
@@ -58,6 +60,7 @@ class SaleProductObserver
                     'quantity' => $quantity,
                     'shipment_type' => $shipmentType,
                     'sale_id' => $saleId,
+                    'purchase_id' => $purchaseId,
                     'purchase_ids' => $purchaseIds,
                     'warehouse_id' => $warehouseId,
                 ];

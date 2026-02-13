@@ -28,7 +28,7 @@ class SaleExpenseHelpers
                 $summPrStr = "";
                 $prIdStr="";
             //
-            foreach($saleProducts as $pr){
+            foreach($saleProducts as $pr) {
                 if(array_key_exists('shipped', $pr)){
                     ///
                         $prIdStr .= "+Отгрузки.Товар".$pr['id'].".Отружено";

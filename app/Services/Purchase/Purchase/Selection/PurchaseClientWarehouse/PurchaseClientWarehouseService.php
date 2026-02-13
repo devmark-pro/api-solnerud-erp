@@ -26,6 +26,7 @@ class PurchaseClientWarehouseService
                         ) 
                     ->limit(1)
                 ])
+            ->where('purchase_delivery_addresses.actual_quantity', '>', 0)
             ->groupBy('purchase_delivery_addresses.id');
     }
 
@@ -33,8 +34,7 @@ class PurchaseClientWarehouseService
 
         try {
             $limit = 30;
-            $model = self::model()
-                ->where('purchase_delivery_addresses.actual_quantity', '>', 0);
+            $model = self::model();
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
             $data = $model->limit($limit)->get();
@@ -54,7 +54,7 @@ class PurchaseClientWarehouseService
         $model = self::filter($model, $requestAll);
            
         return $model
-            ->where('purchase_delivery_addresses.client_warehouse_id', $id)
+            ->where('purchase_delivery_addresses.id', $id)
             ->first();
        
     }

@@ -118,14 +118,14 @@ class SaleProductPurchaseService
     public static function deleteAndCreateArray($saleProductId, $saleId, $shipmentType, $data){
         try {
             
-            $key = '';
-            if($shipmentType==='from_factory'){
-                $key =  'purchase_id';
-            }
+            // $key = '';
+            // if($shipmentType==='from_factory'){
+            //     $key =  'purchase_id';
+            // }
 
-            if($shipmentType==='from_warehouse'){
-                $key =  'warehouse_remains_id';
-            }
+            // if($shipmentType==='from_warehouse'){
+            //     $key =  'warehouse_remains_id';
+            // }
 
             SaleProductPurchase::where([
                 'sale_id' => $saleId,
@@ -133,7 +133,7 @@ class SaleProductPurchaseService
             ])->delete();
             
             
-            if(!$key) return;
+            // if(!$key) return;
             foreach ($data as $item) {
                 SaleProductPurchase::create([
                     'sale_id' => $saleId,

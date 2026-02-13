@@ -15,6 +15,7 @@ class PurchaseNomenclatureService
                     nomenclature_id as id,    
                     sum(count) as availability   
                 '))
+            ->where("purchases.count", ">", 0)
             ->groupBy('nomenclature_id');   
     }
     
@@ -26,7 +27,6 @@ class PurchaseNomenclatureService
             $filter = [];
 
             $model = self::model()
-                ->where("purchases.count", ">", 0)
                 ->where('purchases.deleted_at', null);
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);

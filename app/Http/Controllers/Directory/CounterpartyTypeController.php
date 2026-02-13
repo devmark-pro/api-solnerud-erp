@@ -14,7 +14,7 @@ class CounterpartyTypeController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('directory_r')) {
-        //     abort(403,"Не достаточно прав");
+        //     abort(403,"Недостаточно прав");
         // }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 100;
@@ -25,7 +25,7 @@ class CounterpartyTypeController extends Controller
     {
         try {
             if (!Gate::allows('directory_c')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $updateData = $request->all();
             $validator = Validator::make($updateData, [
@@ -49,7 +49,7 @@ class CounterpartyTypeController extends Controller
 
         try {
             if (!Gate::allows('directory_r')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -73,7 +73,7 @@ class CounterpartyTypeController extends Controller
     {
         try {
             if (!Gate::allows('directory_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -107,7 +107,7 @@ class CounterpartyTypeController extends Controller
     {
         try {
             if (!Gate::allows('directory_d')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -130,7 +130,7 @@ class CounterpartyTypeController extends Controller
     {   
         try {
             if (!Gate::allows('directory_d')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',

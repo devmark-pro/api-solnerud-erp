@@ -8,6 +8,7 @@ use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds;
 use App\Models\Sale\SaleProduct\SaleProduct;
 use App\Services\Sale\SaleExpense\SaleExpense\SaleExpenseHelpers;
+use App\Services\Sale\SaleExpense\SaleExpense\Events\ESaleExpenseUpdateCost;
 
 
 use Illuminate\Support\Facades\Log;
@@ -96,10 +97,10 @@ class SaleExpenseService
     public static function create($data){
         try {
 
-
             $summ = (float)$data['quantity'] * (float)$data['rate'];
             $data['summ'] = (float)$summ;
-
+            
+            $cost = 0;
             if(array_key_exists('summ', $data) &&
                 array_key_exists('quantity', $data) &&
                 array_key_exists('sale_product_ids', $data) &&
@@ -157,6 +158,15 @@ class SaleExpenseService
                 $resultProducts = SaleExpenseProductService::deleteAndCreateArray($model['id'], $model['sale_id'], $products);
                 $model['products'] = $resultProducts;
             }
+
+
+            ESaleExpenseUpdateCost::dispatch(
+                [
+                    'cost' => $cost,
+                    'sale_product_ids'=> $products
+                ]
+            );
+
             return $model;
 
         } catch (Exception $e) {

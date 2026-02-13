@@ -15,7 +15,7 @@ class NomenclatureController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('nomenclature_r')) {
-        //     abort(403, "Не достаточно прав");
+        //     abort(403, "Недостаточно прав");
         // }
         $requestAll = $request->all();
         return NomenclatureService::index($requestAll);
@@ -24,11 +24,11 @@ class NomenclatureController extends Controller
     public function create(Request $request)
     {
         if (!Gate::allows('nomenclature_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
         try {
             if (!Gate::allows('nomenclature_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
@@ -51,7 +51,7 @@ class NomenclatureController extends Controller
     {
         try {
             if (!Gate::allows('nomenclature_r')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -75,7 +75,7 @@ class NomenclatureController extends Controller
     {
         try {
             if (!Gate::allows('nomenclature_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
 
             $requestData=$request->all();
@@ -105,7 +105,7 @@ class NomenclatureController extends Controller
     {
         try {
             if (!Gate::allows('nomenclature_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -128,7 +128,7 @@ class NomenclatureController extends Controller
     {   
         try {
             if (!Gate::allows('nomenclature_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',

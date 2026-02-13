@@ -14,7 +14,7 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('warehouse_r')) {
-        //         abort(403, "Не достаточно прав");
+        //         abort(403, "Недостаточно прав");
         // }
         $requestAll = $request->all();
         return WarehouseService::index($requestAll);
@@ -24,7 +24,7 @@ class WarehouseController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_c')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
@@ -47,7 +47,7 @@ class WarehouseController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_r')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -71,7 +71,7 @@ class WarehouseController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_u')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -105,7 +105,7 @@ class WarehouseController extends Controller
     {
         try {
             if (!Gate::allows('warehouse_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -128,7 +128,7 @@ class WarehouseController extends Controller
     {   
         try {
             if (!Gate::allows('warehouse_d')) {
-                abort(403, "Не достаточно прав");
+                abort(403, "Недостаточно прав");
             }
             $validator = Validator::make($request->all(), [
                 'id'=>'required',

@@ -15,7 +15,7 @@ class SaleAccountSupplierController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $requestAll = $request->all();
         return SaleAccountSupplierService::index($requestAll);
@@ -24,7 +24,7 @@ class SaleAccountSupplierController extends Controller
     public function create(Request $request)
     {
         if (!Gate::allows('sale_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         try {
             $data = $request->all();
@@ -48,7 +48,7 @@ class SaleAccountSupplierController extends Controller
     public function card(Request $request)
     {
         if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -67,7 +67,7 @@ class SaleAccountSupplierController extends Controller
     {
         try {
             if (!Gate::allows('sale_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -92,7 +92,7 @@ class SaleAccountSupplierController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('sale_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -110,7 +110,7 @@ class SaleAccountSupplierController extends Controller
     public function recover(Request $request)
     {
         if (!Gate::allows('sale_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -127,7 +127,7 @@ class SaleAccountSupplierController extends Controller
     public function field($id, $field)
     {   
         if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         if(!(new SaleAccountSupplier())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}

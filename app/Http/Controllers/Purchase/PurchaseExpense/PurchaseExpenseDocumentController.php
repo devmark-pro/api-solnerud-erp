@@ -15,7 +15,7 @@ class PurchaseExpenseDocumentController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('purchase_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $requestAll = $request->all();
         return PurchaseExpenseDocumentService::index($requestAll);
@@ -25,7 +25,7 @@ class PurchaseExpenseDocumentController extends Controller
     {
         try {
             if (!Gate::allows('purchase_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -49,7 +49,7 @@ class PurchaseExpenseDocumentController extends Controller
     public function card(Request $request)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -68,7 +68,7 @@ class PurchaseExpenseDocumentController extends Controller
     {
         try {
             if (!Gate::allows('purchase_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -93,7 +93,7 @@ class PurchaseExpenseDocumentController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -111,7 +111,7 @@ class PurchaseExpenseDocumentController extends Controller
     public function recover(Request $request)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -129,7 +129,7 @@ class PurchaseExpenseDocumentController extends Controller
     public function field($id, $field)
     {   
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         if(!(new PurchaseExpenseDocument())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}

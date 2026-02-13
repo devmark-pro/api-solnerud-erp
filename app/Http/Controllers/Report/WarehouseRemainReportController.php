@@ -15,7 +15,7 @@ class WarehouseRemainReportController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('report_r')) {
-            abort(403, "Не достаточно прав");
+            abort(403, "Недостаточно прав");
         }
         $requestAll = $request->all();
         return WarehouseRemainReportService::index($requestAll);

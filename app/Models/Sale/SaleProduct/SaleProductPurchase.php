@@ -16,7 +16,6 @@ class SaleProductPurchase extends Model
     protected $fillable = [
         'id',
         'purchase_id',
-        'warehouse_remains_id',
         'shipment_type',
         'sale_id',
         'sale_product_id',

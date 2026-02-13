@@ -15,7 +15,7 @@ class SaleProductController extends Controller
     public function index(Request $request)
     {
         if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $requestAll = $request->all();
         return SaleProductService::index($requestAll);
@@ -25,7 +25,7 @@ class SaleProductController extends Controller
     {
         try {
             if (!Gate::allows('sale_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -47,7 +47,7 @@ class SaleProductController extends Controller
     public function card(Request $request)
     {
         if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
                 'id'=>'required',
@@ -66,7 +66,7 @@ class SaleProductController extends Controller
     {
         try {
             if (!Gate::allows('sale_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -84,8 +84,8 @@ class SaleProductController extends Controller
                 $saleProduct = SaleProduct::where(['id' => $id])->first();
                 // throw new \Error(json_encode($saleProduct));
                 if($saleProduct['shipment_type'] === 'from_factory' && (
-                    !$saleProduct['purchase_id'] ||
-                    !$saleProduct['client_warehouse_id'])
+                    // !$saleProduct['purchase_id'] ||
+                    !$saleProduct['purchase_address_id'])
                 ) {
                     throw new \ErrorException('Не указан Адрес доставки');
                 }
@@ -101,7 +101,7 @@ class SaleProductController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('sale_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -119,7 +119,7 @@ class SaleProductController extends Controller
     public function recover(Request $request)
     {
         if (!Gate::allows('sale_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -135,7 +135,7 @@ class SaleProductController extends Controller
     }
     public function field($id, $field)
     {   if (!Gate::allows('sale_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         if(!(new SaleProduct())->isFillable($field)) {
             return response()->json(['message'=>"Field $field not found"], 404);}

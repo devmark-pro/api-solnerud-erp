@@ -20,6 +20,7 @@ class WarehouseRemainsPackingTypeService
                     sum(availability) as availability,
                     sum(reserve) as reserve   
                 '))
+            ->where('availability', '>', 0)
             ->groupBy('packing_type_id');
     }
     
@@ -35,7 +36,6 @@ class WarehouseRemainsPackingTypeService
 
            $data = $model
                 ->limit($limit)
-                ->where('availability', '>', 0)
                 ->get();
 
             return [

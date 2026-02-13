@@ -21,6 +21,7 @@ class WarehouseRemainsNomenclatureService
                     sum(availability) as availability,
                     sum(reserve) as reserve   
                 '))
+            ->where('availability', '>', 0)
             ->groupBy('nomenclature_id');
 
     }
@@ -32,7 +33,7 @@ class WarehouseRemainsNomenclatureService
             $model = self::model();
             $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
-            $data = $model->where('availability', '>', 0)
+            $data = $model
                 ->limit($limit)
                 ->get();
 

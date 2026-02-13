@@ -12,7 +12,7 @@ class PurchaseExpenseController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('purchase_r')) {
-        //     abort(403,"Не достаточно прав");
+        //     abort(403,"Недостаточно прав");
         // }
         $requestAll = $request->all();
         return PurchaseExpenseService::index($requestAll);
@@ -22,7 +22,7 @@ class PurchaseExpenseController extends Controller
     {
         try {
             if (!Gate::allows('purchase_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -47,7 +47,7 @@ class PurchaseExpenseController extends Controller
  public function card(Request $request)
     {
         if (!Gate::allows('purchase_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -66,7 +66,7 @@ class PurchaseExpenseController extends Controller
     {
         try {
             if (!Gate::allows('purchase_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $requestData=$request->all();
             $validator = Validator::make($requestData, [
@@ -92,7 +92,7 @@ class PurchaseExpenseController extends Controller
     public function destroy(Request $request)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',
@@ -110,7 +110,7 @@ class PurchaseExpenseController extends Controller
     public function recover(Request $request)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $validator = Validator::make($request->all(), [
             'id'=>'required',

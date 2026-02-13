@@ -11,15 +11,15 @@ class SaleExpenseObserver
 {    
     public function created(SaleExpense $saleExpense): void
     {
-        $cost = $saleExpense->getAttribute('cost');
-        $saleProductIds = $saleExpense->getAttribute('sale_product_ids');
-                
-        ESaleExpenseUpdateCost::dispatch(
-            [
-                'cost' => $cost,
-                'sale_product_ids'=> $saleProductIds
-            ]
-        );
+        // $cost = $saleExpense->getAttribute('cost');
+        // $saleProductIds = $saleExpense->getAttribute('sale_product_ids');
+             
+        // ESaleExpenseUpdateCost::dispatch(
+        //     [
+        //         'cost' => $cost,
+        //         'sale_product_ids'=> $saleProductIds
+        //     ]
+        // );
 
         $saleId = $saleExpense->getAttribute('sale_id');
 

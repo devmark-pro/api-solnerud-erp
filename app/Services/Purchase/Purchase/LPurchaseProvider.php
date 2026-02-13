@@ -14,14 +14,12 @@ use App\Models\Purchase\Purchase;
 use App\Services\Directory\Nds\NdsService;
 use App\Helpers\Nds; 
 use App\Services\Purchase\PurchaseReceipt\EPurchaseReceiptUpdateQuantity;
+use App\Services\Sale\SaleProduct\Events\ESalePruductShipmentRequest;
 
-use Illuminate\Support\Facades\Log;
 
 
 class LPurchaseProvider extends ServiceProvider
 {
-  
-
     public function boot(): void
     {
         Event::listen(
@@ -29,10 +27,14 @@ class LPurchaseProvider extends ServiceProvider
             [$this, 'calculateQuantity'],
         );
 
+        Event::listen(
+            ESalePruductShipmentRequest::class,
+            [$this, 'setIsUpdatable'],
+        );
     }
+    // Пересчет общего количества 
     public function calculateQuantity(object $event): void
     {
-
         if(!array_key_exists('purchase_id', $event->data)) return;        
         $purchaseId = $event->data['purchase_id'];
         $actualQuantity = PurchaseReceipt::where([
@@ -53,5 +55,17 @@ class LPurchaseProvider extends ServiceProvider
         $model->summ_nds = Nds::calculateNds($summ, $isNdsInPrice,  $ndsRate);
         $model->count = $actualQuantity;
         $model->save(); 
+    }
+
+    public function setIsUpdatable(object $event): void {
+
+        if(!array_key_exists('purchase_ids', $event->data)) 
+            throw new \Exception('LPurchaseProvider->setIsUpdatable error');
+
+        $purchaseIds = $event->data['purchase_ids'];
+        // throw new \Error($purchaseIds);
+        Purchase::whereIn('id', $purchaseIds)->update(['is_updatable' => false]);
+        
+
     }
 }

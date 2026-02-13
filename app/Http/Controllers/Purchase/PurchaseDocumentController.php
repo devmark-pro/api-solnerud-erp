@@ -13,7 +13,7 @@ class PurchaseDocumentController extends Controller
     public function index(Request $request)
     {
         // if (!Gate::allows('purchase_r')) {
-        //     abort(403,"Не достаточно прав");
+        //     abort(403,"Недостаточно прав");
         // }
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? 10;
@@ -24,7 +24,7 @@ class PurchaseDocumentController extends Controller
     {
         try {
             if (!Gate::allows('purchase_u')) {
-                abort(403,"Не достаточно прав");
+                abort(403,"Недостаточно прав");
             }
             $data = $request->all();
             $validator = Validator::make($data, [
@@ -46,7 +46,7 @@ class PurchaseDocumentController extends Controller
     public function card(string $id)
     {
         if (!Gate::allows('purchase_r')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $data = PurchaseDocumentService::card($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
@@ -56,7 +56,7 @@ class PurchaseDocumentController extends Controller
     public function update(Request $request, string $id)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $data = $request->all();
         $result = PurchaseDocumentService::update($id, $data);
@@ -67,7 +67,7 @@ class PurchaseDocumentController extends Controller
     public function destroy(string $id)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $data = PurchaseDocumentService::delete($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
@@ -77,7 +77,7 @@ class PurchaseDocumentController extends Controller
     public function recover(string $id)
     {
         if (!Gate::allows('purchase_u')) {
-            abort(403,"Не достаточно прав");
+            abort(403,"Недостаточно прав");
         }
         $data = PurchaseDocumentService::recover($id);
         if(!$data) return response()->json(['message'=>'Not found'], 404);
