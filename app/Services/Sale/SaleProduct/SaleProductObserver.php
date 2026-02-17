@@ -20,6 +20,8 @@ class SaleProductObserver
         if($saleProduct->isDirty('is_request_shipment'))
         {
             $shipmentType = $saleProduct->getAttribute('shipment_type');
+            $isRequestShipment = $saleProduct->getAttribute('is_request_shipment');
+
             if($shipmentType !== 'from_warehouse') return;
 
             $quantity = (float)$saleProduct->getAttribute('quantity');
@@ -33,7 +35,7 @@ class SaleProductObserver
                     'deleted_at' => null
                 ])->sum('availability');
 
-            if($quantity > $availability) {
+            if($isRequestShipment && $quantity > $availability) {
                 throw new \Error("Недостаточно товара на складе. Доступно $availability тн.");
             }
         }
@@ -45,26 +47,29 @@ class SaleProductObserver
         {   
             
             $isRequestShipment = $saleProduct->getAttribute('is_request_shipment');
-            
-            if($isRequestShipment){
-                $shipmentType = $saleProduct->getAttribute('shipment_type');
-                $saleProductId = $saleProduct->getAttribute('id');
-                $quantity = $saleProduct->getAttribute('quantity');
-                $saleId = $saleProduct->getAttribute('sale_id');
-                $purchaseIds = $saleProduct->getAttribute('purchase_ids');
-                $purchaseId = $saleProduct->getAttribute('purchase_id');
-                $warehouseId = $saleProduct->getAttribute('warehouse_id');
+            $shipmentType = $saleProduct->getAttribute('shipment_type');
+            $saleProductId = $saleProduct->getAttribute('id');
+            $quantity = $saleProduct->getAttribute('quantity');
+            $saleId = $saleProduct->getAttribute('sale_id');
+            $purchaseIds = $saleProduct->getAttribute('purchase_ids');
+            $purchaseId = $saleProduct->getAttribute('purchase_id');
+            $warehouseId = $saleProduct->getAttribute('warehouse_id');
 
-                $data = [
-                    'sale_product_id' => $saleProductId,
-                    'quantity' => $quantity,
-                    'shipment_type' => $shipmentType,
-                    'sale_id' => $saleId,
-                    'purchase_id' => $purchaseId,
-                    'purchase_ids' => $purchaseIds,
-                    'warehouse_id' => $warehouseId,
-                ];
 
+            $data = [
+                'sale_product_id' => $saleProductId,
+                'quantity' => $quantity,
+                'shipment_type' => $shipmentType,
+                'sale_id' => $saleId,
+                'purchase_id' => $purchaseId,
+                'purchase_ids' => $purchaseIds,
+                'warehouse_id' => $warehouseId,
+                'is_request_shipment' => $isRequestShipment,
+            ];
+            if($isRequestShipment) {
+                ESalePruductShipmentRequest::dispatch($data);
+            } else {
+                $data['quantity'] = -$quantity;
                 ESalePruductShipmentRequest::dispatch($data);
             }
         }

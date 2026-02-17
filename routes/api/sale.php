@@ -6,11 +6,12 @@ use App\Http\Controllers\Sale\SaleAccountSupplierController;
 use App\Http\Controllers\Sale\SaleContractAndSpecificationController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductController;
 use App\Http\Controllers\Sale\SaleProduct\SaleProductPurchaseController;
-use App\Http\Controllers\Sale\SaleShipmentController;
+use App\Http\Controllers\Sale\SaleShipment\SaleShipmentController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseDocumentController;
 use App\Http\Controllers\Sale\SaleExpense\SaleExpenseProductController;
-
+use App\Http\Controllers\Purchase\Selection\PurchaseDeliveryMethodController;
+use App\Http\Controllers\Sale\SaleShipment\Selection\SaleShipmentProductSelectionController;
 
 
 Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
@@ -115,6 +116,11 @@ Route::group(['middleware' => ['web', 'auth:sanctum']], function () {
         Route::post('/delete', [SaleExpenseProductController::class, 'destroy'] );
         Route::post('/recover', [SaleExpenseProductController::class, 'recover'] );
         Route::get('/field/{id}/{field}', [SaleExpenseProductController::class, 'field'] );
+    });
+
+    Route::prefix('sale_shipment_selection_product')->group(function () {
+        Route::post('/', [SaleShipmentProductSelectionController::class, 'index'] );
+        Route::post('/get', [SaleShipmentProductSelectionController::class, 'card'] );
     });
 });
 

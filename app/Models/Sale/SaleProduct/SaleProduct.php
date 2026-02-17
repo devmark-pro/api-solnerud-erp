@@ -32,7 +32,7 @@ class SaleProduct extends Model
         'warehouse_id',     // Адрес отгрузки
         'counterparty_id',
         'quantity',
-        'availability',     // Доступно
+        // 'availability',     // Доступно
         'cost',
 
         // 'purchase_id',

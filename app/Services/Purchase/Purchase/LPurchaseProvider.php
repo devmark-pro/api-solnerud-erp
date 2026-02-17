@@ -59,12 +59,21 @@ class LPurchaseProvider extends ServiceProvider
 
     public function setIsUpdatable(object $event): void {
 
-        if(!array_key_exists('purchase_ids', $event->data)) 
+        if(!array_key_exists('purchase_ids', $event->data) ||
+            !array_key_exists('is_request_shipment', $event->data)
+        ) 
             throw new \Exception('LPurchaseProvider->setIsUpdatable error');
 
         $purchaseIds = $event->data['purchase_ids'];
+        $isRequestShipment = $event->data['is_request_shipment'];
+
         // throw new \Error($purchaseIds);
-        Purchase::whereIn('id', $purchaseIds)->update(['is_updatable' => false]);
+        if($isRequestShipment){
+            Purchase::whereIn('id', $purchaseIds)->update(['is_updatable' => false]);
+        } else {
+            Purchase::whereIn('id', $purchaseIds)->update(['is_updatable' => true]);
+        }
+
         
 
     }
