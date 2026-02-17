@@ -30,8 +30,8 @@ class NomenclatureService
             //         ->orWhere('name', 'ILIKE', "%$find%");
             // }
 
-            $model = self::find($model, $requestAll);
             $model = self::filter($model, $requestAll);
+            $model = self::find($model, $requestAll);
 
 
             $count = $model->where(['deleted_at' => null])->get()->count();
@@ -93,7 +93,7 @@ class NomenclatureService
             && (is_string($requestAll['find']))
         ) {
             $find = $requestAll['find']; 
-            $model->where('id', 'LIKE', "%$find%")
+            $model->where('system_number', 'LIKE', "%$find%")
                 ->orWhere('name', 'ILIKE', "%$find%");       
         }
         return $model;
