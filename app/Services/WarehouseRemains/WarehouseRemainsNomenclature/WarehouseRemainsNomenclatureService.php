@@ -22,6 +22,7 @@ class WarehouseRemainsNomenclatureService
                     sum(reserve) as reserve   
                 '))
             ->where('availability', '>', 0)
+            ->whereNull('warehouse_remains.deleted_at')
             ->groupBy('nomenclature_id');
 
     }

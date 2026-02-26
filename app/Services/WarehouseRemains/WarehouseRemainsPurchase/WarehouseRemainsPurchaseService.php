@@ -21,7 +21,9 @@ class WarehouseRemainsPurchaseService
                         sum(reserve) as reserve   
                     '))
             ->groupBy('purchase_id')
-            ->where('availability', '>', 0);
+            ->where('availability', '>', 0)
+            ->whereNull('warehouse_remains.deleted_at')
+;
     }
     public static function index($requestAll) {
         try {
